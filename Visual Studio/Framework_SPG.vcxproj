@@ -54,18 +54,6 @@
     <ClCompile Include="..\Source\GameEngine\ImGUI\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\Source\GameEngine\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="..\Source\include\gl.cpp" />
-    <ClCompile Include="..\Source\Laboratoare\Laborator1\Laborator1.cpp" />
-    <ClCompile Include="..\Source\Laboratoare\Laborator2\Laborator2.cpp" />
-    <ClCompile Include="..\Source\Laboratoare\Laborator3\Laborator3.cpp" />
-    <ClCompile Include="..\Source\Laboratoare\Laborator4\Laborator4.cpp" />
-    <ClCompile Include="..\Source\Laboratoare\Laborator6\Laborator6.cpp" />
-    <ClCompile Include="..\Source\Laboratoare\Proiect\Animation.cpp" />
-    <ClCompile Include="..\Source\Laboratoare\Proiect\Bone.cpp" />
-    <ClCompile Include="..\Source\Laboratoare\Proiect\Model.cpp" />
-    <ClCompile Include="..\Source\Laboratoare\Proiect\Proiect.cpp" />
-    <ClCompile Include="..\Source\Laboratoare\Tema1\Tema1.cpp" />
-    <ClCompile Include="..\Source\Laboratoare\Tema2\Tema2.cpp" />
-    <ClCompile Include="..\Source\Laboratoare\Tema2\Tema2_WinAPI.cpp" />
     <ClCompile Include="..\Source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -118,48 +106,12 @@
     <ClInclude Include="..\Source\include\glm.h" />
     <ClInclude Include="..\Source\include\math.h" />
     <ClInclude Include="..\Source\include\utils.h" />
-    <ClInclude Include="..\Source\Laboratoare\LabList.h" />
-    <ClInclude Include="..\Source\Laboratoare\Laborator1\Laborator1.h" />
-    <ClInclude Include="..\Source\Laboratoare\Laborator2\Laborator2.h" />
-    <ClInclude Include="..\Source\Laboratoare\Laborator3\Laborator3.h" />
-    <ClInclude Include="..\Source\Laboratoare\Laborator4\Laborator4.h" />
-    <ClInclude Include="..\Source\Laboratoare\Laborator6\Laborator6.h" />
-    <ClInclude Include="..\Source\Laboratoare\Proiect\Animation.h" />
-    <ClInclude Include="..\Source\Laboratoare\Proiect\Bone.h" />
-    <ClInclude Include="..\Source\Laboratoare\Proiect\Model.h" />
-    <ClInclude Include="..\Source\Laboratoare\Proiect\Proiect.h" />
-    <ClInclude Include="..\Source\Laboratoare\Tema1\Tema1.h" />
-    <ClInclude Include="..\Source\Laboratoare\Tema2\Tema2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Source\GameEngine\Shaders\FragmentShaderAnim.glsl" />
     <None Include="..\Source\GameEngine\Shaders\FragmentShaderDefault.glsl" />
     <None Include="..\Source\GameEngine\Shaders\VertexShaderAnim.glsl" />
     <None Include="..\Source\GameEngine\Shaders\VertexShaderDefault.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator1\Shaders\FragmentShader.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator1\Shaders\GeometryShader.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator1\Shaders\VertexShader.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator2\Shaders\FragmentShader.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator2\Shaders\GeometryShader.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator2\Shaders\VertexShader.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator3\Shaders\FragmentShader.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator3\Shaders\VertexShader.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator4\Shaders\CubeMap.FS.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator4\Shaders\CubeMap.VS.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator4\Shaders\Normal.FS.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator4\Shaders\Normal.VS.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator6\Shaders\Composition.FS.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator6\Shaders\LightPass.FS.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator6\Shaders\LightPass.VS.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator6\Shaders\Render2Texture.FS.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator6\Shaders\Render2Texture.VS.glsl" />
-    <None Include="..\Source\Laboratoare\Laborator6\Shaders\Composition.VS.glsl" />
-    <None Include="..\Source\Laboratoare\Proiect\Shaders\FragmentShader.glsl" />
-    <None Include="..\Source\Laboratoare\Proiect\Shaders\VertexShader.glsl" />
-    <None Include="..\Source\Laboratoare\Tema1\Shaders\FragmentShader.glsl" />
-    <None Include="..\Source\Laboratoare\Tema1\Shaders\VertexShader.glsl" />
-    <None Include="..\Source\Laboratoare\Tema2\Shaders\FragmentShader.glsl" />
-    <None Include="..\Source\Laboratoare\Tema2\Shaders\VertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Source\GameEngine\ImGUI\LICENSE.txt" />
