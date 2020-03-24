@@ -106,10 +106,6 @@ GLenum Model::LoadModel(const aiScene* scene) {
 }
 
 void Model::VisitBoneTree(float time, Animation* anim, Bone* bone, glm::mat4 parentTransform) {
-	if (anim == nullptr) {
-		return;
-	}
-
 	std::string boneName = bone->GetName();
 	glm::mat4 transform = parentTransform * bone->GetTransformMat();
 
@@ -222,11 +218,7 @@ void Model::InitTextures(const aiScene* scene) {
 
 		if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texture_path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS)
 		{
-			std::string path;
-			int index = strlen(texture_path.data);
-			while (texture_path.data[--index] != '/') {}
-			path.append(&texture_path.data[index + 1]);
-			textures[i] = TextureManager::LoadTexture("Source/GameEngine/Textures", path.c_str());
+			textures[i] = TextureManager::LoadTexture("Source", texture_path.data);
 		}
 	}
 }

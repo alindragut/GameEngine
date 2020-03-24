@@ -14,7 +14,7 @@ AnimationRenderer::AnimationRenderer(std::string defaultModelName, std::string d
 
 	Assimp::Importer importer;
 
-	string aux = string("Source/erika_archer.dae");
+	string aux = string("Source/GameEngine/Models/erika_archer.dae");
 
 	const aiScene* scene = importer.ReadFile(aux,
 		aiProcess_GenSmoothNormals |
@@ -35,7 +35,7 @@ AnimationRenderer::AnimationRenderer(std::string defaultModelName, std::string d
 		return;
 	}
 
-	aux = string("Source/Walking.dae");
+	aux = string("Source/GameEngine/Animations/Walking.dae");
 
 	scene = importer.ReadFile(aux,
 		aiProcess_GenSmoothNormals |
@@ -53,7 +53,7 @@ AnimationRenderer::AnimationRenderer(std::string defaultModelName, std::string d
 		return;
 	}
 
-	aux = string("Source/Running.dae");
+	aux = string("Source/GameEngine/Animations/Running.dae");
 
 	scene = importer.ReadFile(aux,
 		aiProcess_GenSmoothNormals |
