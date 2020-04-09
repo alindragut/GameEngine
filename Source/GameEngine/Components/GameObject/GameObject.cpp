@@ -2,7 +2,6 @@
 
 GameObject::GameObject(int objectId) : BaseGameObject(objectId)
 {
-	transform->SetPos(glm::vec3(3, 0, 0));
 }
 
 GameObject::~GameObject()

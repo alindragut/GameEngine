@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GameEngine/Utils/Transform.h>
+#include <GameEngine/Utils/ComponentTransform.h>
 #include <Core/Engine.h>
 #include <map>
 
@@ -19,9 +19,11 @@ public:
 
 	void AddComponent(BaseComponent* component);
 
-	BaseComponent* GetComponent(std::string name) { return components[name]; }
+	BaseComponent* GetComponent(std::string name);
 
 	std::map<std::string, BaseComponent*>* GetComponents() { return &components; }
+
+	void InitComponents();
 
 protected:
 	int objectId;

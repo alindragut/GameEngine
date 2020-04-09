@@ -19,6 +19,8 @@ public:
 	
 	virtual void update(float deltaTimeSeconds) override;
 
+	virtual void render() override;
+
 private:
 	GameEngine* engine;
 	float time;

@@ -1,8 +1,9 @@
 #pragma once
 
 #include <GameEngine/Components/BaseComponents/BaseGameObject.h>
-#include <GameEngine/Components/PhysicsComponents/GameObjectPhysicsComponent.h>
+#include "GameObjectGameComponent.h"
 #include <GameEngine/Components/Renderers/DefaultRenderer.h>
+#include <GameEngine/Components/BaseComponents/RigidBodyComponent.h>
 
 class GameObject : public BaseGameObject
 {

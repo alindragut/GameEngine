@@ -1,11 +1,25 @@
 #pragma once
 
-#include <GameEngine/Components/BaseComponents/BaseGameObject.h>
-#include <GameEngine/Components/BaseComponents/ComponentFactory.h>
+#include <GameEngine/SceneRenderers/ShadowMapSceneRenderer.h>
+#include <GameEngine/Physics/PhysicsEngine.h>
 #include <Component/SimpleScene.h>
 #include <memory>
 
 using namespace std;
+
+class btDiscreteDynamicsWorld;
+
+class ImGuiSetup {
+public:
+	ImGuiSetup() {}
+	~ImGuiSetup() {}
+
+	void Init();
+
+	void NewFrame();
+
+	void EndFrame();
+};
 
 class GameEngine : public SimpleScene
 {
@@ -16,6 +30,14 @@ public:
 	void Init() override;
 
 	Camera* GetCamera() { return GetSceneCamera(); }
+
+	std::vector<BaseGameObject*> GetObjects() { return objects; }
+
+	void AddObject(BaseGameObject* obj) { objects.push_back(obj); }
+
+	WindowObject* GetWindow() { return window; }
+
+	PhysicsEngine* GetPhysicsEngine() { return physics; }
 
 private:
 	
@@ -33,5 +55,8 @@ private:
 	void OnMouseScroll(int mouseX, int mouseY, int offsetX, int offsetY) override;
 	void OnWindowResize(int width, int height) override;
 
-	std::vector<std::unique_ptr<BaseGameObject>> objects;
+	ShadowMapSceneRenderer* sceneRenderer;
+	PhysicsEngine* physics;
+	ImGuiSetup* ImGui;
+	std::vector<BaseGameObject*> objects;
 };

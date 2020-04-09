@@ -10,7 +10,8 @@ public:
 	DefaultRenderer();
 	~DefaultRenderer();
 	
-	virtual void update(float deltaTimeSeconds);
+	virtual void update(float deltaTimeSeconds) override;
+	virtual void render() override;
 
 	Shader* GetShader() { return this->shader; }
 	Mesh* GetMesh() { return this->mesh; }

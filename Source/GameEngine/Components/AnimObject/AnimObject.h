@@ -2,7 +2,8 @@
 
 #include <GameEngine/Components/BaseComponents/BaseGameObject.h>
 #include <GameEngine/Components/Renderers/AnimationRenderer.h>
-#include <GameEngine/Components/PhysicsComponents/AnimObjectPhysicsComponent.h>
+#include "AnimObjectGameComponent.h"
+#include "AnimMovementGameComponent.h"
 
 class AnimObject : public BaseGameObject
 {

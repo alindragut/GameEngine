@@ -43,11 +43,17 @@
     <Filter Include="GameEngine\Components\Renderers">
       <UniqueIdentifier>{350007ae-319f-425f-954c-8c56b61bc879}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameEngine\Components\PhysicsComponents">
-      <UniqueIdentifier>{13cc7fdf-82f8-49c5-b054-ab53f6f86105}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\ImGUI">
       <UniqueIdentifier>{c2e22969-1d43-412a-aa62-1562a8a3a933}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\RenderPasses">
+      <UniqueIdentifier>{20b4fdcd-f2f0-41f6-83fb-1e6cf699853e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\SceneRenderers">
+      <UniqueIdentifier>{c97702e2-a1a1-4f7d-8d40-a9d0e652415f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Physics">
+      <UniqueIdentifier>{a2ab0e22-f8b4-485b-a93c-dd642fbfda8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -100,9 +106,6 @@
     <ClCompile Include="..\Source\GameEngine\GameEngine.cpp">
       <Filter>GameEngine</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\ComponentFactory.cpp">
-      <Filter>GameEngine\Components\BaseComponents</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\GameEngine\Components\GameObject\GameObject.cpp">
       <Filter>GameEngine\Components\GameObject</Filter>
     </ClCompile>
@@ -133,12 +136,6 @@
     <ClCompile Include="..\Source\GameEngine\Components\Renderers\AnimationRenderer.cpp">
       <Filter>GameEngine\Components\Renderers</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\GameEngine\Components\GameObject\GameObjectPhysicsComponent.cpp">
-      <Filter>GameEngine\Components\PhysicsComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\GameEngine\Components\PhysicsComponents\AnimObjectPhysicsComponent.cpp">
-      <Filter>GameEngine\Components\PhysicsComponents</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\GameEngine\ImGUI\imgui_demo.cpp">
       <Filter>GameEngine\ImGUI</Filter>
     </ClCompile>
@@ -156,6 +153,36 @@
     </ClCompile>
     <ClCompile Include="..\Source\GameEngine\ImGUI\imgui.cpp">
       <Filter>GameEngine\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\RenderPasses\DefaultRenderPass.cpp">
+      <Filter>GameEngine\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\RenderPasses\ShadowMapPass.cpp">
+      <Filter>GameEngine\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\SceneRenderers\ShadowMapSceneRenderer.cpp">
+      <Filter>GameEngine\SceneRenderers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Utils\ComponentFactory.cpp">
+      <Filter>GameEngine\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Physics\PhysicsEngine.cpp">
+      <Filter>GameEngine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\RigidBodyComponent.cpp">
+      <Filter>GameEngine\Components\BaseComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\AnimObject\AnimObjectGameComponent.cpp">
+      <Filter>GameEngine\Components\AnimObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\GameObject\GameObjectGameComponent.cpp">
+      <Filter>GameEngine\Components\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\AnimObject\AnimMovementGameComponent.cpp">
+      <Filter>GameEngine\Components\AnimObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Utils\DebugDraw.cpp">
+      <Filter>GameEngine\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -228,28 +255,16 @@
     <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\GraphicsComponent.h">
       <Filter>GameEngine\Components\BaseComponents</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\PhysicsComponent.h">
-      <Filter>GameEngine\Components\BaseComponents</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\GameEngine\GameEngine.h">
       <Filter>GameEngine</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\GameEngine\IncludeList.h">
       <Filter>GameEngine</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\ComponentFactory.h">
-      <Filter>GameEngine\Components\BaseComponents</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\GameEngine\Components\ComponentsIncludeList.h">
       <Filter>GameEngine\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\BaseGameObject.h">
-      <Filter>GameEngine\Components\BaseComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\GameEngine\Utils\Transform.h">
-      <Filter>GameEngine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\Component.h">
       <Filter>GameEngine\Components\BaseComponents</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\GameEngine\EngineManager.h">
@@ -276,12 +291,6 @@
     <ClInclude Include="..\Source\GameEngine\Components\Renderers\AnimationRenderer.h">
       <Filter>GameEngine\Components\Renderers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\GameEngine\Components\GameObject\GameObjectPhysicsComponent.h">
-      <Filter>GameEngine\Components\PhysicsComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\GameEngine\Components\PhysicsComponents\AnimObjectPhysicsComponent.h">
-      <Filter>GameEngine\Components\PhysicsComponents</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\GameEngine\ImGUI\imgui_impl_glfw.h">
       <Filter>GameEngine\ImGUI</Filter>
     </ClInclude>
@@ -305,6 +314,45 @@
     </ClInclude>
     <ClInclude Include="..\Source\GameEngine\ImGUI\imgui.h">
       <Filter>GameEngine\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\RenderPasses\DefaultRenderPass.h">
+      <Filter>GameEngine\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\RenderPasses\ShadowMapPass.h">
+      <Filter>GameEngine\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\SceneRenderers\ShadowMapSceneRenderer.h">
+      <Filter>GameEngine\SceneRenderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\ComponentFactory.h">
+      <Filter>GameEngine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\BaseComponent.h">
+      <Filter>GameEngine\Components\BaseComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Physics\PhysicsEngine.h">
+      <Filter>GameEngine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\PhysicsManager.h">
+      <Filter>GameEngine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\RigidBodyComponent.h">
+      <Filter>GameEngine\Components\BaseComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\ComponentTransform.h">
+      <Filter>GameEngine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\AnimObject\AnimObjectGameComponent.h">
+      <Filter>GameEngine\Components\AnimObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\GameObject\GameObjectGameComponent.h">
+      <Filter>GameEngine\Components\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\AnimObject\AnimMovementGameComponent.h">
+      <Filter>GameEngine\Components\AnimObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\DebugDraw.h">
+      <Filter>GameEngine\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

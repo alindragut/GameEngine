@@ -71,6 +71,24 @@ AnimationRenderer::AnimationRenderer(std::string defaultModelName, std::string d
 		return;
 	}
 
+	aux = string("Source/GameEngine/Animations/Idle.dae");
+
+	scene = importer.ReadFile(aux,
+		aiProcess_GenSmoothNormals |
+		aiProcess_Triangulate |
+		aiProcess_FlipUVs |
+		aiProcess_LimitBoneWeights);
+
+	if (scene) {
+		Animation* anim_3 = new Animation();
+		anim_3->Init(scene->mAnimations[0], models["model"]->GetBones());
+		animations["anim_3"] = anim_3;
+	}
+	else {
+		printf("Error\n");
+		return;
+	}
+
 
 	animInfo = new AnimationInfo(models[defaultModelName], animations[defaultAnimName], time);
 }
@@ -81,7 +99,9 @@ AnimationRenderer::~AnimationRenderer() {
 
 void AnimationRenderer::update(float deltaTimeSeconds) {
 	time += deltaTimeSeconds;
+}
 
+void AnimationRenderer::render() {
 	Model* currentModel = animInfo->GetModel();
 	Animation* currentAnim = animInfo->GetAnimation();
 

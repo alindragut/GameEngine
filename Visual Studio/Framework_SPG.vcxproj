@@ -33,13 +33,14 @@
     <ClCompile Include="..\Source\Core\Window\WindowCallbacks.cpp" />
     <ClCompile Include="..\Source\Core\Window\WindowObject.cpp" />
     <ClCompile Include="..\Source\Core\World.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Components\AnimObject\AnimMovementGameComponent.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\AnimObject\AnimObject.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Components\AnimObject\AnimObjectGameComponent.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\BaseGameObject.cpp" />
-    <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\ComponentFactory.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\GraphicsComponent.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\RigidBodyComponent.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\GameObject\GameObject.cpp" />
-    <ClCompile Include="..\Source\GameEngine\Components\GameObject\GameObjectPhysicsComponent.cpp" />
-    <ClCompile Include="..\Source\GameEngine\Components\PhysicsComponents\AnimObjectPhysicsComponent.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Components\GameObject\GameObjectGameComponent.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\Renderers\Animation.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\Renderers\AnimationRenderer.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\Renderers\Bone.cpp" />
@@ -53,6 +54,12 @@
     <ClCompile Include="..\Source\GameEngine\ImGUI\imgui_impl_glfw.cpp" />
     <ClCompile Include="..\Source\GameEngine\ImGUI\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\Source\GameEngine\ImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Physics\PhysicsEngine.cpp" />
+    <ClCompile Include="..\Source\GameEngine\RenderPasses\DefaultRenderPass.cpp" />
+    <ClCompile Include="..\Source\GameEngine\RenderPasses\ShadowMapPass.cpp" />
+    <ClCompile Include="..\Source\GameEngine\SceneRenderers\ShadowMapSceneRenderer.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Utils\ComponentFactory.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Utils\DebugDraw.cpp" />
     <ClCompile Include="..\Source\include\gl.cpp" />
     <ClCompile Include="..\Source\Main.cpp" />
   </ItemGroup>
@@ -74,16 +81,16 @@
     <ClInclude Include="..\Source\Core\Window\WindowCallbacks.h" />
     <ClInclude Include="..\Source\Core\Window\WindowObject.h" />
     <ClInclude Include="..\Source\Core\World.h" />
+    <ClInclude Include="..\Source\GameEngine\Components\AnimObject\AnimMovementGameComponent.h" />
     <ClInclude Include="..\Source\GameEngine\Components\AnimObject\AnimObject.h" />
+    <ClInclude Include="..\Source\GameEngine\Components\AnimObject\AnimObjectGameComponent.h" />
+    <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\BaseComponent.h" />
     <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\BaseGameObject.h" />
-    <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\Component.h" />
-    <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\ComponentFactory.h" />
     <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\GraphicsComponent.h" />
-    <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\PhysicsComponent.h" />
+    <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\RigidBodyComponent.h" />
     <ClInclude Include="..\Source\GameEngine\Components\ComponentsIncludeList.h" />
     <ClInclude Include="..\Source\GameEngine\Components\GameObject\GameObject.h" />
-    <ClInclude Include="..\Source\GameEngine\Components\GameObject\GameObjectPhysicsComponent.h" />
-    <ClInclude Include="..\Source\GameEngine\Components\PhysicsComponents\AnimObjectPhysicsComponent.h" />
+    <ClInclude Include="..\Source\GameEngine\Components\GameObject\GameObjectGameComponent.h" />
     <ClInclude Include="..\Source\GameEngine\Components\Renderers\Animation.h" />
     <ClInclude Include="..\Source\GameEngine\Components\Renderers\AnimationRenderer.h" />
     <ClInclude Include="..\Source\GameEngine\Components\Renderers\Bone.h" />
@@ -100,8 +107,15 @@
     <ClInclude Include="..\Source\GameEngine\ImGUI\imstb_textedit.h" />
     <ClInclude Include="..\Source\GameEngine\ImGUI\imstb_truetype.h" />
     <ClInclude Include="..\Source\GameEngine\IncludeList.h" />
+    <ClInclude Include="..\Source\GameEngine\Physics\PhysicsEngine.h" />
+    <ClInclude Include="..\Source\GameEngine\RenderPasses\DefaultRenderPass.h" />
+    <ClInclude Include="..\Source\GameEngine\RenderPasses\ShadowMapPass.h" />
+    <ClInclude Include="..\Source\GameEngine\SceneRenderers\ShadowMapSceneRenderer.h" />
     <ClInclude Include="..\Source\GameEngine\Utils\AnimationInfo.h" />
-    <ClInclude Include="..\Source\GameEngine\Utils\Transform.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\ComponentFactory.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\ComponentTransform.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\DebugDraw.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\PhysicsManager.h" />
     <ClInclude Include="..\Source\include\gl.h" />
     <ClInclude Include="..\Source\include\glm.h" />
     <ClInclude Include="..\Source\include\math.h" />
@@ -279,19 +293,29 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>BT_THREADSAFE=1;BT_USE_DOUBLE_PRECISION;B3_USE_STANDALONE_EXAMPLE;WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\Source\GameEngine\Bullet\src</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <AdditionalOptions>/MP /wd4244 /wd4267 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\Source\GameEngine\Bullet\bin</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Components.lib;BulletCollision_vs2010_x64_release.lib;BulletDynamics_vs2010_x64_release.lib;LinearMath_vs2010_x64_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>call "$(SolutionDir)scripts\post-build.bat" $(PlatformTarget) $(Configuration)</Command>
     </PostBuildEvent>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

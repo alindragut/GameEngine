@@ -8,7 +8,7 @@ layout(location = 0) out vec4 out_color;
 
 void main()
 {
-	vec4 color = vec4(v_normal_out, 1);
+	vec4 color = vec4(0, 1, 0, 1);
 
 	out_color = color;
 }
