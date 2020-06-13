@@ -132,9 +132,9 @@ void Model::VisitBoneTree(float time, Animation* anim, Bone* bone, glm::mat4 par
 	}
 }
 
-void Model::Render(Shader* shader, glm::mat4 ViewMat, glm::mat4 ProjectionMat, glm::mat4 ModelMat, float time, Animation* anim) {
+void Model::Render(Shader* shader, glm::mat4 ViewMat, glm::mat4 ProjectionMat, glm::mat4 ModelMat, float time, Animation* anim, bool depth, float farPlane, glm::vec3 lightPos) {
 	if (!shader || !shader->GetProgramID()) {
-		printf("rip\n");
+		printf("Shader invalid\n");
 		return;
 	}
 
@@ -143,12 +143,23 @@ void Model::Render(Shader* shader, glm::mat4 ViewMat, glm::mat4 ProjectionMat, g
 	VisitBoneTree(time, anim, rootBone, glm::mat4(1));
 
 	shader->Use();
+
+	if (depth) {
+		glUniformMatrix4fv(shader->GetUniformLocation("view[0]"), 1, GL_FALSE, glm::value_ptr(ProjectionMat * glm::lookAt(lightPos, lightPos + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0))));
+		glUniformMatrix4fv(shader->GetUniformLocation("view[1]"), 1, GL_FALSE, glm::value_ptr(ProjectionMat * glm::lookAt(lightPos, lightPos + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0))));
+		glUniformMatrix4fv(shader->GetUniformLocation("view[2]"), 1, GL_FALSE, glm::value_ptr(ProjectionMat * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0))));
+		glUniformMatrix4fv(shader->GetUniformLocation("view[3]"), 1, GL_FALSE, glm::value_ptr(ProjectionMat * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0))));
+		glUniformMatrix4fv(shader->GetUniformLocation("view[4]"), 1, GL_FALSE, glm::value_ptr(ProjectionMat * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0))));
+		glUniformMatrix4fv(shader->GetUniformLocation("view[5]"), 1, GL_FALSE, glm::value_ptr(ProjectionMat * glm::lookAt(lightPos, lightPos + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0))));
+		glUniform3fv(shader->GetUniformLocation("light_pos"), 1, glm::value_ptr(lightPos));
+		glUniform1f(shader->GetUniformLocation("far"), farPlane);
+	}
 	int View_loc = shader->GetUniformLocation("View");
 	glUniformMatrix4fv(View_loc, 1, GL_FALSE, glm::value_ptr(ViewMat));
 	int Proj_loc = shader->GetUniformLocation("Projection");
 	glUniformMatrix4fv(Proj_loc, 1, GL_FALSE, glm::value_ptr(ProjectionMat));
+
 	int Model_loc = shader->GetUniformLocation("Model");
-	ModelMat = glm::scale(ModelMat, glm::vec3(0.05f, 0.05f, 0.05f));
 	glUniformMatrix4fv(Model_loc, 1, GL_FALSE, glm::value_ptr(ModelMat));
 
 	if (!setLocations) {
@@ -226,6 +237,7 @@ void Model::InitTextures(const aiScene* scene) {
 			int index = strlen(texture_path.data);
 			while (texture_path.data[--index] != '/') {}
 			path.append(&texture_path.data[index + 1]);
+			printf("%s\n", path.c_str());
 			textures[i] = TextureManager::LoadTexture("Source/GameEngine/Textures", path.c_str());
 		}
 	}

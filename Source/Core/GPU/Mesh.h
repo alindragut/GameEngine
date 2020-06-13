@@ -97,6 +97,8 @@ class Mesh
 
 		void UseMaterials(bool value);
 
+		void UseTextureFolder(bool useTextureFolder);
+
 		// GL_POINTS, GL_TRIANGLES, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_LINE_STRIP_ADJACENCY, GL_LINES_ADJACENCY,
 		// GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_TRIANGLE_STRIP_ADJACENCY, GL_TRIANGLES_ADJACENCY
 		void SetDrawMode(GLenum primitive);
@@ -130,6 +132,7 @@ class Mesh
 		std::string fileLocation;
 
 		bool useMaterial;
+		bool useTextureFolder;
 		GLenum glDrawMode;
 		GPUBuffers *buffers;
 

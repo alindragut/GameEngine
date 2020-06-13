@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GameEngine/Components/BaseComponents/BaseGameObject.h>
+#include <GameEngine/Components/BaseComponents/PointLightComponent.h>
 #include <GameEngine/Components/Renderers/AnimationRenderer.h>
 #include "AnimObjectGameComponent.h"
 #include "AnimMovementGameComponent.h"

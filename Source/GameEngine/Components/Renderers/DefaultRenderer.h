@@ -13,13 +13,15 @@ public:
 	virtual void update(float deltaTimeSeconds) override;
 	virtual void render() override;
 
-	Shader* GetShader() { return this->shader; }
-	Mesh* GetMesh() { return this->mesh; }
+	void SetShadowMapping(bool value) { this->useShadowMapping = value; }
 
-	void SetShader(std::string shaderPath, std::string VSName, std::string FSName, std::string shaderName);
-	void SetMesh(std::string meshPath, std::string fileName, std::string meshName);
+	void SetShader(std::string shaderName);
+	void SetMesh(std::string meshName);
 
 private:
-	Mesh* mesh;
-	Shader* shader;
+	bool useShadowMapping;
+	glm::mat4 lightView;
+	glm::mat4 lightProj;
+	std::string meshName;
+	std::string shaderName;
 };

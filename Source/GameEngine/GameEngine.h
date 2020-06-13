@@ -3,6 +3,7 @@
 #include <GameEngine/SceneRenderers/ShadowMapSceneRenderer.h>
 #include <GameEngine/Physics/PhysicsEngine.h>
 #include <Component/SimpleScene.h>
+#include <GameEngine/MapGenerator/Generator.h>
 #include <memory>
 
 using namespace std;
@@ -31,7 +32,7 @@ public:
 
 	Camera* GetCamera() { return GetSceneCamera(); }
 
-	std::vector<BaseGameObject*> GetObjects() { return objects; }
+	std::list<BaseGameObject*> GetObjects() { return objects; }
 
 	void AddObject(BaseGameObject* obj) { objects.push_back(obj); }
 
@@ -58,5 +59,7 @@ private:
 	ShadowMapSceneRenderer* sceneRenderer;
 	PhysicsEngine* physics;
 	ImGuiSetup* ImGui;
-	std::vector<BaseGameObject*> objects;
+	Generator* generator;
+	std::list<BaseGameObject*> objects;
+	std::list<BaseGameObject*> toDelete;
 };

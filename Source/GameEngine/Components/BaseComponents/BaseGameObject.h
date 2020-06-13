@@ -9,7 +9,7 @@ class BaseComponent;
 class BaseGameObject
 {
 public:
-	virtual ~BaseGameObject() {}
+	virtual ~BaseGameObject();
 	virtual void update(float deltaTimeSeconds) = 0;
 
 	int GetObjectId() { return this->objectId; }
@@ -25,11 +25,16 @@ public:
 
 	void InitComponents();
 
+	void SetShouldDelete(bool shouldDelete) { this->shouldDelete = shouldDelete; }
+	
+	bool ShouldDelete() { return this->shouldDelete; }
+
 protected:
+	bool shouldDelete;
 	int objectId;
 
 	std::map<std::string, BaseComponent*> components;
-	BaseGameObject(int id) : transform(new ComponentTransform()), objectId(id) {};
+	BaseGameObject(int id) : transform(new ComponentTransform()), objectId(id), shouldDelete(false) {};
 	ComponentTransform* transform;
 
 };

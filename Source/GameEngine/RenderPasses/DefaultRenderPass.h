@@ -1,17 +1,16 @@
 #pragma once
 
 #include <Core/Engine.h>
+#include "RenderPass.h"
 
-class DefaultRenderPass
+class DefaultRenderPass : public RenderPass
 {
 public:
-	DefaultRenderPass(unsigned int width, unsigned int height);
+	DefaultRenderPass();
 
 	~DefaultRenderPass();
 
-	void BindForWriting();
+	void Init(unsigned int width, unsigned int height);
 
-private:
-	unsigned int width;
-	unsigned int height;
+	void BindForWriting();
 };

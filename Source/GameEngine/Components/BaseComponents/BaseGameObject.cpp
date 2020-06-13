@@ -1,6 +1,16 @@
 #include "BaseGameObject.h"
 #include "BaseComponent.h"
 
+BaseGameObject::~BaseGameObject() {
+	for (const auto &it : components) {
+		delete it.second;
+	}
+
+	delete transform;
+
+	components.clear();
+}
+
 void BaseGameObject::AddComponent(BaseComponent* component) {
 	component->SetGameObject(this);
 	this->components[component->GetName()] = component;

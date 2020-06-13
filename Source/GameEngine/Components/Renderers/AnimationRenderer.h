@@ -16,16 +16,18 @@ public:
 
 	void SetAnimation(std::string animationName);
 	void SetModel(std::string modelName);
-	
+	void SetShader(std::string shaderName);
+	void SetLightPos(glm::vec3 lightPos);
+	void SetDepth(bool depth);
+
 	virtual void update(float deltaTimeSeconds) override;
 
 	virtual void render() override;
 
 private:
-	GameEngine* engine;
 	float time;
+	bool depth;
+	glm::vec3 lightPos;
 	AnimationInfo* animInfo;
-	std::unordered_map<std::string, Model*> models;
-	std::unordered_map<std::string, Animation*> animations;
-	std::unordered_map<std::string, Shader*> shaders;
+	std::string shaderName;
 };

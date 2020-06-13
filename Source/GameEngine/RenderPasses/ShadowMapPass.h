@@ -1,24 +1,22 @@
 #pragma once
 
 #include <Core/Engine.h>
+#include "RenderPass.h"
 
-class ShadowMapPass
+class ShadowMapPass : public RenderPass
 {
 public:
-	ShadowMapPass(unsigned int width, unsigned int height);
+	ShadowMapPass();
 
 	~ShadowMapPass();
 
-	void Init();
+	void Init(unsigned int width, unsigned int height);
 
 	void BindForWriting();
 
 	void BindForReading(GLenum textureUnit);
 
 private:
-	unsigned int shadow_width;
-	unsigned int shadow_height;
-
 	GLuint shadow_fbo;
 	GLuint shadow_texture;
 };

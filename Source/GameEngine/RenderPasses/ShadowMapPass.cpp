@@ -1,17 +1,19 @@
-#include "ShadowMapPass.h"
+﻿#include "ShadowMapPass.h"
 #include <GameEngine/EngineManager.h>
 #include <GameEngine/GameEngine.h>
 
-ShadowMapPass::ShadowMapPass(unsigned int width, unsigned int height) {
-	shadow_width = width;
-	shadow_height = height;
+ShadowMapPass::ShadowMapPass() {
+	
 }
 
 ShadowMapPass::~ShadowMapPass() {
 
 }
 
-void ShadowMapPass::Init() {
+void ShadowMapPass::Init(unsigned int shadow_width, unsigned int shadow_height) {
+	width = shadow_width;
+	height = shadow_height;
+
 	glGenFramebuffers(1, &shadow_fbo);
 
 	glGenTextures(1, &shadow_texture);
@@ -21,6 +23,8 @@ void ShadowMapPass::Init() {
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, shadow_fbo);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadow_texture, 0);
@@ -30,9 +34,10 @@ void ShadowMapPass::Init() {
 }
 
 void ShadowMapPass::BindForWriting() {
-	glViewport(0, 0, shadow_width, shadow_height);
+	glViewport(0, 0, width, height);
 	glBindFramebuffer(GL_FRAMEBUFFER, shadow_fbo);
 	glClear(GL_DEPTH_BUFFER_BIT);
+	glCullFace(GL_FRONT);
 }
 
 void ShadowMapPass::BindForReading(GLenum textureUnit) {

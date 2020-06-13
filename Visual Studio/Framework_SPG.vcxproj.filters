@@ -55,6 +55,18 @@
     <Filter Include="GameEngine\Physics">
       <UniqueIdentifier>{a2ab0e22-f8b4-485b-a93c-dd642fbfda8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\Components\Arrow">
+      <UniqueIdentifier>{00b2d9bc-8f6d-4a26-877b-f7ed960284cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\MapGenerator">
+      <UniqueIdentifier>{3ecc8067-c398-4204-ac8b-1279cc83ff6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Utils\Delaunay">
+      <UniqueIdentifier>{47925f32-1f84-476b-8949-735930aaada3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Components\Renderers\GameRenderers">
+      <UniqueIdentifier>{4df3a047-9262-446a-8b79-4bd03bace5b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Core\Engine.cpp">
@@ -181,7 +193,49 @@
     <ClCompile Include="..\Source\GameEngine\Components\AnimObject\AnimMovementGameComponent.cpp">
       <Filter>GameEngine\Components\AnimObject</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\GameEngine\Utils\DebugDraw.cpp">
+    <ClCompile Include="..\Source\GameEngine\RenderPasses\CubeShadowMapPass.cpp">
+      <Filter>GameEngine\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\Renderers\PointShadowRenderer.cpp">
+      <Filter>GameEngine\Components\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Utils\ShaderCache.cpp">
+      <Filter>GameEngine\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\PointLightComponent.cpp">
+      <Filter>GameEngine\Components\BaseComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\Arrow\ArrowComponent.cpp">
+      <Filter>GameEngine\Components\Arrow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\Arrow\ArrowSpawner.cpp">
+      <Filter>GameEngine\Components\Arrow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\MapGenerator\GeneratorManager.cpp">
+      <Filter>GameEngine\MapGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\MapGenerator\Generator.cpp">
+      <Filter>GameEngine\MapGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Utils\Delaunay\edge.cpp">
+      <Filter>GameEngine\Utils\Delaunay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Utils\Delaunay\numeric.cpp">
+      <Filter>GameEngine\Utils\Delaunay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Utils\Delaunay\triangle.cpp">
+      <Filter>GameEngine\Utils\Delaunay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Utils\Delaunay\vector2.cpp">
+      <Filter>GameEngine\Utils\Delaunay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Utils\Delaunay\delaunay.cpp">
+      <Filter>GameEngine\Utils\Delaunay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\Renderers\GameRenderers\TextureRenderer.cpp">
+      <Filter>GameEngine\Components\Renderers\GameRenderers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Utils\MeshManager.cpp">
       <Filter>GameEngine\Utils</Filter>
     </ClCompile>
   </ItemGroup>
@@ -354,6 +408,60 @@
     <ClInclude Include="..\Source\GameEngine\Utils\DebugDraw.h">
       <Filter>GameEngine\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\RenderPasses\RenderPass.h">
+      <Filter>GameEngine\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\RenderPasses\CubeShadowMapPass.h">
+      <Filter>GameEngine\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\Renderers\PointShadowRenderer.h">
+      <Filter>GameEngine\Components\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\ShaderCache.h">
+      <Filter>GameEngine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\PointLightComponent.h">
+      <Filter>GameEngine\Components\BaseComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\Arrow\ArrowComponent.h">
+      <Filter>GameEngine\Components\Arrow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\Arrow\ArrowSpawner.h">
+      <Filter>GameEngine\Components\Arrow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\MapGenerator\GeneratorManager.h">
+      <Filter>GameEngine\MapGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\MapGenerator\Generator.h">
+      <Filter>GameEngine\MapGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\AStarAlgorithm.h">
+      <Filter>GameEngine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\MSTAlgorithm.h">
+      <Filter>GameEngine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\Delaunay\delaunay.h">
+      <Filter>GameEngine\Utils\Delaunay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\Delaunay\edge.h">
+      <Filter>GameEngine\Utils\Delaunay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\Delaunay\numeric.h">
+      <Filter>GameEngine\Utils\Delaunay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\Delaunay\triangle.h">
+      <Filter>GameEngine\Utils\Delaunay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\Delaunay\vector2.h">
+      <Filter>GameEngine\Utils\Delaunay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\Renderers\GameRenderers\TextureRenderer.h">
+      <Filter>GameEngine\Components\Renderers\GameRenderers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\MeshManager.h">
+      <Filter>GameEngine\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Source\GameEngine\Shaders\FragmentShaderDefault.glsl">
@@ -366,6 +474,39 @@
       <Filter>GameEngine\Shaders</Filter>
     </None>
     <None Include="..\Source\GameEngine\Shaders\FragmentShaderAnim.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
+    <None Include="..\Source\GameEngine\Shaders\FragmentShaderPointShadows.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
+    <None Include="..\Source\GameEngine\Shaders\GeometryShaderPointShadows.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
+    <None Include="..\Source\GameEngine\Shaders\VertexShaderPointShadows.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
+    <None Include="..\Source\GameEngine\Shaders\FragmentShaderLighting.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
+    <None Include="..\Source\GameEngine\Shaders\VertexShaderLighting.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
+    <None Include="..\Source\GameEngine\Shaders\VertexShaderPointShadowsAnim.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
+    <None Include="..\Source\GameEngine\Shaders\FragmentShaderDebug.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
+    <None Include="..\Source\GameEngine\Shaders\SkyBox.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
+    <None Include="..\Source\GameEngine\Shaders\FragmentShaderHallway.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
+    <None Include="..\Source\GameEngine\Shaders\FragmentShaderRoom.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
+    <None Include="..\Source\GameEngine\Shaders\FragmentShaderMeshTexture.glsl">
       <Filter>GameEngine\Shaders</Filter>
     </None>
   </ItemGroup>

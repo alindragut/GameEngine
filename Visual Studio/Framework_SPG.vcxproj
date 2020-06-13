@@ -36,8 +36,11 @@
     <ClCompile Include="..\Source\GameEngine\Components\AnimObject\AnimMovementGameComponent.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\AnimObject\AnimObject.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\AnimObject\AnimObjectGameComponent.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Components\Arrow\ArrowComponent.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Components\Arrow\ArrowSpawner.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\BaseGameObject.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\GraphicsComponent.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\PointLightComponent.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\RigidBodyComponent.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\GameObject\GameObject.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\GameObject\GameObjectGameComponent.cpp" />
@@ -45,7 +48,9 @@
     <ClCompile Include="..\Source\GameEngine\Components\Renderers\AnimationRenderer.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\Renderers\Bone.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\Renderers\DefaultRenderer.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Components\Renderers\GameRenderers\TextureRenderer.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\Renderers\Model.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Components\Renderers\PointShadowRenderer.cpp" />
     <ClCompile Include="..\Source\GameEngine\EngineManager.cpp" />
     <ClCompile Include="..\Source\GameEngine\GameEngine.cpp" />
     <ClCompile Include="..\Source\GameEngine\ImGUI\imgui.cpp" />
@@ -54,12 +59,21 @@
     <ClCompile Include="..\Source\GameEngine\ImGUI\imgui_impl_glfw.cpp" />
     <ClCompile Include="..\Source\GameEngine\ImGUI\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\Source\GameEngine\ImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="..\Source\GameEngine\MapGenerator\Generator.cpp" />
+    <ClCompile Include="..\Source\GameEngine\MapGenerator\GeneratorManager.cpp" />
     <ClCompile Include="..\Source\GameEngine\Physics\PhysicsEngine.cpp" />
+    <ClCompile Include="..\Source\GameEngine\RenderPasses\CubeShadowMapPass.cpp" />
     <ClCompile Include="..\Source\GameEngine\RenderPasses\DefaultRenderPass.cpp" />
     <ClCompile Include="..\Source\GameEngine\RenderPasses\ShadowMapPass.cpp" />
     <ClCompile Include="..\Source\GameEngine\SceneRenderers\ShadowMapSceneRenderer.cpp" />
     <ClCompile Include="..\Source\GameEngine\Utils\ComponentFactory.cpp" />
-    <ClCompile Include="..\Source\GameEngine\Utils\DebugDraw.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Utils\Delaunay\delaunay.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Utils\Delaunay\edge.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Utils\Delaunay\numeric.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Utils\Delaunay\triangle.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Utils\Delaunay\vector2.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Utils\MeshManager.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Utils\ShaderCache.cpp" />
     <ClCompile Include="..\Source\include\gl.cpp" />
     <ClCompile Include="..\Source\Main.cpp" />
   </ItemGroup>
@@ -84,9 +98,12 @@
     <ClInclude Include="..\Source\GameEngine\Components\AnimObject\AnimMovementGameComponent.h" />
     <ClInclude Include="..\Source\GameEngine\Components\AnimObject\AnimObject.h" />
     <ClInclude Include="..\Source\GameEngine\Components\AnimObject\AnimObjectGameComponent.h" />
+    <ClInclude Include="..\Source\GameEngine\Components\Arrow\ArrowComponent.h" />
+    <ClInclude Include="..\Source\GameEngine\Components\Arrow\ArrowSpawner.h" />
     <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\BaseComponent.h" />
     <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\BaseGameObject.h" />
     <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\GraphicsComponent.h" />
+    <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\PointLightComponent.h" />
     <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\RigidBodyComponent.h" />
     <ClInclude Include="..\Source\GameEngine\Components\ComponentsIncludeList.h" />
     <ClInclude Include="..\Source\GameEngine\Components\GameObject\GameObject.h" />
@@ -95,7 +112,9 @@
     <ClInclude Include="..\Source\GameEngine\Components\Renderers\AnimationRenderer.h" />
     <ClInclude Include="..\Source\GameEngine\Components\Renderers\Bone.h" />
     <ClInclude Include="..\Source\GameEngine\Components\Renderers\DefaultRenderer.h" />
+    <ClInclude Include="..\Source\GameEngine\Components\Renderers\GameRenderers\TextureRenderer.h" />
     <ClInclude Include="..\Source\GameEngine\Components\Renderers\Model.h" />
+    <ClInclude Include="..\Source\GameEngine\Components\Renderers\PointShadowRenderer.h" />
     <ClInclude Include="..\Source\GameEngine\EngineManager.h" />
     <ClInclude Include="..\Source\GameEngine\GameEngine.h" />
     <ClInclude Include="..\Source\GameEngine\ImGUI\imconfig.h" />
@@ -107,15 +126,28 @@
     <ClInclude Include="..\Source\GameEngine\ImGUI\imstb_textedit.h" />
     <ClInclude Include="..\Source\GameEngine\ImGUI\imstb_truetype.h" />
     <ClInclude Include="..\Source\GameEngine\IncludeList.h" />
+    <ClInclude Include="..\Source\GameEngine\MapGenerator\Generator.h" />
+    <ClInclude Include="..\Source\GameEngine\MapGenerator\GeneratorManager.h" />
     <ClInclude Include="..\Source\GameEngine\Physics\PhysicsEngine.h" />
+    <ClInclude Include="..\Source\GameEngine\RenderPasses\CubeShadowMapPass.h" />
     <ClInclude Include="..\Source\GameEngine\RenderPasses\DefaultRenderPass.h" />
+    <ClInclude Include="..\Source\GameEngine\RenderPasses\RenderPass.h" />
     <ClInclude Include="..\Source\GameEngine\RenderPasses\ShadowMapPass.h" />
     <ClInclude Include="..\Source\GameEngine\SceneRenderers\ShadowMapSceneRenderer.h" />
     <ClInclude Include="..\Source\GameEngine\Utils\AnimationInfo.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\AStarAlgorithm.h" />
     <ClInclude Include="..\Source\GameEngine\Utils\ComponentFactory.h" />
     <ClInclude Include="..\Source\GameEngine\Utils\ComponentTransform.h" />
     <ClInclude Include="..\Source\GameEngine\Utils\DebugDraw.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\Delaunay\delaunay.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\Delaunay\edge.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\Delaunay\numeric.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\Delaunay\triangle.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\Delaunay\vector2.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\MeshManager.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\MSTAlgorithm.h" />
     <ClInclude Include="..\Source\GameEngine\Utils\PhysicsManager.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\ShaderCache.h" />
     <ClInclude Include="..\Source\include\gl.h" />
     <ClInclude Include="..\Source\include\glm.h" />
     <ClInclude Include="..\Source\include\math.h" />
@@ -123,9 +155,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Source\GameEngine\Shaders\FragmentShaderAnim.glsl" />
+    <None Include="..\Source\GameEngine\Shaders\FragmentShaderDebug.glsl" />
     <None Include="..\Source\GameEngine\Shaders\FragmentShaderDefault.glsl" />
+    <None Include="..\Source\GameEngine\Shaders\FragmentShaderHallway.glsl" />
+    <None Include="..\Source\GameEngine\Shaders\FragmentShaderLighting.glsl" />
+    <None Include="..\Source\GameEngine\Shaders\FragmentShaderMeshTexture.glsl" />
+    <None Include="..\Source\GameEngine\Shaders\FragmentShaderPointShadows.glsl" />
+    <None Include="..\Source\GameEngine\Shaders\FragmentShaderRoom.glsl" />
+    <None Include="..\Source\GameEngine\Shaders\GeometryShaderPointShadows.glsl" />
+    <None Include="..\Source\GameEngine\Shaders\SkyBox.glsl" />
     <None Include="..\Source\GameEngine\Shaders\VertexShaderAnim.glsl" />
     <None Include="..\Source\GameEngine\Shaders\VertexShaderDefault.glsl" />
+    <None Include="..\Source\GameEngine\Shaders\VertexShaderLighting.glsl" />
+    <None Include="..\Source\GameEngine\Shaders\VertexShaderPointShadows.glsl" />
+    <None Include="..\Source\GameEngine\Shaders\VertexShaderPointShadowsAnim.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Source\GameEngine\ImGUI\LICENSE.txt" />
@@ -224,6 +267,7 @@
     <OutDir>..\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>obj\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
     <IncludePath>..\Source;..\libs\;..\libs\Engine\;$(IncludePath)</IncludePath>
+    <LibraryPath>..\libs\Engine\$(PlatformTarget)\$(Configuration);$(LibraryPath);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

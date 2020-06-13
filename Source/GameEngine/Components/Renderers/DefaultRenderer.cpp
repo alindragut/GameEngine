@@ -1,13 +1,21 @@
 #include "DefaultRenderer.h"
+#include <GameEngine/Utils/ShaderCache.h>
+#include <GameEngine/Utils/MeshManager.h>
 
 DefaultRenderer::DefaultRenderer() {
-	SetMesh(RESOURCE_PATH::MODELS + "Primitives", "box.obj", "default");
-	SetShader("Source/GameEngine/Shaders/", "VertexShaderDefault.glsl", "FragmentShaderDefault.glsl", "default");
+	this->shaderName = "Default";
+	this->meshName = "box";
+
+	ShaderCache& sc = ShaderCache::GetInstance();
+	sc.AddShader("Default", "Source/GameEngine/Shaders", "VertexShaderDefault.glsl", "FragmentShaderDefault.glsl");
+	sc.AddShader("TextureMesh", "Source/GameEngine/Shaders", "VertexShaderDefault.glsl", "FragmentShaderMeshTexture.glsl");
+	sc.AddShader("Debug", "Source/GameEngine/Shaders", "VertexShaderLighting.glsl", "FragmentShaderDebug.glsl");
+
+	MeshManager& mm = MeshManager::GetInstance();
+	mm.AddMesh("box", RESOURCE_PATH::MODELS + "Primitives", "box.obj");
 }
 
 DefaultRenderer::~DefaultRenderer() {
-	delete mesh;
-	delete shader;
 }
 
 void DefaultRenderer::update(float deltaTimeSeconds) {
@@ -15,6 +23,7 @@ void DefaultRenderer::update(float deltaTimeSeconds) {
 }
 
 void DefaultRenderer::render() {
+	Shader* shader = ShaderCache::GetInstance().GetShader(shaderName);
 	shader->Use();
 
 	glUniformMatrix4fv(shader->loc_view_matrix, 1, GL_FALSE, glm::value_ptr(camera->GetViewMatrix()));
@@ -30,22 +39,29 @@ void DefaultRenderer::render() {
 		glm::mat4 rot = glm::rotate(glm::mat4(1), object->GetTransform()->GetRot().y, glm::vec3(0, 1, 0));
 		glm::mat4 scale = glm::scale(glm::mat4(1), object->GetTransform()->GetScale());
 
-		glm::mat4 modelMat = trans * rot * scale;
+		modelMat = trans * rot * scale;
 	}
 
 	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(modelMat));
+
+	if (useShadowMapping) {
+		int locLightView = shader->GetUniformLocation("Light_View");
+		glUniformMatrix4fv(locLightView, 1, GL_FALSE, glm::value_ptr(lightView));
+		int locLightProj = shader->GetUniformLocation("Light_Projection");
+		glUniformMatrix4fv(locLightProj, 1, GL_FALSE, glm::value_ptr(lightProj));
+	}
+	else {
+		lightView = camera->GetViewMatrix();
+		lightProj = camera->GetProjectionMatrix();
+	}
 	
-	mesh->Render();
+	MeshManager::GetInstance().GetMesh(meshName)->Render();
 }
 
-void DefaultRenderer::SetMesh(std::string meshPath, std::string fileName, std::string meshName) {
-	mesh = new Mesh(meshName);
-	mesh->LoadMesh(meshPath, fileName);
+void DefaultRenderer::SetMesh(std::string meshName) {
+	this->meshName = meshName;
 }
 	
-void DefaultRenderer::SetShader(std::string shaderPath, std::string VSName, std::string FSName, std::string shaderName) {
-	shader = new Shader(shaderName.c_str());
-	shader->AddShader(shaderPath + VSName, GL_VERTEX_SHADER);
-	shader->AddShader(shaderPath + FSName, GL_FRAGMENT_SHADER);
-	shader->CreateAndLink();
+void DefaultRenderer::SetShader(std::string shaderName) {
+	this->shaderName = shaderName;
 }

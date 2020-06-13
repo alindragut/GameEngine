@@ -45,6 +45,7 @@ void Mesh::ClearData()
 	texCoords.clear();
 	indices.clear();
 	normals.clear();
+	vertices.clear();
 }
 
 bool Mesh::LoadMesh(const string& fileLocation, const string& fileName)
@@ -217,7 +218,17 @@ bool Mesh::InitMaterials(const aiScene* pScene)
 			aiString Path;
 			if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS)
 			{
-				materials[i]->texture = TextureManager::LoadTexture(fileLocation, Path.data);
+				if (useTextureFolder) {
+					std::string path;
+					int index = strlen(Path.data);
+					char c = Path.data[--index];
+					while (c != '/' && c != '\\') { c = Path.data[--index]; }
+					path.append(&Path.data[index + 1]);
+					materials[i]->texture = TextureManager::LoadTexture("Source/GameEngine/Textures", path.c_str());
+				}
+				else {
+					materials[i]->texture = TextureManager::LoadTexture(fileLocation, Path.data);
+				}
 			}
 		}
 
@@ -253,6 +264,10 @@ void Mesh::UseMaterials(bool value)
 	useMaterial = value;
 }
 
+void Mesh::UseTextureFolder(bool useTextureFolder) {
+	this->useTextureFolder = useTextureFolder;
+}
+
 void Mesh::Render() const
 {
 	glBindVertexArray(buffers->VAO);
@@ -261,6 +276,7 @@ void Mesh::Render() const
 		if (useMaterial)
 		{
 			auto materialIndex = meshEntries[i].materialIndex;
+
 			if (materialIndex != INVALID_MATERIAL && materials[materialIndex]->texture)
 			{
 				(materials[materialIndex]->texture)->BindToTextureUnit(GL_TEXTURE0);

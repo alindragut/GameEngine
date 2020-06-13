@@ -25,5 +25,5 @@ void main()
 	vec4 PosL = BoneTransform * vec4(v_position, 1.0);
 	gl_Position = Projection * View * Model * PosL;
 	texture_coord = v_texture_coord;
-
+	
 }

@@ -6,9 +6,6 @@ GameObject::GameObject(int objectId) : BaseGameObject(objectId)
 
 GameObject::~GameObject()
 {
-	for (auto &it : components) {
-		delete it.second;
-	}
 }
 
 void GameObject::update(float deltaTimeSeconds) {

@@ -1,129 +1,123 @@
 #include "AnimMovementGameComponent.h"
+#include <GameEngine/Utils/PhysicsManager.h>
 #include <GameEngine/IncludeList.h>
+#include <GameEngine/Components/Arrow/ArrowSpawner.h>
+#include <GameEngine/MapGenerator/GeneratorManager.h>
 
 AnimMovementGameComponent::AnimMovementGameComponent() {
 	dir = glm::vec3(0);
-	crtX = 0;
-	crtY = 0;
-	crtZ = 0;
+	rotQuat = glm::quat();
+	newRotQuat = glm::quat();
 	isRotating = false;
 	animation = false;
 	state = 0;
+	speed = 1;
+	currentDest = glm::vec3(0);
 }
 
 void AnimMovementGameComponent::Init() {
+	GeneratorManager& gm = GeneratorManager::GetInstance();
+	dir = gm.GetGenerator()->GetSpawnPoint();
+	matrix = gm.GetGenerator()->GetMatrix();
+	auxMatrix = new int*[70];
+	for (int i = 0; i < 70; i++) {
+		auxMatrix[i] = new int[70];
+	}
+	object->GetTransform()->SetPos(dir);
+	object->GetTransform()->UseModel(true);
+	astar = new AStarAlgorithm(2 * 30 + 10, 2 * 30 + 10);
 }
 
 void AnimMovementGameComponent::update(float deltaTimeSeconds) {
-
-	ar = (AnimationRenderer*)object->GetComponent("AnimationRenderer");
-
-	switch (state) {
-	case 0:
-		if (!animation) {
-			animation = true;
-			ar->SetAnimation("anim_3");
+	glm::vec3 currentPos = object->GetTransform()->GetPos();
+	if (!crtPath.empty()) {
+		glm::vec3 oldCurrentDest = currentDest;
+		currentDest = glm::vec3(crtPath.top().second, 0, crtPath.top().first);
+		if (oldCurrentDest != currentDest) {
+			dir = glm::normalize(currentDest - currentPos);
+			newRotQuat = glm::quat(glm::inverse(glm::lookAt(glm::vec3(0), -dir, glm::vec3(0, 1, 0))));
 		}
-	case 1:
-		if (!animation) {
-			animation = true;
-			ar->SetAnimation("anim_1");
-		}
-	}
-
-	EngineManager& em = EngineManager::GetInstance();
-	auto camera = em.GetGameEngine()->GetCamera();
-
-	glm::vec3 vector = glm::vec3(crtX, crtY, crtZ) - dir;
-
-	glm::mat4 modelMatrix = glm::mat4(1);
-
-	glm::mat4 rotation = glm::mat4(1);
-	glm::vec3 direction = glm::vec3(0);
-
-	if (vector != glm::vec3(0) && fabs(vector.x) > 0.1f && fabs(vector.z) > 0.1f) {
-		direction = glm::normalize(vector);
-		dir += direction * 5.f * deltaTimeSeconds;
-		if (state != 1) {
-			state = 1;
-			animation = false;
-		}
-		
-	}
-	else {
-		if (state != 0) {
-			state = 0;
-			animation = false;
-		}
-	}
-
-	// https://stackoverflow.com/questions/20346000/rotate-an-object-in-direction-of-motion-in-opengl
-
-	glm::mat4 translate = glm::translate(glm::mat4(1), dir);
-	float crtTime = Engine::GetElapsedTime() - timestamp;
-	if (crtTime < rotDuration) {
-		if (isRotating) {
-			float aux = prevRotation * (1.f - crtTime/rotDuration) + crtRotation * crtTime / rotDuration;
-			rotation = glm::rotate(glm::mat4(1), aux, glm::vec3(0, 1, 0));
-			crtRotation = atan2(-direction.z, direction.x);
+		if (glm::l2Norm(currentPos, currentDest) < 0.5f) {
+			crtPath.pop();
 		}
 	}
 	else {
-		isRotating = false;
-		rotation = glm::rotate(glm::mat4(1), crtRotation, glm::vec3(0, 1, 0));
+		dir = glm::vec3(0);
 	}
-
-	//rotation = glm::inverse(glm::lookAt(dir, dir + forward, glm::vec3(0, 1, 0)));
-	glm::mat4 scale = glm::scale(glm::mat4(1), glm::vec3(1, 2, 1));
-	modelMatrix = translate * rotation * scale;
-
-	object->GetTransform()->SetPos(dir);
-	object->GetTransform()->SetScale(glm::vec3(10));
-
-	camera->SetPosition(glm::vec3(dir.x, dir.y + 10, dir.z + 10));
+	rotQuat = GetRotationQuat(rotQuat, newRotQuat, deltaTimeSeconds);
+	ComponentTransform* transf = object->GetTransform();
+	currentPos += dir * speed * deltaTimeSeconds;
+	transf->SetPos(currentPos);
+	glm::mat4 modelMat = glm::translate(glm::mat4(1), currentPos) * glm::mat4(rotQuat);
+	transf->SetModel(modelMat);
 }
 
 void AnimMovementGameComponent::OnMouseBtnPress(int mouseX, int mouseY, int button, int mods) {
 
 	if (button == GLFW_MOUSE_BUTTON_2) {
-		EngineManager& em = EngineManager::GetInstance();
-		auto camera = em.GetGameEngine()->GetCamera();
-		auto resolution = em.GetGameEngine()->GetWindow()->GetResolution();
+		glm::vec3 playerPos = object->GetTransform()->GetPos();
+		printf("player %lf %lf %lf\n", playerPos.x, playerPos.y, playerPos.z);
+		glm::vec3 mouseWorldPos = RayPick(mouseX, mouseY);
+		printf("target %lf %lf %lf\n", mouseWorldPos.x, mouseWorldPos.y, mouseWorldPos.z);
 
-		glm::vec3 camPosition = camera->transform->GetWorldPosition();
-		int width = resolution.x;
-		int height = resolution.y;
+		for (int i = 0; i < 70; i++) {
+			for (int j = 0; j < 70; j++) {
+				auxMatrix[i][j] = matrix[i][j];
+			}
+		}
 
-
-		// https://stackoverflow.com/questions/29997209/opengl-c-mouse-ray-picking-glmunproject
-
-		float mouseXpos = mouseX / (width * 0.5f) - 1.0f;
-		float mouseYpos = mouseY / (height * 0.5f) - 1.0f;
-
-		glm::mat4 invVP = glm::inverse(camera->GetProjectionMatrix() * camera->GetViewMatrix());
-		glm::vec4 screenPos = glm::vec4(mouseXpos, -mouseYpos, 1.0f, 1.0f);
-		glm::vec4 worldPos = invVP * screenPos;
-
-		glm::vec3 dir = glm::normalize(glm::vec3(worldPos));
-
-
-		// https://www.gamedev.net/forums/topic/321357-ray-plane-intersection/
-
-		glm::vec3 normalXOZ = glm::vec3(0, 1, 0);
-
-		float t = -(glm::dot(camPosition, normalXOZ)) / (glm::dot(dir, normalXOZ));
-
-		crtX = camPosition.x + t * dir.x;
-		crtY = camPosition.y + t * dir.y;
-		crtZ = camPosition.z + t * dir.z;
-
-		prevRotation = crtRotation;
-		forward = glm::normalize(glm::vec3(crtX, crtY, crtZ) - dir);
-
-		crtRotation = atan2(-crtZ, crtX);
-		isRotating = true;
-		timestamp = Engine::GetElapsedTime();
+		crtPath = astar->aStarSearch(&auxMatrix, std::make_pair((int)round(object->GetTransform()->GetPos().z),
+			(int)round(object->GetTransform()->GetPos().x)),
+			std::make_pair((int)round(mouseWorldPos.z),
+			(int)round(mouseWorldPos.x)));
+		if (!crtPath.empty()) {
+			crtPath.pop();
+		}
 	}
 
 
+}
+
+void AnimMovementGameComponent::OnKeyPress(int key, int mods) {
+	if (key == GLFW_KEY_1) {
+		double mouseX, mouseY;
+		glfwGetCursorPos(EngineManager::GetInstance().GetGameEngine()->GetWindow()->GetGLFWWindow(), &mouseX, &mouseY);
+		glm::vec3 yOffset = glm::vec3(0, 0.5, 0);
+
+		glm::vec3 mouseWorldPos = RayPick(int(round(mouseX)), int(round(mouseY))) + yOffset;
+
+		glm::vec3 currentPos = object->GetTransform()->GetPos() + yOffset;
+		printf("1\n");
+		ArrowSpawner::SpawnArrow(object, currentPos, glm::normalize(mouseWorldPos - currentPos), 0.1f, 10.0f);
+	}
+}
+
+glm::vec3 AnimMovementGameComponent::RayPick(int mouseX, int mouseY) {
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	EngineManager& em = EngineManager::GetInstance();
+	auto camera = em.GetGameEngine()->GetCamera();
+	auto resolution = em.GetGameEngine()->GetWindow()->GetResolution();
+
+	glm::vec3 camPosition = camera->transform->GetWorldPosition();
+	int width = resolution.x;
+	int height = resolution.y;
+
+	glm::vec3 res = glm::unProject(glm::vec3(mouseX, height - mouseY - 1, 1.0f), camera->GetViewMatrix() * glm::translate(glm::mat4(1), camPosition), camera->GetProjectionMatrix(), glm::vec4(viewport[0], viewport[1], viewport[2], viewport[3]));
+
+	glm::vec3 dir = glm::normalize(res - camPosition);
+
+
+	bool hit;
+	return PhysicsManager::GetInstance().GetPhysicsEngine()->RayCast(camPosition, res * 100.0f, &hit, COL_FLOOR, COL_FLOOR);
+}
+
+glm::quat AnimMovementGameComponent::GetRotationQuat(glm::quat oldRot, glm::quat newRot, float elapsedTime) {
+	float factor = fmin(elapsedTime / 0.5f, 1.0f);
+	float matching = glm::dot(oldRot, newRot);
+	if (abs(matching - 1.0) < 0.01) {
+		return newRot;
+	}
+	return glm::slerp(oldRot, newRot, factor);
 }

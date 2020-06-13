@@ -6,15 +6,20 @@
 #include "btBulletDynamicsCommon.h"
 #include <GameEngine/Utils/ComponentFactory.h>
 #include <GameEngine/Utils/DebugDraw.h>
+#include <GameEngine/Utils/ShaderCache.h>
 
 GameEngine::GameEngine() {
 }
 
 GameEngine::~GameEngine() {
 	int size = objects.size();
-	for (int i = 0; i < size; i++) {
-		delete objects[i];
+	for (auto it = objects.begin(); it != objects.end();) {
+		delete(*it);
+		it = objects.erase(it);
 	}
+	delete physics;
+	delete ImGui;
+	delete sceneRenderer;
 }
 
 void GameEngine::Init() {
@@ -23,35 +28,71 @@ void GameEngine::Init() {
 
 	ComponentFactory& factory = ComponentFactory::GetInstance();
 
-	/*BaseGameObject* obj = factory.createObject(1);
-
-	if (obj != nullptr) {
-		objects.push_back(obj);
-	}*/
-
-	BaseGameObject* obj = factory.createObject(2);
-
-	if (obj != nullptr) {
-		objects.push_back(obj);
-	}
-
 	physics = new PhysicsEngine();
 	physics->Init();
-
-	int size = objects.size();
-	for (int i = 0; i < size; i++) {
-		objects[i]->InitComponents();
-	}
-
-	glm::ivec2 res = window->GetResolution();
-
-	sceneRenderer = new ShadowMapSceneRenderer(&objects);
-	sceneRenderer->Init(res.x, res.y, res.x, res.y);
 
 	ImGui = new ImGuiSetup();
 	ImGui->Init();
 
-	//DebugDraw::DrawLine(glm::vec3(0), glm::vec3(2, 2, 2));
+	generator = new Generator(3, 30, 30, 3, 3);
+	generator->PlaceRooms();
+
+	glm::ivec2 res = window->GetResolution();
+
+	sceneRenderer = new ShadowMapSceneRenderer(&objects);
+	sceneRenderer->Init(res.x, res.y, 256, 256, 1024, 1024);
+
+	BaseGameObject* obj = factory.createObject(1);
+
+	if (obj != nullptr) {
+		objects.push_back(obj);
+	}
+
+	obj = factory.createObject(4);
+	
+	if (obj != nullptr) {
+		objects.push_back(obj);
+	}
+	
+	obj = factory.createObject(3);
+
+	if (obj != nullptr) {
+		obj->GetTransform()->SetPos(glm::vec3(-2, 0.5, 2));
+		objects.push_back(obj);
+	}
+
+	obj = factory.createObject(3);
+
+	if (obj != nullptr) {
+		obj->GetTransform()->SetPos(glm::vec3(2, 0.5, -2));
+		objects.push_back(obj);
+	}
+
+	obj = factory.createObject(3);
+
+	if (obj != nullptr) {
+		obj->GetTransform()->SetPos(glm::vec3(-2, 0.5, -2));
+		objects.push_back(obj);
+	}
+	
+	obj = factory.createObject(6);
+
+	if (obj != nullptr) {
+		obj->GetTransform()->SetScale(glm::vec3(20, 0.01, 20));
+		obj->GetTransform()->SetPos(glm::vec3(0, 0.01, 0));
+		objects.push_back(obj);
+	}
+	
+	/*obj = factory.createObject(5);
+
+	if (obj != nullptr) {
+		obj->GetTransform()->SetPos(glm::vec3(-5, 0.5, -5));
+		obj->GetTransform()->SetScale(glm::vec3(0.01));
+		DefaultRenderer* dr = static_cast<DefaultRenderer*>(obj->GetComponent("DefaultRenderer"));
+		dr->SetMesh("Source/GameEngine/Models", "SM_Bld_Rockwall_Stairs_01.fbx", "bridge", true, true);
+		dr->SetShader("TextureMesh");
+		objects.push_back(obj);
+	}*/
 }
 
 void GameEngine::FrameStart() {
@@ -63,14 +104,28 @@ void GameEngine::Update(float deltaTimeSeconds) {
 	{
 		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
-		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+		ImGui::Text("%.1f fps", 1.0f / deltaTimeSeconds);               // Display some text (you can use a format strings too)
 	}
 
 	physics->Step(deltaTimeSeconds);
 
-	int size = objects.size();
-	for (int i = 0; i < size; i++) {
-		objects[i]->update(deltaTimeSeconds);
+	for (auto it = objects.begin(); it != objects.end();) {
+		BaseGameObject* obj = *it;
+
+		if (obj->ShouldDelete()) {
+			toDelete.push_back(obj);
+			it = objects.erase(it);
+			
+		}
+		else {
+			obj->update(deltaTimeSeconds);
+			++it;
+		}
+	}
+
+	while (!toDelete.empty()) {
+		delete toDelete.front();
+		toDelete.pop_front();
 	}
 	sceneRenderer->renderScene();
 }
@@ -82,76 +137,76 @@ void GameEngine::FrameEnd() {
 
 
 void GameEngine::OnMouseBtnPress(int mouseX, int mouseY, int button, int mods) {
-	int size = objects.size();
-	for (int i = 0; i < size; i++) {
-		auto components = objects[i]->GetComponents();
+	for (auto obj = objects.begin(); obj != objects.end();) {
+		auto components = (*obj)->GetComponents();
 		for (const auto &it : (*components)) {
 			it.second->OnMouseBtnPress(mouseX, mouseY, button, mods);
 		}
+		obj++;
 	}
 }
 
 void GameEngine::OnInputUpdate(float deltaTime, int mods) {
-	int size = objects.size();
-	for (int i = 0; i < size; i++) {
-		auto components = objects[i]->GetComponents();
+	for (auto obj = objects.begin(); obj != objects.end();) {
+		auto components = (*obj)->GetComponents();
 		for (const auto &it : (*components)) {
 			it.second->OnInputUpdate(deltaTime, mods);
 		}
+		obj++;
 	}
 }
 void GameEngine::OnKeyPress(int key, int mods) {
-	int size = objects.size();
-	for (int i = 0; i < size; i++) {
-		auto components = objects[i]->GetComponents();
+	for (auto obj = objects.begin(); obj != objects.end();) {
+		auto components = (*obj)->GetComponents();
 		for (const auto &it : (*components)) {
 			it.second->OnKeyPress(key, mods);
 		}
+		obj++;
 	}
 }
 void GameEngine::OnKeyRelease(int key, int mods) {
-	int size = objects.size();
-	for (int i = 0; i < size; i++) {
-		auto components = objects[i]->GetComponents();
+	for (auto obj = objects.begin(); obj != objects.end();) {
+		auto components = (*obj)->GetComponents();
 		for (const auto &it : (*components)) {
 			it.second->OnKeyRelease(key, mods);
 		}
+		obj++;
 	}
 }
 void GameEngine::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {
-	int size = objects.size();
-	for (int i = 0; i < size; i++) {
-		auto components = objects[i]->GetComponents();
+	for (auto obj = objects.begin(); obj != objects.end();) {
+		auto components = (*obj)->GetComponents();
 		for (const auto &it : (*components)) {
 			it.second->OnMouseMove(mouseX, mouseY, deltaX, deltaY);
 		}
+		obj++;
 	}
 }
 void GameEngine::OnMouseBtnRelease(int mouseX, int mouseY, int button, int mods) {
-	int size = objects.size();
-	for (int i = 0; i < size; i++) {
-		auto components = objects[i]->GetComponents();
+	for (auto obj = objects.begin(); obj != objects.end();) {
+		auto components = (*obj)->GetComponents();
 		for (const auto &it : (*components)) {
 			it.second->OnMouseBtnRelease(mouseX, mouseY, button, mods);
 		}
+		obj++;
 	}
 }
 void GameEngine::OnMouseScroll(int mouseX, int mouseY, int offsetX, int offsetY) {
-	int size = objects.size();
-	for (int i = 0; i < size; i++) {
-		auto components = objects[i]->GetComponents();
+	for (auto obj = objects.begin(); obj != objects.end();) {
+		auto components = (*obj)->GetComponents();
 		for (const auto &it : (*components)) {
 			it.second->OnMouseScroll(mouseX, mouseY, offsetX, offsetY);
 		}
+		obj++;
 	}
 }
 void GameEngine::OnWindowResize(int width, int height) {
-	int size = objects.size();
-	for (int i = 0; i < size; i++) {
-		auto components = objects[i]->GetComponents();
+	for (auto obj = objects.begin(); obj != objects.end();) {
+		auto components = (*obj)->GetComponents();
 		for (const auto &it : (*components)) {
 			it.second->OnWindowResize(width, height);
 		}
+		obj++;
 	}
 }
 
