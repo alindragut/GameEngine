@@ -3,7 +3,6 @@
 #include <GameEngine/Components/BaseComponents/BaseComponent.h>
 #include <GameEngine/Components/BaseComponents/BaseGameObject.h>
 #include <GameEngine/Components/Renderers/AnimationRenderer.h>
-#include <GameEngine/Utils/AStarAlgorithm.h>
 #include <stack>
 
 class AnimMovementGameComponent : public BaseComponent
@@ -11,7 +10,7 @@ class AnimMovementGameComponent : public BaseComponent
 public:
 	GAME_COMPONENT(AnimMovementGameComponent)
 
-	AnimMovementGameComponent();
+		AnimMovementGameComponent();
 	~AnimMovementGameComponent() {};
 
 	void Init() override;
@@ -34,13 +33,9 @@ private:
 
 	float speed;
 	int state;
-	
-	std::stack<std::pair<int, int>> crtPath;
 
-	int **matrix;
-	int **auxMatrix;
+	std::stack<std::pair<float, float>> crtPath;
 
 	bool isRotating;
 	bool animation;
-	AStarAlgorithm* astar;
 };

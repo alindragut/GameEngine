@@ -34,7 +34,7 @@ void GameEngine::Init() {
 	ImGui = new ImGuiSetup();
 	ImGui->Init();
 
-	generator = new Generator(3, 30, 30, 3, 3);
+	generator = new Generator(3, 30, 30, 3, 3, 5);
 	generator->PlaceRooms();
 
 	glm::ivec2 res = window->GetResolution();
@@ -79,7 +79,7 @@ void GameEngine::Init() {
 
 	if (obj != nullptr) {
 		obj->GetTransform()->SetScale(glm::vec3(20, 0.01, 20));
-		obj->GetTransform()->SetPos(glm::vec3(0, 0.01, 0));
+		obj->GetTransform()->SetPos(glm::vec3(0, -0.01, 0));
 		objects.push_back(obj);
 	}
 	
@@ -93,6 +93,8 @@ void GameEngine::Init() {
 		dr->SetShader("TextureMesh");
 		objects.push_back(obj);
 	}*/
+
+	generator->Init();
 }
 
 void GameEngine::FrameStart() {

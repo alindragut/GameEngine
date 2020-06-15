@@ -24,4 +24,5 @@ private:
 
 	glm::vec3 prevPos;
 	glm::vec3 prevScale;
+	glm::vec3 prevRotate;
 };

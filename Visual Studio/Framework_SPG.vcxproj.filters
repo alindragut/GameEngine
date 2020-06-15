@@ -67,6 +67,9 @@
     <Filter Include="GameEngine\Components\Renderers\GameRenderers">
       <UniqueIdentifier>{4df3a047-9262-446a-8b79-4bd03bace5b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\Components\NPC">
+      <UniqueIdentifier>{2235cef1-83e8-421a-b98c-0db91d162c91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Core\Engine.cpp">
@@ -237,6 +240,12 @@
     </ClCompile>
     <ClCompile Include="..\Source\GameEngine\Utils\MeshManager.cpp">
       <Filter>GameEngine\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\NPC\NPCMovementComponent.cpp">
+      <Filter>GameEngine\Components\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\NPC\NPCSpawner.cpp">
+      <Filter>GameEngine\Components\NPC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -461,6 +470,12 @@
     </ClInclude>
     <ClInclude Include="..\Source\GameEngine\Utils\MeshManager.h">
       <Filter>GameEngine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\NPC\NPCMovementComponent.h">
+      <Filter>GameEngine\Components\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\NPC\NPCSpawner.h">
+      <Filter>GameEngine\Components\NPC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

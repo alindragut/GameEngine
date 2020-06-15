@@ -6,8 +6,6 @@
 #include <stack>
 // A C++ Program to implement A* Search Algorithm
 
-#define ROW 9 
-#define COL 10 
 
 // Creating a shortcut for int, int pair type 
 typedef std::pair<int, int> Pair;
@@ -28,6 +26,8 @@ struct cell
 class AStarAlgorithm {
 
 public:
+	bool** closedList;
+	cell* cellDetails;
 
 	AStarAlgorithm(int rows, int cols) {
 		this->rows = rows;
@@ -54,8 +54,7 @@ public:
 		}
 
 		// Either the source or the destination is blocked 
-		if (isUnBlocked(*grid, src.first, src.second) == false ||
-			isUnBlocked(*grid, dest.first, dest.second) == false)
+		if (isUnBlocked(*grid, dest.first, dest.second) == false)
 		{
 			printf("Source or the destination is blocked\n");
 			return std::stack<Pair>();
@@ -71,11 +70,11 @@ public:
 		// Create a closed list and initialise it to false which means 
 		// that no cell has been included yet 
 		// This closed list is implemented as a boolean 2D array 
-		bool** closedList = new bool* [rows];
+		closedList = new bool* [rows];
 		for (int i = 0; i < rows; i++) {
 			closedList[i] = new bool[cols];
 		}
-		
+
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++)
 				closedList[i][j] = false;
@@ -83,7 +82,7 @@ public:
 
 		// Declare a 2D array of structure to hold the details 
 		//of that cell
-		cell* cellDetails = new cell [rows * cols];
+		cellDetails = new cell[rows * cols];
 
 		int i, j;
 
@@ -107,8 +106,6 @@ public:
 		cellDetails[i * rows + j].parent_i = i;
 		cellDetails[i * rows + j].parent_j = j;
 		int** auxMatrix = *grid;
-		auxMatrix[i][j] = 3;
-		auxMatrix[dest.first][dest.second] = 3;
 
 
 		/*
@@ -225,7 +222,7 @@ public:
 				{
 					// Set the Parent of the destination cell 
 					cellDetails[(i + 1) * rows + j].parent_i = i;
-					cellDetails[(i + 1)* rows + j].parent_j = j;
+					cellDetails[(i + 1) * rows + j].parent_j = j;
 					printf("The destination cell is found\n");
 					foundDest = true;
 					return tracePath(cellDetails, dest, auxMatrix);
@@ -248,16 +245,16 @@ public:
 					// If it is on the open list already, check 
 					// to see if this path to that square is better, 
 					// using 'f' cost as the measure. 
-					if (cellDetails[(i + 1) *rows + j].f == FLT_MAX ||
-						cellDetails[(i + 1)* rows + j].f > fNew)
+					if (cellDetails[(i + 1) * rows + j].f == FLT_MAX ||
+						cellDetails[(i + 1) * rows + j].f > fNew)
 					{
 						openList.insert(std::make_pair(fNew, std::make_pair(i + 1, j)));
 						// Update the details of this cell 
-						cellDetails[(i + 1)* rows + j].f = fNew;
-						cellDetails[(i + 1)* rows + j].g = gNew;
-						cellDetails[(i + 1)* rows + j].h = hNew;
-						cellDetails[(i + 1)* rows + j].parent_i = i;
-						cellDetails[(i + 1)* rows + j].parent_j = j;
+						cellDetails[(i + 1) * rows + j].f = fNew;
+						cellDetails[(i + 1) * rows + j].g = gNew;
+						cellDetails[(i + 1) * rows + j].h = hNew;
+						cellDetails[(i + 1) * rows + j].parent_i = i;
+						cellDetails[(i + 1) * rows + j].parent_j = j;
 					}
 				}
 			}
@@ -364,7 +361,7 @@ public:
 				}
 			}
 
-			if (isAllowedDiagonally(*grid, i, j) == true) {
+			if (isAllowedDiagonally(*grid, i, j, i, j) == true) {
 
 				//----------- 5th Successor (North-East) ------------ 
 
@@ -388,7 +385,7 @@ public:
 					// Else do the following 
 					else if (closedList[i - 1][j + 1] == false &&
 						isUnBlocked(*grid, i - 1, j + 1) == true &&
-						isAllowedDiagonally(*grid, i - 1, j + 1) == true)
+						isAllowedDiagonally(*grid, i - 1, j + 1, i, j) == true)
 					{
 						gNew = cellDetails[i * rows + j].g + 1.414;
 						hNew = calculateHValue(i - 1, j + 1, dest);
@@ -440,7 +437,7 @@ public:
 					// Else do the following 
 					else if (closedList[i - 1][j - 1] == false &&
 						isUnBlocked(*grid, i - 1, j - 1) == true &&
-						isAllowedDiagonally(*grid, i - 1, j - 1) == true)
+						isAllowedDiagonally(*grid, i - 1, j - 1, i, j) == true)
 					{
 						gNew = cellDetails[i * rows + j].g + 1.414;
 						hNew = calculateHValue(i - 1, j - 1, dest);
@@ -490,7 +487,7 @@ public:
 					// Else do the following 
 					else if (closedList[i + 1][j + 1] == false &&
 						isUnBlocked(*grid, i + 1, j + 1) == true &&
-						isAllowedDiagonally(*grid, i + 1, j + 1) == true)
+						isAllowedDiagonally(*grid, i + 1, j + 1, i, j) == true)
 					{
 						gNew = cellDetails[i * rows + j].g + 1.414;
 						hNew = calculateHValue(i + 1, j + 1, dest);
@@ -542,7 +539,7 @@ public:
 					// Else do the following 
 					else if (closedList[i + 1][j - 1] == false &&
 						isUnBlocked(*grid, i + 1, j - 1) == true &&
-						isAllowedDiagonally(*grid, i + 1, j - 1) == true)
+						isAllowedDiagonally(*grid, i + 1, j - 1, i, j) == true)
 					{
 						gNew = cellDetails[i * rows + j].g + 1.414;
 						hNew = calculateHValue(i + 1, j - 1, dest);
@@ -601,7 +598,7 @@ private:
 
 	// A Utility Function to check whether the given cell is 
 	// blocked or not 
-	bool isUnBlocked(int **grid, int row, int col)
+	bool isUnBlocked(int** grid, int row, int col)
 	{
 		// Returns true if the cell is not blocked else false 
 		if (grid[row][col] != 1)
@@ -610,10 +607,14 @@ private:
 			return (false);
 	}
 
-	bool isAllowedDiagonally(int** grid, int row, int col)
+	bool isAllowedDiagonally(int** grid, int row, int col, int curRow, int curCol)
 	{
 		// Returns true if the cell is not blocked else false 
-		if (grid[row][col] == 0)
+		if (grid[row][col] != grid[curRow][curCol]) {
+			return (false);
+		}
+
+		if (grid[row][col] == 0 || grid[row][col] == 4)
 			return (true);
 		else
 			return (false);
@@ -640,9 +641,8 @@ private:
 
 	// A Utility Function to trace the path from the source 
 	// to destination 
-	std::stack<Pair> tracePath(cell *cellDetails, Pair dest, int** matrix)
+	std::stack<Pair> tracePath(cell* cellDetails, Pair dest, int** matrix)
 	{
-		printf("\nThe Path is ");
 		int row = dest.first;
 		int col = dest.second;
 
@@ -661,16 +661,22 @@ private:
 
 		Path.push(std::make_pair(row, col));
 		res = Path;
-		while (!Path.empty())
+		/*while (!Path.empty())
 		{
 			std::pair<int, int> p = Path.top();
 			Path.pop();
 			printf("\n-> (%d,%d)", p.first, p.second);
-			matrix[p.first][p.second] = 2;
 		}
-		printf("\n");
+		printf("\n");*/
+
+		for (int i = 0; i < rows; i++) {
+			delete[] closedList[i];
+		}
+
+		delete[] closedList;
+		delete[] cellDetails;
 
 		return res;
 	}
-	
+
 };

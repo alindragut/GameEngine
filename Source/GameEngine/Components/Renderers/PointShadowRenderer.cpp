@@ -20,6 +20,9 @@ PointShadowRenderer::PointShadowRenderer() {
 	MeshManager& mm = MeshManager::GetInstance();
 	mm.AddMesh("arrow", "Source/GameEngine/Models", "Arrow.fbx");
 	mm.AddMesh("box", RESOURCE_PATH::MODELS + "Primitives", "box.obj");
+	mm.AddMesh("wall01", "Source/GameEngine/Models", "SM_Bld_Castle_Wall_01.fbx", true, true, true);
+	mm.AddMesh("door01", "Source/GameEngine/Models", "SM_Bld_Rockwall_Archway_01.fbx", true, true, true);
+	mm.AddMesh("floor01", "Source/GameEngine/Models", "SM_Env_Path_Cobble_01.fbx", true, true, true);
 }
 
 PointShadowRenderer::~PointShadowRenderer() {

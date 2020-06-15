@@ -282,3 +282,43 @@ void Model::InitModel(unsigned int index, const aiMesh* mesh) {
 		indices.push_back(mesh->mFaces[i].mIndices[2]);
 	}
 }
+
+void Model::NormalizePositions() {
+	float minX = FLT_MAX, minY = FLT_MAX, minZ = FLT_MAX, maxX = FLT_MIN, maxY = FLT_MIN, maxZ = FLT_MIN;
+
+	for (auto pos : positions) {
+		if (pos.x < minX) {
+			minX = pos.x;
+		}
+
+		if (pos.y < minY) {
+			minY = pos.y;
+		}
+
+		if (pos.z < minZ) {
+			minZ = pos.z;
+		}
+
+		if (pos.x > maxX) {
+			maxX = pos.x;
+		}
+
+		if (pos.y > maxY) {
+			maxY = pos.y;
+		}
+
+		if (pos.z > maxZ) {
+			maxZ = pos.z;
+		}
+	}
+
+	for (auto it = positions.begin(); it != positions.end();) {
+		glm::vec3 pos = *it;
+		float newX = (pos.x - minX) / (maxX - minX) - 0.5f;
+		float newY = (pos.y - minY) / (maxY - minY) - 0.5f;
+		float newZ = (pos.z - minZ) / (maxZ - minZ) - 0.5f;
+
+		*it = glm::vec3(newX, newY, newZ);
+		++it;
+	}
+}

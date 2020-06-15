@@ -76,6 +76,15 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 			go->InitComponents();
 			return go;
 		}
+		case 9:
+		{
+			BaseGameObject* go(new AnimObject(globalObjectId++));
+			go->AddComponent(new NPCMovementComponent());
+			go->AddComponent(new AnimationRenderer("npc", "npc_anim_1"));
+			go->AddComponent(new RigidBodyComponent());
+			go->InitComponents();
+			return go;
+		}
 		default:
 			return nullptr;
 	}

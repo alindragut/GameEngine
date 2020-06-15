@@ -1,15 +1,15 @@
 #include "TextureRenderer.h"
 #include <GameEngine/Utils/ShaderCache.h>
+#include <GameEngine/Utils/MeshManager.h>
 
 TextureRenderer::TextureRenderer() {
-	SetMesh(RESOURCE_PATH::MODELS + "Primitives", "box.obj", "default");
+	meshName = "box";
 	ShaderCache& sc = ShaderCache::GetInstance();
 	sc.AddShader("Room", "Source/GameEngine/Shaders/", "VertexShaderDefault.glsl", "FragmentShaderRoom.glsl");
 	SetShader("Room");
 }
 
 TextureRenderer::~TextureRenderer() {
-	delete mesh;
 }
 
 void TextureRenderer::update(float deltaTimeSeconds) {
@@ -41,12 +41,11 @@ void TextureRenderer::render() {
 
 	glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(modelMat));
 
-	mesh->Render();
+	MeshManager::GetInstance().GetMesh(meshName)->Render();
 }
 
-void TextureRenderer::SetMesh(std::string meshPath, std::string fileName, std::string meshName) {
-	mesh = new Mesh(meshName);
-	mesh->LoadMesh(meshPath, fileName);
+void TextureRenderer::SetMesh(std::string meshName) {
+	this->meshName = meshName;
 }
 
 void TextureRenderer::SetShader(std::string shaderName) {

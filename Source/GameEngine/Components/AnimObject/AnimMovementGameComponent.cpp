@@ -18,14 +18,9 @@ AnimMovementGameComponent::AnimMovementGameComponent() {
 void AnimMovementGameComponent::Init() {
 	GeneratorManager& gm = GeneratorManager::GetInstance();
 	dir = gm.GetGenerator()->GetSpawnPoint();
-	matrix = gm.GetGenerator()->GetMatrix();
-	auxMatrix = new int*[70];
-	for (int i = 0; i < 70; i++) {
-		auxMatrix[i] = new int[70];
-	}
 	object->GetTransform()->SetPos(dir);
 	object->GetTransform()->UseModel(true);
-	astar = new AStarAlgorithm(2 * 30 + 10, 2 * 30 + 10);
+	gm.GetGenerator()->SetPlayer(object);
 }
 
 void AnimMovementGameComponent::update(float deltaTimeSeconds) {
@@ -56,26 +51,13 @@ void AnimMovementGameComponent::OnMouseBtnPress(int mouseX, int mouseY, int butt
 
 	if (button == GLFW_MOUSE_BUTTON_2) {
 		glm::vec3 playerPos = object->GetTransform()->GetPos();
-		printf("player %lf %lf %lf\n", playerPos.x, playerPos.y, playerPos.z);
 		glm::vec3 mouseWorldPos = RayPick(mouseX, mouseY);
-		printf("target %lf %lf %lf\n", mouseWorldPos.x, mouseWorldPos.y, mouseWorldPos.z);
 
-		for (int i = 0; i < 70; i++) {
-			for (int j = 0; j < 70; j++) {
-				auxMatrix[i][j] = matrix[i][j];
-			}
-		}
-
-		crtPath = astar->aStarSearch(&auxMatrix, std::make_pair((int)round(object->GetTransform()->GetPos().z),
-			(int)round(object->GetTransform()->GetPos().x)),
-			std::make_pair((int)round(mouseWorldPos.z),
-			(int)round(mouseWorldPos.x)));
+		crtPath = GeneratorManager::GetInstance().GetGenerator()->GetPath(playerPos, mouseWorldPos);
 		if (!crtPath.empty()) {
 			crtPath.pop();
 		}
 	}
-
-
 }
 
 void AnimMovementGameComponent::OnKeyPress(int key, int mods) {
@@ -89,6 +71,24 @@ void AnimMovementGameComponent::OnKeyPress(int key, int mods) {
 		glm::vec3 currentPos = object->GetTransform()->GetPos() + yOffset;
 		printf("1\n");
 		ArrowSpawner::SpawnArrow(object, currentPos, glm::normalize(mouseWorldPos - currentPos), 0.1f, 10.0f);
+	}
+
+	if (key == GLFW_KEY_3) {
+		double mouseX, mouseY;
+		glfwGetCursorPos(EngineManager::GetInstance().GetGameEngine()->GetWindow()->GetGLFWWindow(), &mouseX, &mouseY);
+		glm::vec3 yOffset = glm::vec3(0, 0.5, 0);
+
+		glm::vec3 mouseWorldPos = RayPick(int(round(mouseX)), int(round(mouseY))) + yOffset;
+
+		object->GetTransform()->SetPos(mouseWorldPos);
+		while (!crtPath.empty()) {
+			crtPath.pop();
+		}
+		printf("matrix: %d\n", GeneratorManager::GetInstance().GetGenerator()->GetNavMatrixValue(mouseWorldPos));
+		//printf("\n");
+	}
+	if (key == GLFW_KEY_SPACE) {
+		EngineManager::GetInstance().GetGameEngine()->GetCamera()->SetPosition(object->GetTransform()->GetPos() + glm::vec3(0,2,1));
 	}
 }
 

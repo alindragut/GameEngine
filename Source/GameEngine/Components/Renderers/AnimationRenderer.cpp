@@ -14,10 +14,12 @@ AnimationRenderer::AnimationRenderer(std::string defaultModelName, std::string d
 
 	MeshManager& mm = MeshManager::GetInstance();
 	mm.AddModel("model", "Source/GameEngine/Models", "erika_archer.dae");
+	mm.AddModel("npc", "Source/GameEngine/Models", "pirate_p_konstantinov.dae");
 	mm.AddAnimation("model", "anim_1", "Source/GameEngine/Animations", "Walking.dae");
 	mm.AddAnimation("model", "anim_2", "Source/GameEngine/Animations", "Running.dae");
 	mm.AddAnimation("model", "anim_3", "Source/GameEngine/Animations", "Idle.dae");
 	mm.AddAnimation("model", "anim_2", "Source/GameEngine/Animations", "Running.dae");
+	mm.AddAnimation("npc", "npc_anim_1", "Source/GameEngine/Animations", "NPCWalking.dae");
 
 	animInfo = new AnimationInfo(mm.GetModel(defaultModelName), mm.GetAnimation(defaultAnimName), time);
 }

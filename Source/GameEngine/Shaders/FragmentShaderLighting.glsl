@@ -1,13 +1,14 @@
 #version 430
 in vec3 world_position;
 in vec3 world_normal;
-in vec3 tex_coords;
+in vec2 tex_coords;
 in vec4 light_space_position;
 
 uniform vec3 light_pos;
 uniform vec3 view_pos;
 uniform float far;
 
+layout(binding = 0) uniform sampler2D txt;
 layout(binding = 1) uniform samplerCube shadow_cube;
 layout(binding = 2) uniform sampler2DShadow shadow_map;
 
@@ -42,15 +43,16 @@ void main()
 {
 	float shadow = calculatePointShadow();
 	float ambient = 0.1f;
+	vec3 color = texture2D(txt, tex_coords).xyz;
 
 	if (shadow == 0.0f) {
-		out_color = vec4(ambient * world_position, 1.0);
+		out_color = vec4(ambient * color, 1.0);
 	}
 	else {
 		shadow = calculateDirShadow();
 
 		if (shadow == 0.0f) {
-			out_color = vec4(ambient * world_position, 1.0);
+			out_color = vec4(ambient * color, 1.0);
 		}
 		else {
 			vec3 normal = normalize(world_normal);
@@ -61,7 +63,7 @@ void main()
 			float diffuse = max(dot(normal, light_dir), 0.0);
 			float specular = 0.1 * pow(max(dot(view_dir, reflect_dir), 0.0), 32);
 
-			out_color = vec4(ambient + shadow * (diffuse + specular) * world_position, 1.0);
+			out_color = vec4(ambient + shadow * (diffuse + specular) * color, 1.0);
 		}
 	}
 }  

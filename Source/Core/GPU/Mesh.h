@@ -99,6 +99,8 @@ class Mesh
 
 		void UseTextureFolder(bool useTextureFolder);
 
+		void SetNormalizePositions(bool normalizePositions);
+
 		// GL_POINTS, GL_TRIANGLES, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_LINE_STRIP_ADJACENCY, GL_LINES_ADJACENCY,
 		// GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_TRIANGLE_STRIP_ADJACENCY, GL_TRIANGLES_ADJACENCY
 		void SetDrawMode(GLenum primitive);
@@ -117,6 +119,7 @@ class Mesh
 		bool InitFromScene(const aiScene* pScene);
 
 	private:
+		void NormalizePositions();
 		std::string meshID;
 		glm::vec3 halfSize;
 		glm::vec3 meshCenter;
@@ -133,6 +136,7 @@ class Mesh
 
 		bool useMaterial;
 		bool useTextureFolder;
+		bool normalizePositions;
 		GLenum glDrawMode;
 		GPUBuffers *buffers;
 

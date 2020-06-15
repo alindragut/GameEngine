@@ -15,6 +15,8 @@ Mesh::Mesh(std::string meshID)
 	this->meshID = std::move(meshID);
 
 	useMaterial = true;
+	normalizePositions = false;
+	useTextureFolder = false;
 	glDrawMode = GL_TRIANGLES;
 	buffers = new GPUBuffers();
 }
@@ -169,6 +171,10 @@ bool Mesh::InitFromScene(const aiScene* pScene)
 		InitMesh(paiMesh);
 	}
 
+	if (normalizePositions) {
+		NormalizePositions();
+	}
+
 	if (useMaterial && !InitMaterials(pScene))
 		return false;
 
@@ -264,6 +270,11 @@ void Mesh::UseMaterials(bool value)
 	useMaterial = value;
 }
 
+void Mesh::SetNormalizePositions(bool value)
+{
+	normalizePositions = value;
+}
+
 void Mesh::UseTextureFolder(bool useTextureFolder) {
 	this->useTextureFolder = useTextureFolder;
 }
@@ -291,4 +302,44 @@ void Mesh::Render() const
 			meshEntries[i].baseVertex);
 	}
 	glBindVertexArray(0);
+}
+
+void Mesh::NormalizePositions() {
+	float minX = FLT_MAX, minY = FLT_MAX, minZ = FLT_MAX, maxX = FLT_MIN, maxY = FLT_MIN, maxZ = FLT_MIN;
+
+	for (auto pos : positions) {
+		if (pos.x < minX) {
+			minX = pos.x;
+		}
+
+		if (pos.y < minY) {
+			minY = pos.y;
+		}
+
+		if (pos.z < minZ) {
+			minZ = pos.z;
+		}
+
+		if (pos.x > maxX) {
+			maxX = pos.x;
+		}
+
+		if (pos.y > maxY) {
+			maxY = pos.y;
+		}
+
+		if (pos.z > maxZ) {
+			maxZ = pos.z;
+		}
+	}
+		
+	for (auto it = positions.begin(); it != positions.end();) {
+		glm::vec3 pos = *it;
+		float newX = (pos.x - minX) / (maxX - minX) - 0.5f;
+		float newY = (pos.y - minY) / (maxY - minY) - 0.5f;
+		float newZ = (pos.z - minZ) / (maxZ - minZ) - 0.5f;
+
+		*it = glm::vec3(newX, newY, newZ);
+		++it;
+	}
 }

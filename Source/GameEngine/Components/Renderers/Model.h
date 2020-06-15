@@ -39,9 +39,16 @@ struct Entry {
 
 class Model
 {
+
 public:
 	Model();
 	~Model();
+	Bone* CreateBoneHierarchy(Bone* bone, const aiNode* node);
+	Bone* GetRootBone();
+	void SetRootBone(Bone* rootBone);
+	std::map<std::string, Bone*>* GetBones();
+	GLenum LoadModel(const aiScene* scene);
+	void Render(Shader* shader, glm::mat4 ViewMat, glm::mat4 ProjectionMat, glm::mat4 ModelMat, float time, Animation* anim, bool depth = false, float farPlane = 0.0f, glm::vec3 lightPos = glm::vec3(0));
 
 protected:
 	std::map<std::string, Bone*> bones;
@@ -57,21 +64,13 @@ protected:
 	GLuint locations[206];
 	bool setLocations;
 
-public:
-	Bone* CreateBoneHierarchy(Bone* bone, const aiNode* node);
-	Bone* GetRootBone();
-	void SetRootBone(Bone* rootBone);
-	std::map<std::string, Bone*>* GetBones();
-	GLenum LoadModel(const aiScene* scene);
-	void Render(Shader* shader, glm::mat4 ViewMat, glm::mat4 ProjectionMat, glm::mat4 ModelMat, float time, Animation* anim, bool depth = false, float farPlane = 0.0f, glm::vec3 lightPos = glm::vec3(0));
-
-
-
 private:
 	void VisitBoneTree(float time, Animation* anim, Bone* bone, glm::mat4 parentTransform);
 	void InitModel(unsigned int, const aiMesh* mesh);
 	void Init(const aiNode* node, const aiScene* scene);
 	void InitTextures(const aiScene* scene);
+	void NormalizePositions();
+
 	GLuint VAO;
 	GLuint buffers[6];
 	std::vector<Entry> entries;
