@@ -40,6 +40,8 @@ public:
 
 	PhysicsEngine* GetPhysicsEngine() { return physics; }
 
+	ShadowMapSceneRenderer* GetSceneRenderer() { return sceneRenderer; }
+
 private:
 	
 

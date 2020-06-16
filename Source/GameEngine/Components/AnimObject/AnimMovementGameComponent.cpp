@@ -21,6 +21,7 @@ void AnimMovementGameComponent::Init() {
 	object->GetTransform()->SetPos(dir);
 	object->GetTransform()->UseModel(true);
 	gm.GetGenerator()->SetPlayer(object);
+	EngineManager::GetInstance().GetGameEngine()->GetSceneRenderer()->SetPlayer(object);
 }
 
 void AnimMovementGameComponent::update(float deltaTimeSeconds) {

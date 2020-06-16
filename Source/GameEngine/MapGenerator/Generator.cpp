@@ -75,6 +75,11 @@ void Generator::PlaceRooms() {
 		float randomx = rand() % (2 * locationMaxX) + 5;
 		float randomy = rand() % (2 * locationMaxY) + 5;
 
+		randomx -= fmod(randomx, 2.0f);
+		randomy -= fmod(randomy, 2.0f);
+
+		printf("%lf %lf\n", randomx, randomy);
+
 		glm::vec3 location = glm::vec3(randomx, 0, randomy);
 
 		randomx = 2 * (rand() % sizeMaxX) + 4;
@@ -150,7 +155,7 @@ void Generator::PlaceRooms() {
 			}
 		}
 		if (from->location != to->location) {
-			PlaceCorridors(GetCorridorBoundary(from, to), GetCorridorBoundary(to, from), size);
+			PlaceCorridors(GetCorridorBoundary(from, to), to->location, size);
 		}
 		delete to;
 		delete from;
@@ -167,7 +172,9 @@ void Generator::PlaceRooms() {
 					mapMatrix[i * navSizeMult + k][j * navSizeMult + l] = auxMapMatrix[i][j];
 				}
 			}
+			printf("%d", auxMapMatrix[i][j]);
 		}
+		printf("\n");
 	}
 }
 
@@ -282,7 +289,9 @@ void Generator::PlaceCorridor(glm::vec3 location, float size) {
 
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
-			auxMapMatrix[(int)location.z - 1 + j][(int)location.x - 1 + i] = 4;
+			if (auxMapMatrix[(int)location.z - 1 + j][(int)location.x - 1 + i] == 1) {
+				auxMapMatrix[(int)location.z - 1 + j][(int)location.x - 1 + i] = 4;
+			}
 		}
 	}
 	
@@ -290,16 +299,16 @@ void Generator::PlaceCorridor(glm::vec3 location, float size) {
 
 void Generator::PlaceCorridors(glm::vec3 crtPos, glm::vec3 finalPos, glm::vec3 size) {
 
-	if (crtPos == finalPos) {
+	if (auxMapMatrix[(int)crtPos.z][(int)crtPos.x] == 0) {
 		return;
 	}
 
 	float multiplier = 2.0f;
 
-	if (glm::l1Norm(crtPos, finalPos) <= 2.f) {
+	/*if (glm::l1Norm(crtPos, finalPos) <= 2.f) {
 		printf("%lf\n", glm::l1Norm(crtPos, finalPos));
 		multiplier = 1.0f;
-	}
+	}*/
 
 	float leftDist = glm::l1Norm(finalPos - (crtPos - glm::vec3(multiplier, 0, 0)));
 	float rightDist = glm::l1Norm(finalPos - (crtPos + glm::vec3(multiplier, 0, 0)));
@@ -328,6 +337,14 @@ void Generator::PlaceCorridors(glm::vec3 crtPos, glm::vec3 finalPos, glm::vec3 s
 
 	if (auxMapMatrix[(int)next.z][(int)next.x] == 1) {
 		PlaceCorridor(next, (int)multiplier);
+	}
+	else {
+		glm::vec3 dir = next - crtPos;
+		next -= dir / 2.0f;
+
+		if (auxMapMatrix[(int)next.z][(int)next.x] == 1) {
+			PlaceCorridor(next, (int)multiplier);
+		}
 	}
 
 	PlaceCorridors(next, finalPos, size);

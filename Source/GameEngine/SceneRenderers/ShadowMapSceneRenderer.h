@@ -18,6 +18,9 @@ public:
 
 	void renderScene();
 
+	void SetLightPos(glm::vec3 pos) { this->lightPos = pos; }
+	void SetPlayer(BaseGameObject* player) { this->player = player; }
+
 private:
 	void renderGameObjects();
 	void renderPointShadow();
@@ -28,6 +31,7 @@ private:
 	ShadowMapPass* dirShadowPass;
 	CubeShadowMapPass* pointShadowPass;
 	float shadowAspectRatio;
+	BaseGameObject* player;
 	glm::vec3 lightPos;
 	glm::mat4 dirLightView;
 	glm::mat4 dirLightProj;
