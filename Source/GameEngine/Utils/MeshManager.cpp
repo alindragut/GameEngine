@@ -66,7 +66,7 @@ Animation* MeshManager::GetAnimation(std::string name) {
 	return animations[name];
 }
 
-void MeshManager::AddAnimation(std::string modelName, std::string animationName, std::string animationPath, std::string fileName) {
+void MeshManager::AddAnimation(std::string modelName, std::string animationName, std::string animationPath, std::string fileName, bool notRepeatable) {
 	if (animations.find(animationName) != animations.end()) {
 		return;
 	}
@@ -91,6 +91,7 @@ void MeshManager::AddAnimation(std::string modelName, std::string animationName,
 	if (scene) {
 		Animation* anim = new Animation();
 		anim->Init(scene->mAnimations[0], model->GetBones());
+		anim->SetNotRepeatable(notRepeatable);
 		animations[animationName] = anim;
 	}
 	else {

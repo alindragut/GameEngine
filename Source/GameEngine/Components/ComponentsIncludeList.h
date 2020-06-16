@@ -4,3 +4,4 @@
 #include <GameEngine/Components/Arrow/ArrowComponent.h>
 #include <GameEngine/Components/NPC/NPCMovementComponent.h>
 #include <GameEngine/Components/Renderers/GameRenderers/TextureRenderer.h>
+#include <GameEngine/Components/Combat/CombatComponent.h>

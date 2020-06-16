@@ -41,6 +41,7 @@ class Animation
 
 
 		bool isBlending;
+		bool notRepeatable;
 		float blendStartTime;
 		Animation* prevAnim;
 
@@ -57,6 +58,9 @@ class Animation
 		std::string GetName();
 		float GetTicksPerSecond();
 		float GetDuration();
+
+		void SetNotRepeatable(bool notRepeatable) { this->notRepeatable = notRepeatable; }
+		bool GetNotRepeatable() { return notRepeatable; }
 
 		void SetBlendStartTime(float startTime) { this->blendStartTime = startTime; }
 		float GetBlendStartTime() { return this->blendStartTime; }

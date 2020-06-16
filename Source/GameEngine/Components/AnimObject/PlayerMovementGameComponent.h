@@ -19,6 +19,7 @@ public:
 	void OnMouseBtnPress(int mouseX, int mouseY, int button, int mods) override;
 	void OnKeyPress(int key, int mods) override;
 	void SetRotationTime(float rotationTime) { this->rotationTime = rotationTime; }
+	bool isAlive() { return this->isPlayerAlive; }
 
 private:
 	float rotationTime;
@@ -39,4 +40,5 @@ private:
 	bool isRotating;
 	bool animation;
 	bool centeredCamera;
+	bool isPlayerAlive;
 };

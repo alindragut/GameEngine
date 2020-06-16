@@ -37,6 +37,8 @@ private:
 	float pathfindCooldown;
 	float timer;
 	float speed;
+	float crtAnimDuration;
+	float crtAnimTimer;
 
 	std::stack<std::pair<float, float>> crtPath;
 	bool animation;

@@ -15,9 +15,10 @@ AnimationRenderer::AnimationRenderer(std::string defaultModelName, std::string d
 	MeshManager& mm = MeshManager::GetInstance();
 	mm.AddModel("model", "Source/GameEngine/Models", "erika_archer.dae");
 	mm.AddModel("npc", "Source/GameEngine/Models", "pirate_p_konstantinov.dae");
-	mm.AddAnimation("model", "anim_1", "Source/GameEngine/Animations", "Walking.dae");
-	mm.AddAnimation("model", "anim_2", "Source/GameEngine/Animations", "Running.dae");
-	mm.AddAnimation("model", "anim_3", "Source/GameEngine/Animations", "Idle.dae");
+	mm.AddAnimation("model", "player_walk", "Source/GameEngine/Animations", "Walking.dae");
+	mm.AddAnimation("model", "player_run", "Source/GameEngine/Animations", "Running.dae");
+	mm.AddAnimation("model", "player_idle", "Source/GameEngine/Animations", "Idle.dae");
+	mm.AddAnimation("model", "player_die", "Source/GameEngine/Animations", "Falling Forward Death.dae", true);
 	mm.AddAnimation("npc", "npc_idle", "Source/GameEngine/Animations", "NPCIdle.dae");
 	mm.AddAnimation("npc", "npc_walk", "Source/GameEngine/Animations", "NPCWalking.dae");
 	mm.AddAnimation("npc", "npc_attack_1", "Source/GameEngine/Animations", "NPCPunching.dae");

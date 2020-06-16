@@ -32,8 +32,9 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 		{
 			BaseGameObject* go(new AnimObject(globalObjectId++));
 			go->AddComponent(new PlayerMovementGameComponent());
-			go->AddComponent(new AnimationRenderer("model", "anim_1"));
+			go->AddComponent(new AnimationRenderer("model", "player_idle"));
 			go->AddComponent(new PointLightComponent());
+			go->AddComponent(new CombatComponent());
 			go->InitComponents();
 			return go;
 		}
@@ -82,6 +83,7 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 			go->AddComponent(new NPCMovementComponent());
 			go->AddComponent(new AnimationRenderer("npc", "npc_idle"));
 			go->AddComponent(new RigidBodyComponent());
+			go->AddComponent(new CombatComponent());
 			go->InitComponents();
 			return go;
 		}

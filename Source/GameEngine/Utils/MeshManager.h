@@ -12,7 +12,7 @@ public:
 	void AddModel(std::string modelName, std::string modelPath, std::string fileName);
 
 	Animation* GetAnimation(std::string name);
-	void AddAnimation(std::string modelName, std::string animationName, std::string animationPath, std::string fileName);
+	void AddAnimation(std::string modelName, std::string animationName, std::string animationPath, std::string fileName, bool notRepeatable = false);
 
 	MeshManager(MeshManager const&) = delete;
 	void operator=(MeshManager const&) = delete;

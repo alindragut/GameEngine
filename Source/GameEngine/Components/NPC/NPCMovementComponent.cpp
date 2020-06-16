@@ -3,6 +3,9 @@
 #include <GameEngine/IncludeList.h>
 #include <GameEngine/Components/Arrow/ArrowSpawner.h>
 #include <GameEngine/MapGenerator/GeneratorManager.h>
+#include <GameEngine/Utils/MeshManager.h>
+#include <GameEngine/Components/Combat/CombatComponent.h>
+#include <GameEngine/Components/AnimObject/PlayerMovementGameComponent.h>
 
 NPCMovementComponent::NPCMovementComponent() {
 	dir = glm::vec3(0);
@@ -13,6 +16,8 @@ NPCMovementComponent::NPCMovementComponent() {
 	pathfindCooldown = 0.33f;
 	timer = 0.0f;
 	state = 0;
+	crtAnimDuration = 0.f;
+	crtAnimTimer = 0.f;
 }
 
 void NPCMovementComponent::Init() {
@@ -28,7 +33,10 @@ void NPCMovementComponent::update(float deltaTimeSeconds) {
 	glm::vec3 currentTargetPos = target->GetTransform()->GetPos();
 	int crtState = state;
 
-	if (glm::l1Norm(currentPos - currentTargetPos) > 10.f) {
+	if (!static_cast<PlayerMovementGameComponent*>(target->GetComponent("PlayerMovementGameComponent"))->isAlive()) {
+		state = 0;
+		speed = 0;
+	} else if (glm::l1Norm(currentPos - currentTargetPos) > 10.f) {
 		state = 0;
 		speed = 0;
 	} else if (glm::l1Norm(currentPos - currentTargetPos) < 2.f) {
@@ -49,7 +57,17 @@ void NPCMovementComponent::update(float deltaTimeSeconds) {
 		}
 		 else if (state == 2) {
 			static_cast<AnimationRenderer*>(object->GetComponent("AnimationRenderer"))->SetAnimation("npc_attack_1");
+			crtAnimDuration = MeshManager::GetInstance().GetAnimation("npc_attack_1")->GetDuration();
+			crtAnimTimer = 0.f;
 		}
+	}
+	else if (state == 2) {
+			if (crtAnimTimer >= crtAnimDuration) {
+				static_cast<CombatComponent*>(target->GetComponent("CombatComponent"))->DealDamage(static_cast<CombatComponent*>(object->GetComponent("CombatComponent"))->GetDamage());
+				printf("did:%d dmg, hp left: %d\n", static_cast<CombatComponent*>(object->GetComponent("CombatComponent"))->GetDamage(), static_cast<CombatComponent*>(target->GetComponent("CombatComponent"))->GetHP());
+				state = 0;
+			}
+			crtAnimTimer += deltaTimeSeconds;
 	}
 	
 

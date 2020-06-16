@@ -3,6 +3,7 @@
 #include <GameEngine/IncludeList.h>
 #include <GameEngine/Components/Arrow/ArrowSpawner.h>
 #include <GameEngine/MapGenerator/GeneratorManager.h>
+#include <GameEngine/Components/Combat/CombatComponent.h>
 
 PlayerMovementGameComponent::PlayerMovementGameComponent() {
 	dir = glm::vec3(0);
@@ -14,6 +15,7 @@ PlayerMovementGameComponent::PlayerMovementGameComponent() {
 	speed = 1;
 	currentDest = glm::vec3(0);
 	centeredCamera = false;
+	isPlayerAlive = true;
 }
 
 void PlayerMovementGameComponent::Init() {
@@ -26,6 +28,17 @@ void PlayerMovementGameComponent::Init() {
 }
 
 void PlayerMovementGameComponent::update(float deltaTimeSeconds) {
+	int hp = static_cast<CombatComponent*>(object->GetComponent("CombatComponent"))->GetHP();
+	int crtState = state;
+	if (hp <= 0) {
+		state = 4;
+		isPlayerAlive = false;
+	}
+	if (crtState != state) {
+		if (state == 4) {
+			static_cast<AnimationRenderer*>(object->GetComponent("AnimationRenderer"))->SetAnimation("player_die");
+		}
+	}
 	glm::vec3 currentPos = object->GetTransform()->GetPos();
 	if (!crtPath.empty()) {
 		glm::vec3 oldCurrentDest = currentDest;
