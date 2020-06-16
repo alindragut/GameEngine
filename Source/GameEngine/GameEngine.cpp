@@ -34,7 +34,7 @@ void GameEngine::Init() {
 	ImGui = new ImGuiSetup();
 	ImGui->Init();
 
-	generator = new Generator(3, 30, 30, 3, 3, 5);
+	generator = new Generator(3, 30, 30, 3, 3, 4);
 	generator->PlaceRooms();
 
 	glm::ivec2 res = window->GetResolution();

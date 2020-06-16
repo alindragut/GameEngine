@@ -32,7 +32,7 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 		{
 			BaseGameObject* go(new AnimObject(globalObjectId++));
 			go->AddComponent(new PlayerMovementGameComponent());
-			go->AddComponent(new AnimationRenderer("model", "player_idle"));
+			go->AddComponent(new AnimationRenderer("model", "player_run"));
 			go->AddComponent(new PointLightComponent());
 			go->AddComponent(new CombatComponent());
 			go->InitComponents();

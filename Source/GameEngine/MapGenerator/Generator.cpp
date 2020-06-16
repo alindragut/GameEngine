@@ -72,11 +72,8 @@ void Generator::PlaceRooms() {
 
 	while (index < roomCount) {
 
-		float randomx = rand() % (2 * locationMaxX) + 5;
-		float randomy = rand() % (2 * locationMaxY) + 5;
-
-		randomx -= fmod(randomx, 2.0f);
-		randomy -= fmod(randomy, 2.0f);
+		float randomx = 2 * rand() % (locationMaxX) + 5;
+		float randomy = 2 * rand() % (locationMaxY) + 5;
 
 		printf("%lf %lf\n", randomx, randomy);
 
@@ -123,7 +120,7 @@ void Generator::PlaceRooms() {
 
 	std::map<std::pair<float, float>, std::pair<float, float>> MST = MSTAlgorithm::Algorithm(triangles, roomLocations);
 
-	for (int i = 0; i < 3; i++) {
+	/*for (int i = 0; i < 3; i++) {
 		
 		auto it = MST.begin();
 		std::advance(it, rand() % MST.size());
@@ -140,7 +137,7 @@ void Generator::PlaceRooms() {
 
 		MST.insert({ random_key_x, random_key_y });
 
-	}
+	}*/
 
 	for (auto const& edge : MST) {
 		glm::vec3 size = glm::vec3(1);
@@ -172,10 +169,125 @@ void Generator::PlaceRooms() {
 					mapMatrix[i * navSizeMult + k][j * navSizeMult + l] = auxMapMatrix[i][j];
 				}
 			}
-			printf("%d", auxMapMatrix[i][j]);
+		}
+	}
+
+	int startI = -1, startJ = -1;
+
+	for (int i = 0; i < (2 * locationMaxX + 10) * navSizeMult; i++) {
+		for (int j = 0; j < (2 * locationMaxY + 10) * navSizeMult; j++) {
+			if (mapMatrix[i][j] != 1) {
+				startI = i;
+				startJ = j;
+				break;
+			}
+		}
+		if (startI != -1) {
+			break;
+		}
+	}
+
+	if (startI != -1) {
+		while (mapMatrix[startI][startJ] != 5) {
+			mapMatrix[startI][startJ] = 5;
+
+			int max = -1;
+			int index = 0;
+			int up = -1; 
+			int down = -1;
+			int left = -1; 
+			int right = -1;
+
+			if (mapMatrix[startI - 1][startJ] != 1 && mapMatrix[startI - 1][startJ] != 5) {
+				up = GetNumberOfInvalidNeighbours(startI - 1, startJ);
+			}
+			if (mapMatrix[startI + 1][startJ] != 1 && mapMatrix[startI + 1][startJ] != 5) {
+				down = GetNumberOfInvalidNeighbours(startI + 1, startJ);
+			}
+			if (mapMatrix[startI][startJ - 1] != 1 && mapMatrix[startI][startJ - 1] != 5) {
+				left = GetNumberOfInvalidNeighbours(startI, startJ - 1);;
+			}
+			if (mapMatrix[startI][startJ + 1] != 1 && mapMatrix[startI][startJ + 1] != 5) {
+				right = GetNumberOfInvalidNeighbours(startI, startJ + 1);;
+			}
+
+			if (down > max) {
+				max = down;
+				index = 1;
+			}
+			if (left > max) {
+				max = left;
+				index = 2;
+			}
+			if (right > max) {
+				max = right;
+				index = 3;
+			}
+			if (up > max) {
+				max = up;
+				index = 4;
+			}
+
+			if (max == 0) {
+				printf("max 0\n");
+				break;
+			}
+
+			if (index == 1) {
+				startI += 1;
+			}
+			else if (index == 2) {
+				startJ -= 1;
+			}
+			else if (index == 3) {
+				startJ += 1;
+			}
+			else if (index == 4) {
+				startI -= 1;
+			}
+		}
+	}
+	
+
+	for (int i = 0; i < (2 * locationMaxX + 10) * navSizeMult; i++) {
+		for (int j = 0; j < (2 * locationMaxY + 10) * navSizeMult; j++) {
+			if (mapMatrix[i][j] == 5) {
+				mapMatrix[i][j] = 1;
+			}
+			printf("%d", mapMatrix[i][j]);
 		}
 		printf("\n");
 	}
+}
+
+int Generator::GetNumberOfInvalidNeighbours(int i, int j) {
+	int count = 0;
+
+	if (mapMatrix[i - 1][j - 1] == 1) {
+		count++;
+	}
+	if (mapMatrix[i - 1][j] == 1) {
+		count++;
+	}
+	if (mapMatrix[i - 1][j + 1] == 1) {
+		count++;
+	}
+	if (mapMatrix[i][j - 1] == 1) {
+		count++;
+	}
+	if (mapMatrix[i][j + 1] == 1) {
+		count++;
+	}
+	if (mapMatrix[i + 1][j - 1] == 1) {
+		count++;
+	}
+	if (mapMatrix[i + 1][j] == 1) {
+		count++;
+	}
+	if (mapMatrix[i + 1][j + 1] == 1) {
+		count++;
+	}
+	return count;
 }
 
 int Generator::CalcLinearInterp(float nr, int mode) {
@@ -363,8 +475,13 @@ void Generator::PlaceWall(Room room) {
 	auto object3 = factory.createObject(3);
 	auto object4 = factory.createObject(3);
 
+	bool isDoor;
 
-	if (IsDoor((int)room.location.z, (int)room.location.x, -1, 0)) {
+
+	IsDoor(glm::vec3(room.location.x - room.size.x / 2.0f, 0, room.location.z - room.size.z / 2.0f - 1.0f), glm::vec3(room.location.x + room.size.x / 2.0f, 0, room.location.z - room.size.z / 2.0f - 1.0f), &isDoor);
+
+	
+	if (isDoor) {
 		static_cast<PointShadowRenderer*>(object1->GetComponent("PointShadowRenderer"))->SetMesh("door01");
 		object1->GetTransform()->SetRot(glm::vec3(0, M_PI / 2.0f, 0));
 		object1->GetTransform()->SetScale(glm::vec3(0.01f, 3, room.size.x));
@@ -378,8 +495,9 @@ void Generator::PlaceWall(Room room) {
 	object1->GetTransform()->SetPos(glm::vec3(room.location.x, 1, room.location.z - room.size.z / 2));
 	object1->InitComponents();
 	em.GetGameEngine()->AddObject(object1);
+	IsDoor(glm::vec3(room.location.x - room.size.x / 2.0f - 1.0f, 0, room.location.z - room.size.z / 2.0f), glm::vec3(room.location.x - room.size.x / 2.0f - 1.0f, 0, room.location.z + room.size.z / 2.0f), &isDoor);
 
-	if (IsDoor((int)room.location.z, (int)room.location.x, 0, -1)) {
+	if (isDoor) {
 		static_cast<PointShadowRenderer*>(object2->GetComponent("PointShadowRenderer"))->SetMesh("door01");
 		object2->GetTransform()->SetScale(glm::vec3(0.01f, 3, room.size.z));
 	}
@@ -392,8 +510,9 @@ void Generator::PlaceWall(Room room) {
 	object2->GetTransform()->SetPos(glm::vec3(room.location.x - room.size.x / 2, 1, room.location.z));
 	object2->InitComponents();
 	em.GetGameEngine()->AddObject(object2);
+	IsDoor(glm::vec3(room.location.x + room.size.x / 2.0f - 1.0f, 0, room.location.z + room.size.z / 2.0f), glm::vec3(room.location.x - room.size.x / 2.0f - 1.0f, 0, room.location.z + room.size.z / 2.0f), &isDoor);
 
-	if (IsDoor((int)room.location.z, (int)room.location.x, 1, 0)) {
+	if (isDoor) {
 		static_cast<PointShadowRenderer*>(object3->GetComponent("PointShadowRenderer"))->SetMesh("door01");
 		object3->GetTransform()->SetRot(glm::vec3(0, M_PI / 2.0f, 0));
 		object3->GetTransform()->SetScale(glm::vec3(0.01f, 3, room.size.x));
@@ -407,8 +526,10 @@ void Generator::PlaceWall(Room room) {
 	object3->GetTransform()->SetPos(glm::vec3(room.location.x, 1, room.location.z + room.size.z / 2));
 	object3->InitComponents();
 	em.GetGameEngine()->AddObject(object3);
+	IsDoor(glm::vec3(room.location.x + room.size.x / 2.0f, 0, room.location.z - room.size.z / 2.0f), glm::vec3(room.location.x + room.size.x / 2.0f, 0, room.location.z + room.size.z / 2.0f), &isDoor);
 
-	if (IsDoor((int)room.location.z, (int)room.location.x, 0, 1)) {
+
+	if (isDoor) {
 		static_cast<PointShadowRenderer*>(object4->GetComponent("PointShadowRenderer"))->SetMesh("door01");
 		object4->GetTransform()->SetScale(glm::vec3(0.01f, 3, room.size.z));
 	}
@@ -421,4 +542,34 @@ void Generator::PlaceWall(Room room) {
 	object4->GetTransform()->SetPos(glm::vec3(room.location.x + room.size.x / 2, 1, room.location.z));
 	object4->InitComponents();
 	em.GetGameEngine()->AddObject(object4);
+}
+
+std::pair<glm::vec3, glm::vec3> Generator::IsDoor(glm::vec3 from, glm::vec3 to, bool *isDoor) {
+	glm::vec3 start, finish, dir, current;
+	bool foundStart = false;
+	dir = normalize(to - from);
+	current = from;
+	start = glm::vec3(0);
+	finish = glm::vec3(0);
+
+	while (current != (to)) {
+		if (!foundStart) {
+			if (auxMapMatrix[(int)current.z][(int)current.x] == 4) {
+				foundStart = true;
+				start = current;
+				finish = current;
+			}
+		}
+		else {
+			if (auxMapMatrix[(int)current.z][(int)current.x] != 4) {
+				break;
+			}
+			finish = current;
+		}
+		current += dir;
+	}
+
+	*isDoor = foundStart;
+
+	return std::pair<glm::vec3, glm::vec3>(start, finish);
 }

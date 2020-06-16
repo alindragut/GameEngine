@@ -47,6 +47,7 @@ public:
 private:
 	glm::vec3 GetCorridorBoundary(Room* r1, Room* r2);
 	int CalcLinearInterp(float nr, int mode = 1);
+	int GetNumberOfInvalidNeighbours(int i, int j);
 	
 	int roomCount;
 
@@ -72,32 +73,7 @@ private:
 	void PlaceWalls(Room room);
 	void PlaceWall(Room room);
 
-	bool IsDoor(int x, int y, int dirX, int dirY) {
-		while (mapMatrix[x][y] == 0) {
-			x += dirX;
-			y += dirY;
-			if (mapMatrix[x][y] == 4) {
-				return true;
-			}
-				
-			
-		}
-		if (dirX == 0) {
-			for (int i = -sizeMaxX; i < sizeMaxX; i++) {
-				if (mapMatrix[x + i][y] == 4){
-					return true;
-				}
-			}
-		}
-		else {
-			for (int i = -sizeMaxY; i < sizeMaxY; i++) {
-				if (mapMatrix[x][y + i] == 4) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+	std::pair<glm::vec3, glm::vec3> IsDoor(glm::vec3 from, glm::vec3 to, bool *isDoor);
 
 
 };
