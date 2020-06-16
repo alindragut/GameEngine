@@ -5,13 +5,13 @@
 #include <GameEngine/Components/Renderers/AnimationRenderer.h>
 #include <stack>
 
-class AnimMovementGameComponent : public BaseComponent
+class PlayerMovementGameComponent : public BaseComponent
 {
 public:
-	GAME_COMPONENT(AnimMovementGameComponent)
+	GAME_COMPONENT(PlayerMovementGameComponent)
 
-		AnimMovementGameComponent();
-	~AnimMovementGameComponent() {};
+	PlayerMovementGameComponent();
+	~PlayerMovementGameComponent() {};
 
 	void Init() override;
 	void update(float deltaTimeSeconds) override;
@@ -38,4 +38,5 @@ private:
 
 	bool isRotating;
 	bool animation;
+	bool centeredCamera;
 };

@@ -12,6 +12,7 @@ NPCMovementComponent::NPCMovementComponent() {
 	spawnPos = glm::vec3(0);
 	pathfindCooldown = 0.33f;
 	timer = 0.0f;
+	state = 0;
 }
 
 void NPCMovementComponent::Init() {
@@ -25,6 +26,33 @@ void NPCMovementComponent::update(float deltaTimeSeconds) {
 	timer += deltaTimeSeconds;
 	glm::vec3 currentPos = object->GetTransform()->GetPos();
 	glm::vec3 currentTargetPos = target->GetTransform()->GetPos();
+	int crtState = state;
+
+	if (glm::l1Norm(currentPos - currentTargetPos) > 10.f) {
+		state = 0;
+		speed = 0;
+	} else if (glm::l1Norm(currentPos - currentTargetPos) < 2.f) {
+		state = 2;
+		speed = 0;
+	}
+	else {
+		state = 1;
+		speed = 1;
+	}
+
+	if (crtState != state) {
+		if (state == 0) {
+			static_cast<AnimationRenderer*>(object->GetComponent("AnimationRenderer"))->SetAnimation("npc_idle");
+		}
+		 else if (state == 1) {
+			static_cast<AnimationRenderer*>(object->GetComponent("AnimationRenderer"))->SetAnimation("npc_walk");
+		}
+		 else if (state == 2) {
+			static_cast<AnimationRenderer*>(object->GetComponent("AnimationRenderer"))->SetAnimation("npc_attack_1");
+		}
+	}
+	
+
 	if (timer > pathfindCooldown && currentTargetPos != targetPos) {
 		timer = 0.0f;
 		targetPos = currentTargetPos;
@@ -47,6 +75,7 @@ void NPCMovementComponent::update(float deltaTimeSeconds) {
 	else {
 		dir = glm::vec3(0);
 	}
+
 	ComponentTransform* transf = object->GetTransform();
 	currentPos += dir * speed * deltaTimeSeconds;
 	transf->SetPos(currentPos);

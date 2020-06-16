@@ -1,10 +1,10 @@
-#include "AnimMovementGameComponent.h"
+#include "PlayerMovementGameComponent.h"
 #include <GameEngine/Utils/PhysicsManager.h>
 #include <GameEngine/IncludeList.h>
 #include <GameEngine/Components/Arrow/ArrowSpawner.h>
 #include <GameEngine/MapGenerator/GeneratorManager.h>
 
-AnimMovementGameComponent::AnimMovementGameComponent() {
+PlayerMovementGameComponent::PlayerMovementGameComponent() {
 	dir = glm::vec3(0);
 	rotQuat = glm::quat();
 	newRotQuat = glm::quat();
@@ -13,9 +13,10 @@ AnimMovementGameComponent::AnimMovementGameComponent() {
 	state = 0;
 	speed = 1;
 	currentDest = glm::vec3(0);
+	centeredCamera = false;
 }
 
-void AnimMovementGameComponent::Init() {
+void PlayerMovementGameComponent::Init() {
 	GeneratorManager& gm = GeneratorManager::GetInstance();
 	dir = gm.GetGenerator()->GetSpawnPoint();
 	object->GetTransform()->SetPos(dir);
@@ -24,7 +25,7 @@ void AnimMovementGameComponent::Init() {
 	EngineManager::GetInstance().GetGameEngine()->GetSceneRenderer()->SetPlayer(object);
 }
 
-void AnimMovementGameComponent::update(float deltaTimeSeconds) {
+void PlayerMovementGameComponent::update(float deltaTimeSeconds) {
 	glm::vec3 currentPos = object->GetTransform()->GetPos();
 	if (!crtPath.empty()) {
 		glm::vec3 oldCurrentDest = currentDest;
@@ -48,7 +49,7 @@ void AnimMovementGameComponent::update(float deltaTimeSeconds) {
 	transf->SetModel(modelMat);
 }
 
-void AnimMovementGameComponent::OnMouseBtnPress(int mouseX, int mouseY, int button, int mods) {
+void PlayerMovementGameComponent::OnMouseBtnPress(int mouseX, int mouseY, int button, int mods) {
 
 	if (button == GLFW_MOUSE_BUTTON_2) {
 		glm::vec3 playerPos = object->GetTransform()->GetPos();
@@ -61,7 +62,7 @@ void AnimMovementGameComponent::OnMouseBtnPress(int mouseX, int mouseY, int butt
 	}
 }
 
-void AnimMovementGameComponent::OnKeyPress(int key, int mods) {
+void PlayerMovementGameComponent::OnKeyPress(int key, int mods) {
 	if (key == GLFW_KEY_1) {
 		double mouseX, mouseY;
 		glfwGetCursorPos(EngineManager::GetInstance().GetGameEngine()->GetWindow()->GetGLFWWindow(), &mouseX, &mouseY);
@@ -89,11 +90,18 @@ void AnimMovementGameComponent::OnKeyPress(int key, int mods) {
 		//printf("\n");
 	}
 	if (key == GLFW_KEY_SPACE) {
+		centeredCamera = !centeredCamera;
 		EngineManager::GetInstance().GetGameEngine()->GetCamera()->SetPosition(object->GetTransform()->GetPos() + glm::vec3(0,2,1));
+		if (centeredCamera) {
+			EngineManager::GetInstance().GetGameEngine();
+		}
+		else {
+			EngineManager::GetInstance().GetGameEngine();
+		}
 	}
 }
 
-glm::vec3 AnimMovementGameComponent::RayPick(int mouseX, int mouseY) {
+glm::vec3 PlayerMovementGameComponent::RayPick(int mouseX, int mouseY) {
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
@@ -114,7 +122,7 @@ glm::vec3 AnimMovementGameComponent::RayPick(int mouseX, int mouseY) {
 	return PhysicsManager::GetInstance().GetPhysicsEngine()->RayCast(camPosition, res * 100.0f, &hit, COL_FLOOR, COL_FLOOR);
 }
 
-glm::quat AnimMovementGameComponent::GetRotationQuat(glm::quat oldRot, glm::quat newRot, float elapsedTime) {
+glm::quat PlayerMovementGameComponent::GetRotationQuat(glm::quat oldRot, glm::quat newRot, float elapsedTime) {
 	float factor = fmin(elapsedTime / 0.5f, 1.0f);
 	float matching = glm::dot(oldRot, newRot);
 	if (abs(matching - 1.0) < 0.01) {

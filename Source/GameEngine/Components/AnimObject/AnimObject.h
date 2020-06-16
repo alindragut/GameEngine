@@ -4,7 +4,7 @@
 #include <GameEngine/Components/BaseComponents/PointLightComponent.h>
 #include <GameEngine/Components/Renderers/AnimationRenderer.h>
 #include "AnimObjectGameComponent.h"
-#include "AnimMovementGameComponent.h"
+#include "PlayerMovementGameComponent.h"
 
 class AnimObject : public BaseGameObject
 {

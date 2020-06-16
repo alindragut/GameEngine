@@ -22,6 +22,10 @@ public:
 	void SetPathfindCooldown(float cooldown) { this->pathfindCooldown = cooldown; }
 
 private:
+	int state;
+	// idle - 0
+	// walking - 1
+	// attack - 2
 
 	glm::vec3 dir;
 	glm::vec3 currentDest;

@@ -18,8 +18,9 @@ AnimationRenderer::AnimationRenderer(std::string defaultModelName, std::string d
 	mm.AddAnimation("model", "anim_1", "Source/GameEngine/Animations", "Walking.dae");
 	mm.AddAnimation("model", "anim_2", "Source/GameEngine/Animations", "Running.dae");
 	mm.AddAnimation("model", "anim_3", "Source/GameEngine/Animations", "Idle.dae");
-	mm.AddAnimation("model", "anim_2", "Source/GameEngine/Animations", "Running.dae");
-	mm.AddAnimation("npc", "npc_anim_1", "Source/GameEngine/Animations", "NPCWalking.dae");
+	mm.AddAnimation("npc", "npc_idle", "Source/GameEngine/Animations", "NPCIdle.dae");
+	mm.AddAnimation("npc", "npc_walk", "Source/GameEngine/Animations", "NPCWalking.dae");
+	mm.AddAnimation("npc", "npc_attack_1", "Source/GameEngine/Animations", "NPCPunching.dae");
 
 	animInfo = new AnimationInfo(mm.GetModel(defaultModelName), mm.GetAnimation(defaultAnimName), time);
 }

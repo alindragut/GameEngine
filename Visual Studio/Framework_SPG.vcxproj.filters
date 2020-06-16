@@ -70,6 +70,9 @@
     <Filter Include="GameEngine\Components\NPC">
       <UniqueIdentifier>{2235cef1-83e8-421a-b98c-0db91d162c91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\Components\Combat">
+      <UniqueIdentifier>{80f5d944-d89b-4742-8da0-8d44fa5dddfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Core\Engine.cpp">
@@ -193,9 +196,6 @@
     <ClCompile Include="..\Source\GameEngine\Components\GameObject\GameObjectGameComponent.cpp">
       <Filter>GameEngine\Components\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\GameEngine\Components\AnimObject\AnimMovementGameComponent.cpp">
-      <Filter>GameEngine\Components\AnimObject</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\GameEngine\RenderPasses\CubeShadowMapPass.cpp">
       <Filter>GameEngine\RenderPasses</Filter>
     </ClCompile>
@@ -246,6 +246,12 @@
     </ClCompile>
     <ClCompile Include="..\Source\GameEngine\Components\NPC\NPCSpawner.cpp">
       <Filter>GameEngine\Components\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\AnimObject\PlayerMovementGameComponent.cpp">
+      <Filter>GameEngine\Components\AnimObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\Combat\CombatComponent.cpp">
+      <Filter>GameEngine\Components\Combat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -411,9 +417,6 @@
     <ClInclude Include="..\Source\GameEngine\Components\GameObject\GameObjectGameComponent.h">
       <Filter>GameEngine\Components\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\GameEngine\Components\AnimObject\AnimMovementGameComponent.h">
-      <Filter>GameEngine\Components\AnimObject</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\GameEngine\Utils\DebugDraw.h">
       <Filter>GameEngine\Utils</Filter>
     </ClInclude>
@@ -476,6 +479,12 @@
     </ClInclude>
     <ClInclude Include="..\Source\GameEngine\Components\NPC\NPCSpawner.h">
       <Filter>GameEngine\Components\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\AnimObject\PlayerMovementGameComponent.h">
+      <Filter>GameEngine\Components\AnimObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\Combat\CombatComponent.h">
+      <Filter>GameEngine\Components\Combat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -33,7 +33,7 @@
     <ClCompile Include="..\Source\Core\Window\WindowCallbacks.cpp" />
     <ClCompile Include="..\Source\Core\Window\WindowObject.cpp" />
     <ClCompile Include="..\Source\Core\World.cpp" />
-    <ClCompile Include="..\Source\GameEngine\Components\AnimObject\AnimMovementGameComponent.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Components\AnimObject\PlayerMovementGameComponent.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\AnimObject\AnimObject.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\AnimObject\AnimObjectGameComponent.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\Arrow\ArrowComponent.cpp" />
@@ -42,6 +42,7 @@
     <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\GraphicsComponent.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\PointLightComponent.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\RigidBodyComponent.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Components\Combat\CombatComponent.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\GameObject\GameObject.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\GameObject\GameObjectGameComponent.cpp" />
     <ClCompile Include="..\Source\GameEngine\Components\NPC\NPCMovementComponent.cpp" />
@@ -97,7 +98,7 @@
     <ClInclude Include="..\Source\Core\Window\WindowCallbacks.h" />
     <ClInclude Include="..\Source\Core\Window\WindowObject.h" />
     <ClInclude Include="..\Source\Core\World.h" />
-    <ClInclude Include="..\Source\GameEngine\Components\AnimObject\AnimMovementGameComponent.h" />
+    <ClInclude Include="..\Source\GameEngine\Components\AnimObject\PlayerMovementGameComponent.h" />
     <ClInclude Include="..\Source\GameEngine\Components\AnimObject\AnimObject.h" />
     <ClInclude Include="..\Source\GameEngine\Components\AnimObject\AnimObjectGameComponent.h" />
     <ClInclude Include="..\Source\GameEngine\Components\Arrow\ArrowComponent.h" />
@@ -107,6 +108,7 @@
     <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\GraphicsComponent.h" />
     <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\PointLightComponent.h" />
     <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\RigidBodyComponent.h" />
+    <ClInclude Include="..\Source\GameEngine\Components\Combat\CombatComponent.h" />
     <ClInclude Include="..\Source\GameEngine\Components\ComponentsIncludeList.h" />
     <ClInclude Include="..\Source\GameEngine\Components\GameObject\GameObject.h" />
     <ClInclude Include="..\Source\GameEngine\Components\GameObject\GameObjectGameComponent.h" />
@@ -181,7 +183,7 @@
     <ProjectGuid>{FB43B467-42CC-458C-9556-597B025830F7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Framework_EGC</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -206,7 +208,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
