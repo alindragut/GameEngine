@@ -22,7 +22,7 @@ PointShadowRenderer::PointShadowRenderer() {
 	mm.AddMesh("box", RESOURCE_PATH::MODELS + "Primitives", "box.obj");
 	mm.AddMesh("wall01", "Source/GameEngine/Models", "SM_Bld_Castle_Wall_01.fbx", true, true, true);
 	mm.AddMesh("door01", "Source/GameEngine/Models", "SM_Bld_Rockwall_Archway_01.fbx", true, true, true);
-	mm.AddMesh("floor01", "Source/GameEngine/Models", "SM_Env_Path_Cobble_01.fbx", true, true, true);
+	mm.AddMesh("floor01", "Source/GameEngine/Models", "Floor_Modular.fbx", true, true, false);
 }
 
 PointShadowRenderer::~PointShadowRenderer() {
@@ -106,6 +106,8 @@ void PointShadowRenderer::RenderLight() {
 	else {
 		glm::mat4 trans = glm::translate(glm::mat4(1), object->GetTransform()->GetPos());
 		glm::mat4 rot = glm::rotate(glm::mat4(1), object->GetTransform()->GetRot().y, glm::vec3(0, 1, 0));
+		rot = glm::rotate(rot, object->GetTransform()->GetRot().x, glm::vec3(1, 0, 0));
+		rot = glm::rotate(rot, object->GetTransform()->GetRot().z, glm::vec3(0, 0, 1));
 		glm::mat4 scale = glm::scale(glm::mat4(1), object->GetTransform()->GetScale());
 
 		modelMat = trans * rot * scale;

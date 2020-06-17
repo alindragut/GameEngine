@@ -64,8 +64,6 @@ void NPCMovementComponent::update(float deltaTimeSeconds) {
 	else if (state == 2) {
 			if (crtAnimTimer >= crtAnimDuration) {
 				static_cast<CombatComponent*>(target->GetComponent("CombatComponent"))->DealDamage(static_cast<CombatComponent*>(object->GetComponent("CombatComponent"))->GetDamage());
-				printf("did:%d dmg, hp left: %d\n", static_cast<CombatComponent*>(object->GetComponent("CombatComponent"))->GetDamage(), static_cast<CombatComponent*>(target->GetComponent("CombatComponent"))->GetHP());
-				state = 0;
 			}
 			crtAnimTimer += deltaTimeSeconds;
 	}
