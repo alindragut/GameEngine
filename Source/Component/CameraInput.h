@@ -16,12 +16,8 @@ class CameraInput : public InputController
 		void OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) override;
 		void OnMouseBtnPress(int mouseX, int mouseY, int button, int mods) override;
 		void OnMouseBtnRelease(int mouseX, int mouseY, int button, int mods) override;
-		void SetCameraLock(bool locked) { this->locked = locked; }
 
 	public:
 		EngineComponents::Camera *camera;
-
-	private:
-		bool locked;
 };
 

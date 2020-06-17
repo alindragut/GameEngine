@@ -8,13 +8,13 @@
 #include <GameEngine/MapGenerator/GeneratorManager.h>
 #include <GameEngine/Components/NPC/NPCSpawner.h>
 
-Generator::Generator(int roomCount, int locationMaxX, int locationMaxZ, int sizeMaxX, int sizeMaxZ, int navigationMatrixSizeMultiplier) {
+Generator::Generator(int roomCount, int locationMaxX, int locationMaxY, int sizeMaxX, int sizeMaxY, int navigationMatrixSizeMultiplier) {
 
 	this->roomCount = roomCount;
 	this->locationMaxX = locationMaxX;
-	this->locationMaxZ = locationMaxZ;
+	this->locationMaxY = locationMaxY;
 	this->sizeMaxX = sizeMaxX;
-	this->sizeMaxZ = sizeMaxZ;
+	this->sizeMaxY = sizeMaxY;
 	navSizeMult = navigationMatrixSizeMultiplier;
 
 	GeneratorManager& gm = GeneratorManager::GetInstance();
@@ -73,16 +73,16 @@ void Generator::PlaceRooms() {
 	while (index < roomCount) {
 
 		float randomx = 2 * rand() % (locationMaxX) + 5;
-		float randomz = 2 * rand() % (locationMaxZ) + 5;
+		float randomy = 2 * rand() % (locationMaxY) + 5;
 
-		printf("%lf %lf\n", randomx, randomz);
+		printf("%lf %lf\n", randomx, randomy);
 
-		glm::vec3 location = glm::vec3(randomx, 0, randomz);
+		glm::vec3 location = glm::vec3(randomx, 0, randomy);
 
 		randomx = 2 * (rand() % sizeMaxX) + 4;
-		randomz = 2 * (rand() % sizeMaxZ) + 4;
+		randomy = 2 * (rand() % sizeMaxY) + 4;
 
-		glm::vec3 size = glm::vec3(randomx, 0.01f, randomz);
+		glm::vec3 size = glm::vec3(randomx, 0.01f, randomy);
 
 		bool add = true;
 		Room* newRoom = new Room(location, size);
@@ -124,18 +124,18 @@ void Generator::PlaceRooms() {
 		
 		auto it = MST.begin();
 		std::advance(it, rand() % MST.size());
-		std::pair<float, float> random_kez_x = it->first;
+		std::pair<float, float> random_key_x = it->first;
 
 		it = MST.begin();
 		std::advance(it, rand() % MST.size());
-		std::pair<float, float> random_kez_z = it->first;
+		std::pair<float, float> random_key_y = it->first;
 
-		if (random_kez_x == random_kez_z) {
+		if (random_key_x == random_key_y) {
 			i--;
 			continue;
 		}
 
-		MST.insert({ random_kez_x, random_kez_z });
+		MST.insert({ random_key_x, random_key_y });
 
 	}*/
 
@@ -163,7 +163,7 @@ void Generator::PlaceRooms() {
 	}
 
 	for (int i = 0; i < 2 * locationMaxX + 10; i++) {
-		for (int j = 0; j < 2 * locationMaxZ + 10; j++) {
+		for (int j = 0; j < 2 * locationMaxY + 10; j++) {
 			for (int k = 0; k < navSizeMult; k++) {
 				for (int l = 0; l < navSizeMult; l++) {
 					mapMatrix[i * navSizeMult + k][j * navSizeMult + l] = auxMapMatrix[i][j];
@@ -175,7 +175,7 @@ void Generator::PlaceRooms() {
 	int startI = -1, startJ = -1;
 
 	for (int i = 0; i < (2 * locationMaxX + 10) * navSizeMult; i++) {
-		for (int j = 0; j < (2 * locationMaxZ + 10) * navSizeMult; j++) {
+		for (int j = 0; j < (2 * locationMaxY + 10) * navSizeMult; j++) {
 			if (mapMatrix[i][j] != 1) {
 				startI = i;
 				startJ = j;
@@ -250,7 +250,7 @@ void Generator::PlaceRooms() {
 	
 
 	for (int i = 0; i < (2 * locationMaxX + 10) * navSizeMult; i++) {
-		for (int j = 0; j < (2 * locationMaxZ + 10) * navSizeMult; j++) {
+		for (int j = 0; j < (2 * locationMaxY + 10) * navSizeMult; j++) {
 			if (mapMatrix[i][j] == 5) {
 				mapMatrix[i][j] = 1;
 			}
@@ -331,7 +331,7 @@ std::stack<std::pair<float, float>> Generator::GetPath(glm::vec3 from, glm::vec3
 }
 
 glm::vec3 Generator::GetCorridorBoundary(Room* r1, Room* r2) {
-	glm::vec3 boundarz;
+	glm::vec3 boundary;
 
 	glm::vec3 finalPos = r2->location;
 	glm::vec3 crtPos = r1->location;
@@ -360,7 +360,7 @@ glm::vec3 Generator::GetCorridorBoundary(Room* r1, Room* r2) {
 		next = crtPos + glm::vec3(0, 0, round(size.z / 2.0f + 1));
 	}
 
-	printf("qwe %lf %lf %lf\n", next.x, next.z, next.z);
+	printf("qwe %lf %lf %lf\n", next.x, next.y, next.z);
 		
 	PlaceCorridor(next, 2);
 	return next;

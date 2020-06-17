@@ -7,7 +7,6 @@
 #include <GameEngine/Utils/ComponentFactory.h>
 #include <GameEngine/Utils/DebugDraw.h>
 #include <GameEngine/Utils/ShaderCache.h>
-#include <Component\CameraInput.h>
 
 GameEngine::GameEngine() {
 }
@@ -165,12 +164,6 @@ void GameEngine::OnKeyPress(int key, int mods) {
 			it.second->OnKeyPress(key, mods);
 		}
 		obj++;
-	}
-	if (key == GLFW_KEY_SPACE) {
-		static_cast<CameraInput*>(GetCameraInput())->SetCameraLock(true);
-	}
-	if (key == GLFW_KEY_L) {
-		static_cast<CameraInput*>(GetCameraInput())->SetCameraLock(false);
 	}
 }
 void GameEngine::OnKeyRelease(int key, int mods) {

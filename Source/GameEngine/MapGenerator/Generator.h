@@ -33,7 +33,7 @@ class Generator{
 
 public:
 
-	Generator(int roomCount, int locationMaxX, int locationMaxZ, int sizeMaxX, int sizeMaxZ, int navigationMatrixSizeMultiplier);
+	Generator(int roomCount, int locationMaxX, int locationMaxY, int sizeMaxX, int sizeMaxY, int navigationMatrixSizeMultiplier);
 	~Generator();
 	void Init();
 
@@ -52,9 +52,9 @@ private:
 	int roomCount;
 
 	int locationMaxX;
-	int locationMaxZ;
+	int locationMaxY;
 	int sizeMaxX;
-	int sizeMaxZ;
+	int sizeMaxY;
 	int navSizeMult;
 
 	int** mapMatrix;
