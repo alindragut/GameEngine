@@ -13,10 +13,12 @@ using namespace EngineComponents;
 CameraInput::CameraInput(Camera *camera)
 {
 	this->camera = camera;
+	locked = true;
 }
 
 void CameraInput::OnInputUpdate(float deltaTime, int mods)
 {
+	if (locked) return;
 	if (!window->MouseHold(GLFW_MOUSE_BUTTON_RIGHT)) return;
 
 	if (window->GetSpecialKeyState() & GLFW_MOD_SHIFT)
@@ -48,7 +50,10 @@ void CameraInput::OnKeyPress(int key, int mods) {
 		camera->Log();
 }
 
-void CameraInput::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {
+void CameraInput::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
+{
+
+	if (locked) return;
 
 	if (window->MouseHold(GLFW_MOUSE_BUTTON_RIGHT))
 	{

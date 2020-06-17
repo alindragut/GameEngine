@@ -32,6 +32,14 @@ void PlayerMovementGameComponent::update(float deltaTimeSeconds) {
 	int hp = static_cast<CombatComponent*>(object->GetComponent("CombatComponent"))->GetHP();
 	int crtState = state;
 
+	if (centeredCamera) {
+		Camera* cam = EngineManager::GetInstance().GetGameEngine()->GetCamera();
+		glm::vec3 newPos = object->GetTransform()->GetPos();
+		cam->SetPosition(newPos + glm::vec3(-4, 4, -4));
+		cam->SetRotation(glm::inverse(glm::lookAt(newPos + glm::vec3(-4, 4, -4), newPos, glm::vec3(0, 1, 0))));
+		cam->Update();
+	}
+
 	if (hp <= 0 && alive) {
 		state = 3;
 		alive = false;
@@ -138,13 +146,6 @@ void PlayerMovementGameComponent::OnKeyPress(int key, int mods) {
 	}
 	if (key == GLFW_KEY_SPACE) {
 		centeredCamera = !centeredCamera;
-		EngineManager::GetInstance().GetGameEngine()->GetCamera()->SetPosition(object->GetTransform()->GetPos() + glm::vec3(0,2,1));
-		if (centeredCamera) {
-			EngineManager::GetInstance().GetGameEngine();
-		}
-		else {
-			EngineManager::GetInstance().GetGameEngine();
-		}
 	}
 }
 
