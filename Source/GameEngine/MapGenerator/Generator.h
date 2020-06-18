@@ -47,8 +47,15 @@ public:
 private:
 	glm::vec3 GetCorridorBoundary(Room* r1, Room* r2);
 	int CalcLinearInterp(float nr, int mode = 1);
-	int GetNumberOfInvalidNeighbours(int i, int j);
-	
+	int GetNumberOfInvalidNeighbours(int **mat, int i, int j);
+	int GetNumberOfValidNeighbours(int **mat, int i, int j);
+	int GetWallDirection(int **mat, int i, int j);
+	int GetCorridorType(int **mat, int i, int j);
+	glm::vec3 GetWallOffset(int **mat, int i, int j);
+	bool VerifyFinalCorridorPos(int i, int j, int dir);
+	bool IsFenceEnding(int i, int j, int dir);
+	void PlaceFloor(glm::vec3 pos);
+
 	int roomCount;
 
 	int locationMaxX;
@@ -72,6 +79,8 @@ private:
 	void PlaceCorridors(glm::vec3 crtPos, glm::vec3 finalPos, glm::vec3 size);
 	void PlaceWalls(Room room);
 	void PlaceWall(Room room);
+	void PlaceWll(glm::vec3 pos, int wallDir, int type, int corridorType, glm::vec3 wallOffset);
+	
 
 	std::pair<glm::vec3, glm::vec3> IsDoor(glm::vec3 from, glm::vec3 to, bool *isDoor);
 

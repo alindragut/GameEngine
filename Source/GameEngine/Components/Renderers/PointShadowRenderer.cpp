@@ -20,9 +20,13 @@ PointShadowRenderer::PointShadowRenderer() {
 	MeshManager& mm = MeshManager::GetInstance();
 	mm.AddMesh("arrow", "Source/GameEngine/Models", "Arrow.fbx");
 	mm.AddMesh("box", RESOURCE_PATH::MODELS + "Primitives", "box.obj");
-	mm.AddMesh("wall01", "Source/GameEngine/Models", "SM_Bld_Castle_Wall_01.fbx", true, true, true);
+	//mm.AddMesh("wall01", "Source/GameEngine/Models", "SM_Bld_Castle_Wall_01.fbx", true, true, true);
+	mm.AddMesh("wall01", "Source/GameEngine/Models", "ModularStoneWall.fbx", true, true, false);
+	mm.AddMesh("fence01", "Source/GameEngine/Models", "Fence_Straight_Modular.fbx", true, true, false);
+	mm.AddMesh("fence02", "Source/GameEngine/Models", "Fence_End_Modular.fbx", true, true, false);
+	mm.AddMesh("fence03", "Source/GameEngine/Models", "Fence_90_Modular.fbx", true, true, false);
 	mm.AddMesh("door01", "Source/GameEngine/Models", "SM_Bld_Rockwall_Archway_01.fbx", true, true, true);
-	mm.AddMesh("floor01", "Source/GameEngine/Models", "SM_Env_Path_Cobble_01.fbx", true, true, true);
+	mm.AddMesh("floor01", "Source/GameEngine/Models", "ModularFloor.fbx", true, true, true);
 }
 
 PointShadowRenderer::~PointShadowRenderer() {
@@ -72,7 +76,9 @@ void PointShadowRenderer::RenderDepth() {
 	}
 	else {
 		glm::mat4 trans = glm::translate(glm::mat4(1), object->GetTransform()->GetPos());
-		glm::mat4 rot = glm::rotate(glm::mat4(1), object->GetTransform()->GetRot().y, glm::vec3(0, 1, 0));
+
+		glm::mat4 rot = glm::mat4(glm::quat(object->GetTransform()->GetRot()));
+
 		glm::mat4 scale = glm::scale(glm::mat4(1), object->GetTransform()->GetScale());
 
 		modelMat = trans * rot * scale;
@@ -105,7 +111,9 @@ void PointShadowRenderer::RenderLight() {
 	}
 	else {
 		glm::mat4 trans = glm::translate(glm::mat4(1), object->GetTransform()->GetPos());
-		glm::mat4 rot = glm::rotate(glm::mat4(1), object->GetTransform()->GetRot().y, glm::vec3(0, 1, 0));
+
+		glm::mat4 rot = glm::mat4(glm::quat(object->GetTransform()->GetRot()));
+
 		glm::mat4 scale = glm::scale(glm::mat4(1), object->GetTransform()->GetScale());
 
 		modelMat = trans * rot * scale;

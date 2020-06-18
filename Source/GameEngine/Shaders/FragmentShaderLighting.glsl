@@ -42,7 +42,8 @@ float calculateDirShadow() {
 void main()
 {
 	float shadow = calculatePointShadow();
-	float ambient = 0.1f;
+	float ambient = 0.15f;
+	float attenuation = 1;
 	vec3 color = texture2D(txt, tex_coords).xyz;
 
 	if (shadow == 0.0f) {
@@ -61,9 +62,10 @@ void main()
 			vec3 reflect_dir = reflect(-light_dir, normal);
 
 			float diffuse = max(dot(normal, light_dir), 0.0);
-			float specular = 0.1 * pow(max(dot(view_dir, reflect_dir), 0.0), 32);
+			attenuation = 1 / (pow(distance(light_pos, world_position), 2) + 1);
+			float specular = 0 * pow(max(dot(view_dir, reflect_dir), 0.0), 2);
 
-			out_color = vec4(ambient + shadow * (diffuse + specular) * color, 1.0);
+			out_color = vec4(ambient * color + shadow * (diffuse + specular) * color * attenuation, 1.0);
 		}
 	}
 }  

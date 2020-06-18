@@ -138,7 +138,7 @@ glm::vec3 PlayerMovementGameComponent::RayPick(int mouseX, int mouseY) {
 glm::quat PlayerMovementGameComponent::GetRotationQuat(glm::quat oldRot, glm::quat newRot, float elapsedTime) {
 	float factor = fmin(elapsedTime / 0.5f, 1.0f);
 	float matching = glm::dot(oldRot, newRot);
-	if (abs(matching - 1.0) < 0.01) {
+	if (abs(matching - 1.0) < 0.001) {
 		return newRot;
 	}
 	return glm::slerp(oldRot, newRot, factor);

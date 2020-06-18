@@ -58,7 +58,7 @@ Generator::~Generator() {
 }
 
 void Generator::Init() {
-	NPCSpawner::SpawnNPC(player, rooms.back().location);
+	//NPCSpawner::SpawnNPC(player, rooms.back().location);
 }
 
 glm::vec3 Generator::GetSpawnPoint() {
@@ -72,29 +72,29 @@ void Generator::PlaceRooms() {
 
 	while (index < roomCount) {
 
-		float randomx = 2 * rand() % (locationMaxX) + 5;
-		float randomy = 2 * rand() % (locationMaxY) + 5;
+		float randomx = 2 * rand() % (locationMaxX) + 6;
+		float randomy = 2 * rand() % (locationMaxY) + 6;
 
 		printf("%lf %lf\n", randomx, randomy);
 
-		glm::vec3 location = glm::vec3(randomx, 0, randomy);
+		glm::vec3 location = glm::vec3(randomx, -0.5f, randomy);
 
-		randomx = 2 * (rand() % sizeMaxX) + 4;
-		randomy = 2 * (rand() % sizeMaxY) + 4;
+		randomx = 2 * (rand() % sizeMaxX) + 6;
+		randomy = 2 * (rand() % sizeMaxY) + 6;
 
-		glm::vec3 size = glm::vec3(randomx, 0.01f, randomy);
+		glm::vec3 size = glm::vec3(randomx, 1, randomy);
 
 		bool add = true;
 		Room* newRoom = new Room(location, size);
 		for (Room room : rooms) {
-			if (newRoom->Intersection(room, 2.f)) {
+			if (newRoom->Intersection(room, 4.f)) {
 				add = false;
 				break;
 			}
 		}
 		if (add) {
 			rooms.push_back(*newRoom);
-			PlaceRoom(newRoom->location, newRoom->size);
+			//PlaceRoom(newRoom->location, newRoom->size);
 			index++;
 			for (int i = newRoom->location.x - newRoom->size.x/2; i < newRoom->location.x + newRoom->size.x/2; i++) {
 				for (int j = newRoom->location.z - newRoom->size.z/2; j < newRoom->location.z + newRoom->size.z/2; j++) {
@@ -159,7 +159,7 @@ void Generator::PlaceRooms() {
 	}
 
 	for (auto room : rooms) {
-		PlaceWall(room);
+		//PlaceWall(room);
 	}
 
 	for (int i = 0; i < 2 * locationMaxX + 10; i++) {
@@ -171,8 +171,69 @@ void Generator::PlaceRooms() {
 			}
 		}
 	}
-
 	int startI = -1, startJ = -1;
+	for (int i = 0; i < (2 * locationMaxX + 10); i++) {
+		for (int j = 0; j < (2 * locationMaxY + 10); j++) {
+			if (auxMapMatrix[i][j] != 1) {
+				int val = GetWallDirection(auxMapMatrix, i, j);
+				if (val != 5) {
+					PlaceWll(glm::vec3(j, 0, i), val, auxMapMatrix[i][j], GetCorridorType(auxMapMatrix, i, j), GetWallOffset(auxMapMatrix, i, j));
+				}
+				PlaceFloor(glm::vec3(j, 0, i));
+			}
+		}
+	}
+
+	std::vector<glm::ivec2> dirs;
+	dirs.push_back(glm::ivec2(1, 0));
+	dirs.push_back(glm::ivec2(-1, 0));
+	dirs.push_back(glm::ivec2(0, 1));
+	dirs.push_back(glm::ivec2(0, -1));
+	glm::ivec2 dir = dirs[0];
+	glm::ivec2 crtMapPos = glm::ivec2(startI, startJ);
+
+	/*if (startI != -1) {
+		while (auxMapMatrix[crtMapPos.x][crtMapPos.y] != 5) {
+			auxMapMatrix[crtMapPos.x][crtMapPos.y] = 5;
+
+			PlaceWll(glm::vec3(crtMapPos.y, 0, crtMapPos.x), dir);
+
+			glm::ivec2 nextPos = crtMapPos + dir;
+			bool end = true;
+
+			if ((auxMapMatrix[nextPos.x][nextPos.y] == 1) && GetNumberOfValidNeighbours(auxMapMatrix, nextPos.x, nextPos.y) > 0) {
+				crtMapPos = nextPos;
+				end = false;
+			}
+			else {
+				for (glm::ivec2 dirIt : dirs) {
+					if (dirIt != dir && dirIt != -dir) {
+						nextPos = crtMapPos + dirIt;
+						if ((auxMapMatrix[nextPos.x][nextPos.y] == 1) && GetNumberOfValidNeighbours(auxMapMatrix, nextPos.x, nextPos.y) > 0) {
+							dir = dirIt;
+							crtMapPos = nextPos;
+							end = false;
+							break;
+						}
+					}
+				}
+			}
+			if (end) {
+				printf("end gen\n");
+				break;
+			}
+
+		}
+	}*/
+
+	/*for (int i = 0; i < (2 * locationMaxX + 10); i++) {
+		for (int j = 0; j < (2 * locationMaxY + 10); j++) {
+			printf("%d", auxMapMatrix[i][j]);
+		}
+		printf("\n");
+	}*/
+
+	startI = -1, startJ = -1;
 
 	for (int i = 0; i < (2 * locationMaxX + 10) * navSizeMult; i++) {
 		for (int j = 0; j < (2 * locationMaxY + 10) * navSizeMult; j++) {
@@ -199,16 +260,16 @@ void Generator::PlaceRooms() {
 			int right = -1;
 
 			if (mapMatrix[startI - 1][startJ] != 1 && mapMatrix[startI - 1][startJ] != 5) {
-				up = GetNumberOfInvalidNeighbours(startI - 1, startJ);
+				up = GetNumberOfInvalidNeighbours(mapMatrix, startI - 1, startJ);
 			}
 			if (mapMatrix[startI + 1][startJ] != 1 && mapMatrix[startI + 1][startJ] != 5) {
-				down = GetNumberOfInvalidNeighbours(startI + 1, startJ);
+				down = GetNumberOfInvalidNeighbours(mapMatrix, startI + 1, startJ);
 			}
 			if (mapMatrix[startI][startJ - 1] != 1 && mapMatrix[startI][startJ - 1] != 5) {
-				left = GetNumberOfInvalidNeighbours(startI, startJ - 1);;
+				left = GetNumberOfInvalidNeighbours(mapMatrix, startI, startJ - 1);;
 			}
 			if (mapMatrix[startI][startJ + 1] != 1 && mapMatrix[startI][startJ + 1] != 5) {
-				right = GetNumberOfInvalidNeighbours(startI, startJ + 1);;
+				right = GetNumberOfInvalidNeighbours(mapMatrix, startI, startJ + 1);;
 			}
 
 			if (down > max) {
@@ -249,45 +310,368 @@ void Generator::PlaceRooms() {
 	}
 	
 
-	for (int i = 0; i < (2 * locationMaxX + 10) * navSizeMult; i++) {
-		for (int j = 0; j < (2 * locationMaxY + 10) * navSizeMult; j++) {
-			if (mapMatrix[i][j] == 5) {
-				mapMatrix[i][j] = 1;
-			}
-			printf("%d", mapMatrix[i][j]);
-		}
-		printf("\n");
-	}
 }
 
-int Generator::GetNumberOfInvalidNeighbours(int i, int j) {
+int Generator::GetCorridorType(int **mat, int i, int j) {
+	if (mat[i][j] != 4) {
+		return 0;
+	}
+
+	if ((mat[i + 1][j] == 1 && mat[i][j - 1] == 1) || (mat[i + 1][j] == 1 && mat[i][j + 1] == 1) || (mat[i - 1][j] == 1 && mat[i][j - 1] == 1) || (mat[i - 1][j] == 1 && mat[i][j + 1] == 1)) {
+		return 4;
+	}
+
+	if (mat[i + 1][j] == 0 || mat[i - 1][j] == 0 || mat[i][j - 1] == 0 || mat[i][j + 1] == 0) {
+		return 2;
+	}
+
+	if (mat[i][j] == 4 && mat[i - 1][j] == 4 && mat[i + 1][j] == 4 && mat[i][j - 1] == 4 && mat[i][j + 1] == 4) {
+		return 3;
+	}
+
+	return 1;
+}
+
+int Generator::GetWallDirection(int **mat, int i, int j) {
+	/* numpad */
+	
+	if (mat[i][j] == 4 && mat[i - 1][j] == 4 && mat[i + 1][j] == 4 && mat[i][j - 1] == 4 && mat[i][j + 1] == 4) {
+		if (mat[i - 1][j - 1] == 1) {
+			return 3;
+		}
+
+		if (mat[i - 1][j + 1] == 1) {
+			return 1;
+		}
+
+		if (mat[i + 1][j - 1] == 1) {
+			return 9;
+		}
+
+		if (mat[i + 1][j + 1] == 1) {
+			return 7;
+		}
+	}
+
+	if (mat[i][j] == 4) {
+		if (mat[i - 1][j] == 1 && mat[i - 1][j - 1] == 4) {
+			return 5;
+		}
+		if (mat[i + 1][j] == 1 && mat[i + 1][j + 1] == 4) {
+			return 5;
+		}
+		if (mat[i][j - 1] == 1 && mat[i + 1][j - 1] == 4) {
+			return 5;
+		}
+		if (mat[i][j + 1] == 1 && mat[i - 1][j + 1] == 4) {
+			return 5;
+		}
+	}
+
+
+
+	if (mat[i - 1][j] == 1 && mat[i][j - 1] == 1) {
+		// NW
+		return 7;
+	}
+	if (mat[i - 1][j] == 1 && mat[i][j + 1] == 1) {
+		// NE
+		return 9;
+	}
+	if (mat[i + 1][j] == 1 && mat[i][j - 1] == 1) {
+		// SW
+		return 1;
+	}
+	if (mat[i + 1][j] == 1 && mat[i][j + 1] == 1) {
+		// SE
+		return 3;
+	}
+	if (mat[i - 1][j] == 1) {
+		// N
+		return 8;
+	}
+	if (mat[i + 1][j] == 1) {
+		// S
+		return 2;
+	}
+	if (mat[i][j - 1] == 1) {
+		// W
+		return 4;
+	}
+	if (mat[i][j + 1] == 1) {
+		// E
+		return 6;
+	}
+	// center
+	return 5;
+}
+
+bool Generator::IsFenceEnding(int i, int j, int dir) {
+	if ((dir == 2 || dir == 8) && (auxMapMatrix[i][j - 2] == 0 || auxMapMatrix[i][j + 2] == 0)) {
+		return true;
+	}
+
+	if ((dir == 4 || dir == 6) && (auxMapMatrix[i - 2][j] == 0 || auxMapMatrix[i + 2][j] == 0)) {
+		return true;
+	}
+
+	return false;
+}
+
+glm::vec3 Generator::GetWallOffset(int **mat, int i, int j) {
+
+	if (mat[i][j] != 0) {
+		return glm::vec3(0);
+	}
+
+	if (mat[i + 1][j + 1] == 4 && mat[i + 1][j] == 1) {
+		return glm::vec3(-0.5, 0, 0);
+	}
+
+	/*if (mat[i + 1][j - 1] == 4 && mat[i + 1][j] == 1) {
+		return 0.f * glm::vec3(0, 1, 0);
+	}*/
+
+	/*if (mat[i + 1][j + 1] == 4 && mat[i][j + 1] == 1) {
+		return 0.f * glm::vec3(0, 1, 0);
+	}*/
+
+	if (mat[i - 1][j + 1] == 4 && mat[i][j + 1] == 1) {
+		return glm::vec3(0, 0, 0.5);
+	}
+
+	if (mat[i - 1][j - 1] == 4 && mat[i - 1][j] == 1) {
+		return glm::vec3(0.5, 0, 0);
+	}
+
+	/*if (mat[i - 1][j + 1] == 4 && mat[i - 1][j] == 1) {
+		return 0.f * glm::vec3(0, 1, 0);
+	}*/
+
+	if (mat[i + 1][j - 1] == 4 && mat[i][j - 1] == 1) {
+		return glm::vec3(0, 0, -0.5);
+	}
+
+	/*if ((mat[i - 1][j - 1] == 4 && mat[i][j - 1] == 1)) {
+		return  0.f * glm::vec3(0, 1.f, 0);
+	}*/
+
+	/*if (mat[i + 1][j] == 4 && mat[i + 1][j - 1] == 1) {
+		return glm::vec3(0, 2, 0);
+	}
+	if (mat[i + 1][j] == 4 && mat[i + 1][j + 1] == 1) {
+		return glm::vec3(0, 2, 0);
+	}
+	if (mat[i][j + 1] == 4 && mat[i - 1][j + 1] == 1) {
+		return glm::vec3(0, 2, 0);
+	}
+	if (mat[i][j + 1] == 4 && mat[i + 1][j + 1] == 1) {
+		return glm::vec3(0, 2, 0);
+	}
+	if (mat[i - 1][j] == 4 && mat[i - 1][j + 1] == 1) {
+		return glm::vec3(0, 2, 0);
+	}
+	if (mat[i - 1][j] == 4 && mat[i - 1][j - 1] == 1) {
+		return glm::vec3(0, 2, 0);
+	}
+	if (mat[i][j - 1] == 4 && mat[i - 1][j - 1] == 1) {
+		return glm::vec3(0, 2, 0);
+	}
+	if (mat[i][j - 1] == 4 && mat[i + 1][j - 1] == 1) {
+		return glm::vec3(0, 2, 0);
+	}*/
+	return glm::vec3(0);
+}
+
+int Generator::GetNumberOfInvalidNeighbours(int **mat, int i, int j) {
 	int count = 0;
 
-	if (mapMatrix[i - 1][j - 1] == 1) {
+	if (mat[i - 1][j - 1] == 1) {
 		count++;
 	}
-	if (mapMatrix[i - 1][j] == 1) {
+	if (mat[i - 1][j] == 1) {
 		count++;
 	}
-	if (mapMatrix[i - 1][j + 1] == 1) {
+	if (mat[i - 1][j + 1] == 1) {
 		count++;
 	}
-	if (mapMatrix[i][j - 1] == 1) {
+	if (mat[i][j - 1] == 1) {
 		count++;
 	}
-	if (mapMatrix[i][j + 1] == 1) {
+	if (mat[i][j + 1] == 1) {
 		count++;
 	}
-	if (mapMatrix[i + 1][j - 1] == 1) {
+	if (mat[i + 1][j - 1] == 1) {
 		count++;
 	}
-	if (mapMatrix[i + 1][j] == 1) {
+	if (mat[i + 1][j] == 1) {
 		count++;
 	}
-	if (mapMatrix[i + 1][j + 1] == 1) {
+	if (mat[i + 1][j + 1] == 1) {
 		count++;
 	}
 	return count;
+}
+
+int Generator::GetNumberOfValidNeighbours(int **mat, int i, int j) {
+	int count = 0;
+
+	if (mat[i - 1][j - 1] != 1 && mat[i - 1][j - 1] != 5) {
+		count++;
+	}
+	if (mat[i - 1][j] != 1 && mat[i - 1][j] != 5) {
+		count++;
+	}
+	if (mat[i - 1][j + 1] != 1 && mat[i - 1][j + 1] != 5) {
+		count++;
+	}
+	if (mat[i][j - 1] != 1 && mat[i][j - 1] != 5) {
+		count++;
+	}
+	if (mat[i][j + 1] != 1 && mat[i][j + 1] != 5) {
+		count++;
+	}
+	if (mat[i + 1][j - 1] != 1 && mat[i + 1][j - 1] != 5) {
+		count++;
+	}
+	if (mat[i + 1][j] != 1 && mat[i + 1][j] != 5) {
+		count++;
+	}
+	if (mat[i + 1][j + 1] != 1 && mat[i + 1][j + 1] != 5) {
+		count++;
+	}
+	return count;
+}
+
+bool Generator::VerifyFinalCorridorPos(int i, int j, int dir) {
+	if (auxMapMatrix[i][j] == 0) {
+		return false;
+	}
+
+	if ((dir == 2 || dir == 8) && (auxMapMatrix[i][j - 1] == 0 || auxMapMatrix[i][j + 1] == 0)) {
+		return false;
+	}
+
+	if ((dir == 4 || dir == 6) && (auxMapMatrix[i - 1][j] == 0 || auxMapMatrix[i + 1][j] == 0)) {
+		return false;
+	}
+
+	return true;
+}
+
+void Generator::PlaceWll(glm::vec3 pos, int dir, int type, int corridorType, glm::vec3 wallOffset) {
+	ComponentFactory& factory = ComponentFactory::GetInstance();
+	EngineManager& em = EngineManager::GetInstance();
+
+	auto object = factory.createObject(3);
+	
+	
+
+	if (dir == 8) {
+		object->GetTransform()->SetPos(pos + glm::vec3(0, 0, 0));
+		object->GetTransform()->SetRot(glm::vec3(0, -M_PI_2, 0));
+	}
+
+	if (dir == 7) {
+		object->GetTransform()->SetPos(pos + glm::vec3(0, 0, 0));
+		if (type == 4 && corridorType != 4) {
+			object->GetTransform()->SetPos(pos + glm::vec3(1, 0, 1));
+		}
+	}
+	
+	if (dir == 9) {
+		object->GetTransform()->SetPos(pos + glm::vec3(1, 0, 0));
+		object->GetTransform()->SetRot(glm::vec3(0, -M_PI_2, 0));
+		if (type == 4 && corridorType != 4) {
+			object->GetTransform()->SetPos(pos + glm::vec3(0, 0, 1));
+			
+		}
+	}
+
+	if (dir == 2) {
+		object->GetTransform()->SetPos(pos + glm::vec3(1, 0, 1));
+		object->GetTransform()->SetRot(glm::vec3(0, M_PI_2, 0));
+
+	}
+		
+	if (dir == 3) {
+		object->GetTransform()->SetRot(glm::vec3(0, M_PI, 0));
+		object->GetTransform()->SetPos(pos + glm::vec3(1, 0, 1));
+		if (type == 4 && corridorType != 4) {
+			object->GetTransform()->SetPos(pos + glm::vec3(0, 0, 0));
+		}
+	}
+
+	if (dir == 1) {
+		object->GetTransform()->SetRot(glm::vec3(0, M_PI_2, 0));
+		object->GetTransform()->SetPos(pos + glm::vec3(0, 0, 1));
+		if (type == 4 && corridorType != 4) {
+			object->GetTransform()->SetPos(pos + glm::vec3(1, 0, 0));
+
+		}
+	}
+
+	if (dir == 6) {
+		object->GetTransform()->SetPos(pos + glm::vec3(1, 0, 0));
+		object->GetTransform()->SetRot(glm::vec3(0, M_PI, 0));
+	}
+
+	if (dir == 4) {
+		object->GetTransform()->SetPos(pos + glm::vec3(0, 0, 1));
+	}
+
+	if (dir % 2 == 1) {
+		wallOffset = glm::vec3(0);
+	}
+
+	if (wallOffset != glm::vec3(0)) {
+		object->GetTransform()->SetScale(glm::vec3(1, 1, 0.5));
+	}
+
+	object->GetTransform()->SetPos(object->GetTransform()->GetPos() + glm::vec3(0, 1, 0) + wallOffset);
+	
+
+	if (type == 0) {
+		static_cast<PointShadowRenderer*>(object->GetComponent("PointShadowRenderer"))->SetMesh("wall01");
+		object->GetTransform()->SetScale(object->GetTransform()->GetScale() + glm::vec3(0.625, 0, 0));
+	}
+	else if (type == 4) {
+		//intersection
+		if (corridorType >= 3) {
+			static_cast<PointShadowRenderer*>(object->GetComponent("PointShadowRenderer"))->SetMesh("fence03");
+			//intersection that needs flip
+			//if (corridorType == 4) {
+				object->GetTransform()->SetRot(object->GetTransform()->GetRot() + glm::vec3(0, M_PI, 0));
+			//}
+		}
+		else {
+			/*glm::vec3 finalPos = object->GetTransform()->GetPos();
+			if (IsFenceEnding(int(finalPos.z), int(finalPos.x), dir)) {
+				static_cast<PointShadowRenderer*>(object->GetComponent("PointShadowRenderer"))->SetMesh("fence02");
+				if (dir == 2 || dir == 6) {
+					object->GetTransform()->SetRot(object->GetTransform()->GetRot() + glm::vec3(0, M_PI, 0));
+				}
+				object->GetTransform()->SetScale(glm::vec3(1, 1, 5));
+			}
+			else {*/
+				static_cast<PointShadowRenderer*>(object->GetComponent("PointShadowRenderer"))->SetMesh("fence01");
+			//}
+		}
+		//start/end of corridor
+		
+		
+		object->GetTransform()->SetRot(object->GetTransform()->GetRot() + glm::vec3(-M_PI_2, M_PI_2, 0));
+	}
+
+	if (type == 4 && dir % 2 != 1) {
+		glm::vec3 finalPos = object->GetTransform()->GetPos();
+		if (!VerifyFinalCorridorPos(int(finalPos.z), int(finalPos.x), dir)) {
+			delete object;
+			return;
+		}
+	}
+
+	em.GetGameEngine()->AddObject(object);
 }
 
 int Generator::CalcLinearInterp(float nr, int mode) {
@@ -361,7 +745,8 @@ glm::vec3 Generator::GetCorridorBoundary(Room* r1, Room* r2) {
 	}
 
 	printf("qwe %lf %lf %lf\n", next.x, next.y, next.z);
-		
+	PlaceCorridor(next, 2);
+	next = next + 2.0f * glm::normalize(next - crtPos);
 	PlaceCorridor(next, 2);
 	return next;
 }
@@ -383,22 +768,20 @@ void Generator::PlaceRoom(glm::vec3 location, glm::vec3 size) {
 	em.GetGameEngine()->AddObject(object);
 }
 
-void Generator::PlaceCorridor(glm::vec3 location, float size) {
-
+void Generator::PlaceFloor(glm::vec3 pos) {
 	ComponentFactory& factory = ComponentFactory::GetInstance();
-	auto object = factory.createObject(3);
-
-	static_cast<PointShadowRenderer*>(object->GetComponent("PointShadowRenderer"))->SetMesh("floor01");
-	static_cast<RigidBodyComponent*>(object->GetComponent("RigidBodyComponent"))->SetWalkable(true);
-
-	object->GetTransform()->SetPos(location);
-	object->GetTransform()->SetScale(glm::vec3(size, 0, size));
-	object->InitComponents();
-
 	EngineManager& em = EngineManager::GetInstance();
 
-	em.GetGameEngine()->AddObject(object);
+	auto object = factory.createObject(3);
+	static_cast<PointShadowRenderer*>(object->GetComponent("PointShadowRenderer"))->SetMesh("floor01");
+	static_cast<RigidBodyComponent*>(object->GetComponent("RigidBodyComponent"))->SetWalkable(true);
+	object->GetTransform()->SetPos(pos + glm::vec3(0.5, -0.5, 0.5));
+	object->GetTransform()->SetRot(glm::vec3(-M_PI_2, 0, 0));
 
+	em.GetGameEngine()->AddObject(object);
+}
+
+void Generator::PlaceCorridor(glm::vec3 location, float size) {
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
 			if (auxMapMatrix[(int)location.z - 1 + j][(int)location.x - 1 + i] == 1) {
@@ -406,7 +789,6 @@ void Generator::PlaceCorridor(glm::vec3 location, float size) {
 			}
 		}
 	}
-	
 }
 
 void Generator::PlaceCorridors(glm::vec3 crtPos, glm::vec3 finalPos, glm::vec3 size) {
@@ -484,11 +866,11 @@ void Generator::PlaceWall(Room room) {
 	if (isDoor) {
 		static_cast<PointShadowRenderer*>(object1->GetComponent("PointShadowRenderer"))->SetMesh("door01");
 		object1->GetTransform()->SetRot(glm::vec3(0, M_PI / 2.0f, 0));
-		object1->GetTransform()->SetScale(glm::vec3(0.01f, 3, room.size.x));
+		object1->GetTransform()->SetScale(glm::vec3(1, 3, room.size.x));
 	}
 	else {
 		static_cast<PointShadowRenderer*>(object1->GetComponent("PointShadowRenderer"))->SetMesh("wall01");
-		object1->GetTransform()->SetScale(glm::vec3(room.size.x, 3, 0.01f));
+		//object1->GetTransform()->SetScale(glm::vec3(room.size.x, 3, 1));
 	}
 
 	
@@ -499,12 +881,12 @@ void Generator::PlaceWall(Room room) {
 
 	if (isDoor) {
 		static_cast<PointShadowRenderer*>(object2->GetComponent("PointShadowRenderer"))->SetMesh("door01");
-		object2->GetTransform()->SetScale(glm::vec3(0.01f, 3, room.size.z));
+		object2->GetTransform()->SetScale(glm::vec3(1, 3, room.size.z));
 	}
 	else {
 		static_cast<PointShadowRenderer*>(object2->GetComponent("PointShadowRenderer"))->SetMesh("wall01");
-		object2->GetTransform()->SetRot(glm::vec3(0, M_PI / 2.0f, 0));
-		object2->GetTransform()->SetScale(glm::vec3(room.size.z, 3, 0.01f));
+		//object2->GetTransform()->SetRot(glm::vec3(0, M_PI / 2.0f, 0));
+		//object2->GetTransform()->SetScale(glm::vec3(room.size.z, 3, 1));
 	}
 
 	object2->GetTransform()->SetPos(glm::vec3(room.location.x - room.size.x / 2, 1, room.location.z));
@@ -515,11 +897,11 @@ void Generator::PlaceWall(Room room) {
 	if (isDoor) {
 		static_cast<PointShadowRenderer*>(object3->GetComponent("PointShadowRenderer"))->SetMesh("door01");
 		object3->GetTransform()->SetRot(glm::vec3(0, M_PI / 2.0f, 0));
-		object3->GetTransform()->SetScale(glm::vec3(0.01f, 3, room.size.x));
+		object3->GetTransform()->SetScale(glm::vec3(1, 3, room.size.x));
 	}
 	else {
 		static_cast<PointShadowRenderer*>(object3->GetComponent("PointShadowRenderer"))->SetMesh("wall01");
-		object3->GetTransform()->SetScale(glm::vec3(room.size.x, 3, 0.01f));
+		//object3->GetTransform()->SetScale(glm::vec3(room.size.x, 3, 1));
 	}
 
 	
@@ -531,12 +913,12 @@ void Generator::PlaceWall(Room room) {
 
 	if (isDoor) {
 		static_cast<PointShadowRenderer*>(object4->GetComponent("PointShadowRenderer"))->SetMesh("door01");
-		object4->GetTransform()->SetScale(glm::vec3(0.01f, 3, room.size.z));
+		object4->GetTransform()->SetScale(glm::vec3(1, 3, room.size.z));
 	}
 	else {
 		static_cast<PointShadowRenderer*>(object4->GetComponent("PointShadowRenderer"))->SetMesh("wall01");
-		object4->GetTransform()->SetRot(glm::vec3(0, M_PI / 2.0f, 0));
-		object4->GetTransform()->SetScale(glm::vec3(room.size.z, 3, 0.01f));
+		//object4->GetTransform()->SetRot(glm::vec3(0, M_PI / 2.0f, 0));
+		//object4->GetTransform()->SetScale(glm::vec3(room.size.z, 3, 1));
 	}
 
 	object4->GetTransform()->SetPos(glm::vec3(room.location.x + room.size.x / 2, 1, room.location.z));

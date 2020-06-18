@@ -7,6 +7,7 @@
 #include <GameEngine/Utils/ComponentFactory.h>
 #include <GameEngine/Utils/DebugDraw.h>
 #include <GameEngine/Utils/ShaderCache.h>
+#include <Component/CameraInput.h>
 
 GameEngine::GameEngine() {
 }
@@ -34,13 +35,13 @@ void GameEngine::Init() {
 	ImGui = new ImGuiSetup();
 	ImGui->Init();
 
-	generator = new Generator(3, 30, 30, 3, 3, 4);
+	generator = new Generator(3, 50, 50, 3, 3, 4);
 	generator->PlaceRooms();
 
 	glm::ivec2 res = window->GetResolution();
 
 	sceneRenderer = new ShadowMapSceneRenderer(&objects);
-	sceneRenderer->Init(res.x, res.y, 256, 256, 1024, 1024);
+	sceneRenderer->Init(res.x, res.y, 128, 128, 256, 256);
 
 	BaseGameObject* obj = factory.createObject(1);
 
@@ -164,6 +165,12 @@ void GameEngine::OnKeyPress(int key, int mods) {
 			it.second->OnKeyPress(key, mods);
 		}
 		obj++;
+	}
+	if (key == GLFW_KEY_SPACE) {
+		static_cast<CameraInput*>(GetCameraInput())->SetCameraLock(true);
+	}
+	if (key == GLFW_KEY_L) {
+		static_cast<CameraInput*>(GetCameraInput())->SetCameraLock(false);
 	}
 }
 void GameEngine::OnKeyRelease(int key, int mods) {
