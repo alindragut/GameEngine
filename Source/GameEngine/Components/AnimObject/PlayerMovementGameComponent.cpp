@@ -4,6 +4,7 @@
 #include <GameEngine/Components/Arrow/ArrowSpawner.h>
 #include <GameEngine/MapGenerator/GeneratorManager.h>
 #include <GameEngine/Components/Combat/CombatComponent.h>
+#include <GameEngine/Utils/MeshManager.h>
 
 PlayerMovementGameComponent::PlayerMovementGameComponent() {
 	dir = glm::vec3(0);
@@ -15,7 +16,7 @@ PlayerMovementGameComponent::PlayerMovementGameComponent() {
 	speed = 1;
 	currentDest = glm::vec3(0);
 	centeredCamera = false;
-	isPlayerAlive = true;
+	alive = true;
 }
 
 void PlayerMovementGameComponent::Init() {
@@ -30,14 +31,54 @@ void PlayerMovementGameComponent::Init() {
 void PlayerMovementGameComponent::update(float deltaTimeSeconds) {
 	int hp = static_cast<CombatComponent*>(object->GetComponent("CombatComponent"))->GetHP();
 	int crtState = state;
-	if (hp <= 0) {
-		state = 4;
-		isPlayerAlive = false;
+
+	if (centeredCamera) {
+		Camera* cam = EngineManager::GetInstance().GetGameEngine()->GetCamera();
+		glm::vec3 newPos = object->GetTransform()->GetPos();
+		cam->SetPosition(newPos + glm::vec3(-4, 4, -4));
+		cam->SetRotation(glm::inverse(glm::lookAt(newPos + glm::vec3(-4, 4, -4), newPos, glm::vec3(0, 1, 0))));
+		cam->Update();
 	}
+
+	if (hp <= 0 && alive) {
+		state = 3;
+		alive = false;
+		crtAnimDuration = MeshManager::GetInstance().GetAnimation("player_die")->GetDuration();
+		crtAnimTimer = 0.f;
+	}
+
+	if (alive) {
+		if (crtPath.empty()) {
+			state = 0;
+		}
+		else {
+			state = 1;
+		}
+	}
+
 	if (crtState != state) {
-		if (state == 4) {
+		if (state == 0) {
+			static_cast<AnimationRenderer*>(object->GetComponent("AnimationRenderer"))->SetAnimation("player_idle");
+		}
+		if (state == 1) {
+			static_cast<AnimationRenderer*>(object->GetComponent("AnimationRenderer"))->SetAnimation("player_walk");
+		}
+		if (state == 2) {
+			static_cast<AnimationRenderer*>(object->GetComponent("AnimationRenderer"))->SetAnimation("player_run");
+		}
+		if (state == 3) {
 			static_cast<AnimationRenderer*>(object->GetComponent("AnimationRenderer"))->SetAnimation("player_die");
 		}
+	}
+
+	if (state == 3) {
+		if (crtAnimTimer >= crtAnimDuration) {
+			static_cast<AnimationRenderer*>(object->GetComponent("AnimationRenderer"))->SetAnimation("player_dead");
+			crtAnimDuration = 0.f;
+			crtAnimTimer = 0.f;
+			state = 4;
+		}
+		crtAnimTimer += deltaTimeSeconds;
 	}
 	glm::vec3 currentPos = object->GetTransform()->GetPos();
 	if (!crtPath.empty()) {
@@ -68,7 +109,10 @@ void PlayerMovementGameComponent::OnMouseBtnPress(int mouseX, int mouseY, int bu
 		glm::vec3 playerPos = object->GetTransform()->GetPos();
 		glm::vec3 mouseWorldPos = RayPick(mouseX, mouseY);
 
-		crtPath = GeneratorManager::GetInstance().GetGenerator()->GetPath(playerPos, mouseWorldPos);
+		if (alive) {
+			crtPath = GeneratorManager::GetInstance().GetGenerator()->GetPath(playerPos, mouseWorldPos);
+		}
+
 		if (!crtPath.empty()) {
 			crtPath.pop();
 		}
@@ -84,7 +128,7 @@ void PlayerMovementGameComponent::OnKeyPress(int key, int mods) {
 		glm::vec3 mouseWorldPos = RayPick(int(round(mouseX)), int(round(mouseY))) + yOffset;
 
 		glm::vec3 currentPos = object->GetTransform()->GetPos() + yOffset;
-		printf("1\n");
+
 		ArrowSpawner::SpawnArrow(object, currentPos, glm::normalize(mouseWorldPos - currentPos), 0.1f, 10.0f);
 	}
 
@@ -99,18 +143,9 @@ void PlayerMovementGameComponent::OnKeyPress(int key, int mods) {
 		while (!crtPath.empty()) {
 			crtPath.pop();
 		}
-		printf("matrix: %d\n", GeneratorManager::GetInstance().GetGenerator()->GetNavMatrixValue(mouseWorldPos));
-		//printf("\n");
 	}
 	if (key == GLFW_KEY_SPACE) {
 		centeredCamera = !centeredCamera;
-		EngineManager::GetInstance().GetGameEngine()->GetCamera()->SetPosition(object->GetTransform()->GetPos() + glm::vec3(0,2,1));
-		if (centeredCamera) {
-			EngineManager::GetInstance().GetGameEngine();
-		}
-		else {
-			EngineManager::GetInstance().GetGameEngine();
-		}
 	}
 }
 

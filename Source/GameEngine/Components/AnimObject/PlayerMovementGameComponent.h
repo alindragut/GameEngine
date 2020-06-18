@@ -19,7 +19,7 @@ public:
 	void OnMouseBtnPress(int mouseX, int mouseY, int button, int mods) override;
 	void OnKeyPress(int key, int mods) override;
 	void SetRotationTime(float rotationTime) { this->rotationTime = rotationTime; }
-	bool isAlive() { return this->isPlayerAlive; }
+	bool isAlive() { return this->alive; }
 
 private:
 	float rotationTime;
@@ -33,12 +33,21 @@ private:
 	glm::quat rotQuat;
 
 	float speed;
+	float crtAnimDuration;
+	float crtAnimTimer;
 	int state;
+	/*
+	0 - idle
+	1 - walk
+	2 - run
+	3 - die
+	4 - dead
+	*/
 
 	std::stack<std::pair<float, float>> crtPath;
 
 	bool isRotating;
 	bool animation;
 	bool centeredCamera;
-	bool isPlayerAlive;
+	bool alive;
 };

@@ -10,13 +10,15 @@
 using namespace std;
 using namespace EngineComponents;
 
-CameraInput::CameraInput(Camera *camera)
+CameraInput::CameraInput(Camera* camera)
 {
 	this->camera = camera;
+	locked = true;
 }
 
 void CameraInput::OnInputUpdate(float deltaTime, int mods)
 {
+	if (locked) return;
 	if (!window->MouseHold(GLFW_MOUSE_BUTTON_RIGHT)) return;
 
 	if (window->GetSpecialKeyState() & GLFW_MOD_SHIFT)
@@ -34,9 +36,9 @@ void CameraInput::OnInputUpdate(float deltaTime, int mods)
 	if (window->KeyHold(GLFW_KEY_KP_MULTIPLY))	camera->UpdateSpeed();
 	if (window->KeyHold(GLFW_KEY_KP_DIVIDE))	camera->UpdateSpeed(-0.2f);
 
-	if (window->KeyHold(GLFW_KEY_KP_4))		camera->RotateOY( 500 * deltaTime);
+	if (window->KeyHold(GLFW_KEY_KP_4))		camera->RotateOY(500 * deltaTime);
 	if (window->KeyHold(GLFW_KEY_KP_6))		camera->RotateOY(-500 * deltaTime);
-	if (window->KeyHold(GLFW_KEY_KP_8))		camera->RotateOX( 700 * deltaTime);
+	if (window->KeyHold(GLFW_KEY_KP_8))		camera->RotateOX(700 * deltaTime);
 	if (window->KeyHold(GLFW_KEY_KP_5))		camera->RotateOX(-700 * deltaTime);
 
 	camera->Update();
@@ -48,8 +50,9 @@ void CameraInput::OnKeyPress(int key, int mods) {
 		camera->Log();
 }
 
-void CameraInput::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {
-
+void CameraInput::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
+{
+	if (locked) return;
 	if (window->MouseHold(GLFW_MOUSE_BUTTON_RIGHT))
 	{
 		camera->RotateOY(-(float)deltaX);

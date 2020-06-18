@@ -50,11 +50,11 @@ void GameEngine::Init() {
 	}
 
 	obj = factory.createObject(4);
-	
+
 	if (obj != nullptr) {
 		objects.push_back(obj);
 	}
-	
+
 	obj = factory.createObject(3);
 
 	if (obj != nullptr) {
@@ -75,7 +75,7 @@ void GameEngine::Init() {
 		obj->GetTransform()->SetPos(glm::vec3(-2, 0.5, -2));
 		objects.push_back(obj);
 	}
-	
+
 	obj = factory.createObject(6);
 
 	if (obj != nullptr) {
@@ -83,7 +83,7 @@ void GameEngine::Init() {
 		obj->GetTransform()->SetPos(glm::vec3(0, -0.01, 0));
 		objects.push_back(obj);
 	}
-	
+
 	/*obj = factory.createObject(5);
 
 	if (obj != nullptr) {
@@ -118,7 +118,7 @@ void GameEngine::Update(float deltaTimeSeconds) {
 		if (obj->ShouldDelete()) {
 			toDelete.push_back(obj);
 			it = objects.erase(it);
-			
+
 		}
 		else {
 			obj->update(deltaTimeSeconds);
@@ -142,7 +142,7 @@ void GameEngine::FrameEnd() {
 void GameEngine::OnMouseBtnPress(int mouseX, int mouseY, int button, int mods) {
 	for (auto obj = objects.begin(); obj != objects.end();) {
 		auto components = (*obj)->GetComponents();
-		for (const auto &it : (*components)) {
+		for (const auto& it : (*components)) {
 			it.second->OnMouseBtnPress(mouseX, mouseY, button, mods);
 		}
 		obj++;
@@ -152,7 +152,7 @@ void GameEngine::OnMouseBtnPress(int mouseX, int mouseY, int button, int mods) {
 void GameEngine::OnInputUpdate(float deltaTime, int mods) {
 	for (auto obj = objects.begin(); obj != objects.end();) {
 		auto components = (*obj)->GetComponents();
-		for (const auto &it : (*components)) {
+		for (const auto& it : (*components)) {
 			it.second->OnInputUpdate(deltaTime, mods);
 		}
 		obj++;
@@ -161,7 +161,7 @@ void GameEngine::OnInputUpdate(float deltaTime, int mods) {
 void GameEngine::OnKeyPress(int key, int mods) {
 	for (auto obj = objects.begin(); obj != objects.end();) {
 		auto components = (*obj)->GetComponents();
-		for (const auto &it : (*components)) {
+		for (const auto& it : (*components)) {
 			it.second->OnKeyPress(key, mods);
 		}
 		obj++;
@@ -176,7 +176,7 @@ void GameEngine::OnKeyPress(int key, int mods) {
 void GameEngine::OnKeyRelease(int key, int mods) {
 	for (auto obj = objects.begin(); obj != objects.end();) {
 		auto components = (*obj)->GetComponents();
-		for (const auto &it : (*components)) {
+		for (const auto& it : (*components)) {
 			it.second->OnKeyRelease(key, mods);
 		}
 		obj++;
@@ -185,7 +185,7 @@ void GameEngine::OnKeyRelease(int key, int mods) {
 void GameEngine::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {
 	for (auto obj = objects.begin(); obj != objects.end();) {
 		auto components = (*obj)->GetComponents();
-		for (const auto &it : (*components)) {
+		for (const auto& it : (*components)) {
 			it.second->OnMouseMove(mouseX, mouseY, deltaX, deltaY);
 		}
 		obj++;
@@ -194,7 +194,7 @@ void GameEngine::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY) {
 void GameEngine::OnMouseBtnRelease(int mouseX, int mouseY, int button, int mods) {
 	for (auto obj = objects.begin(); obj != objects.end();) {
 		auto components = (*obj)->GetComponents();
-		for (const auto &it : (*components)) {
+		for (const auto& it : (*components)) {
 			it.second->OnMouseBtnRelease(mouseX, mouseY, button, mods);
 		}
 		obj++;
@@ -203,7 +203,7 @@ void GameEngine::OnMouseBtnRelease(int mouseX, int mouseY, int button, int mods)
 void GameEngine::OnMouseScroll(int mouseX, int mouseY, int offsetX, int offsetY) {
 	for (auto obj = objects.begin(); obj != objects.end();) {
 		auto components = (*obj)->GetComponents();
-		for (const auto &it : (*components)) {
+		for (const auto& it : (*components)) {
 			it.second->OnMouseScroll(mouseX, mouseY, offsetX, offsetY);
 		}
 		obj++;
@@ -212,7 +212,7 @@ void GameEngine::OnMouseScroll(int mouseX, int mouseY, int offsetX, int offsetY)
 void GameEngine::OnWindowResize(int width, int height) {
 	for (auto obj = objects.begin(); obj != objects.end();) {
 		auto components = (*obj)->GetComponents();
-		for (const auto &it : (*components)) {
+		for (const auto& it : (*components)) {
 			it.second->OnWindowResize(width, height);
 		}
 		obj++;

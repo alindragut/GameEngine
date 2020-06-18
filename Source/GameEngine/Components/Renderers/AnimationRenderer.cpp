@@ -19,6 +19,7 @@ AnimationRenderer::AnimationRenderer(std::string defaultModelName, std::string d
 	mm.AddAnimation("model", "player_run", "Source/GameEngine/Animations", "Running.dae");
 	mm.AddAnimation("model", "player_idle", "Source/GameEngine/Animations", "Idle.dae");
 	mm.AddAnimation("model", "player_die", "Source/GameEngine/Animations", "Falling Forward Death.dae", true);
+	mm.AddAnimation("model", "player_dead", "Source/GameEngine/Animations", "Dead.dae", true);
 	mm.AddAnimation("npc", "npc_idle", "Source/GameEngine/Animations", "NPCIdle.dae");
 	mm.AddAnimation("npc", "npc_walk", "Source/GameEngine/Animations", "NPCWalking.dae");
 	mm.AddAnimation("npc", "npc_attack_1", "Source/GameEngine/Animations", "NPCPunching.dae");
