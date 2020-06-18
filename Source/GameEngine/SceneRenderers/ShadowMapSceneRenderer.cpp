@@ -49,9 +49,9 @@ void ShadowMapSceneRenderer::renderScene() {
 	renderPointShadow();
 
 	dirShadowPass->BindForWriting();
-	cam->SetOrthographic(2, 2, 0.01f, 5);
-	cam->transform->SetWorldPosition(lightPos + glm::vec3(1));
-	cam->transform->SetWorldRotation(glm::inverse(glm::lookAt(glm::vec3(lightPos) + glm::vec3(1), glm::vec3(lightPos), glm::vec3(0, 1, 0))));
+	cam->SetOrthographic(20, 20, 0.01f, 40);
+	cam->transform->SetWorldPosition(lightPos + glm::vec3(10));
+	cam->transform->SetWorldRotation(glm::inverse(glm::lookAt(glm::vec3(lightPos) + glm::vec3(10), glm::vec3(lightPos), glm::vec3(0, 1, 0))));
 	cam->Update();
 	dirLightView = cam->GetViewMatrix();
 	dirLightProj = cam->GetProjectionMatrix();
@@ -81,10 +81,6 @@ void ShadowMapSceneRenderer::renderGameObjects() {
 				tr->render();
 			}
 			if (PointShadowRenderer* psr = dynamic_cast<PointShadowRenderer*>(((*it)->GetComponent("PointShadowRenderer")))) {
-				psr->SetRenderDepth(false);
-				psr->SetShader("PointShadowLight");
-				psr->SetDirLightView(dirLightView);
-				psr->SetDirLightProj(dirLightProj);
 				psr->render();
 			}
 		}
@@ -98,10 +94,17 @@ void ShadowMapSceneRenderer::renderPointShadow() {
 			if (PointShadowRenderer* psr = dynamic_cast<PointShadowRenderer*>(((*it)->GetComponent("PointShadowRenderer")))) {
 				psr->SetRenderDepth(true);
 				psr->SetPos(lightPos);
-
-				if (!psr->isSkybox()) {
-					psr->SetShader("PointShadowDepth");
-					psr->render();
+				psr->render();
+				psr->SetRenderDepth(false);
+			}
+			if (AnimationRenderer* ar = dynamic_cast<AnimationRenderer*>(((*it)->GetComponent("AnimationRenderer")))) {
+				if (player != (*it)) {
+					ar->SetShader("AnimationDepth");
+					ar->SetLightPos(lightPos + glm::vec3(0, 3, 0));
+					ar->SetDepth(true);
+					ar->render();
+					ar->SetShader("Animation");
+					ar->SetDepth(false);
 				}
 			}
 		}
@@ -110,5 +113,24 @@ void ShadowMapSceneRenderer::renderPointShadow() {
 }
 
 void ShadowMapSceneRenderer::renderDirShadow() {
-	static_cast<AnimationRenderer*>(player->GetComponent("AnimationRenderer"))->render();
+	for (auto it = (*objects).begin(); it != (*objects).end();) {
+		if (glm::l2Norm((*it)->GetTransform()->GetPos() - lightPos) < 50.0f) {
+			if (PointShadowRenderer* psr = dynamic_cast<PointShadowRenderer*>(((*it)->GetComponent("PointShadowRenderer")))) {
+				//psr->SetRenderDepth(true);
+				//psr->SetPos(lightPos);
+				
+				psr->SetDirLightView(dirLightView);
+				psr->SetDirLightProj(dirLightProj);
+				psr->render();
+			}
+			if (AnimationRenderer* ar = dynamic_cast<AnimationRenderer*>(((*it)->GetComponent("AnimationRenderer")))) {
+				//ar->SetShader("AnimationDepth");
+				//ar->SetLightPos(lightPos + glm::vec3(0, 3, 0));
+				//ar->SetDepth(true);
+				ar->render();
+			}
+		}
+		++it;
+	}
+	//static_cast<AnimationRenderer*>(player->GetComponent("AnimationRenderer"))->render();
 }

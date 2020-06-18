@@ -533,6 +533,9 @@
     <None Include="..\Source\GameEngine\Shaders\FragmentShaderMeshTexture.glsl">
       <Filter>GameEngine\Shaders</Filter>
     </None>
+    <None Include="..\Source\GameEngine\Shaders\FragmentShaderDungeon.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Source\GameEngine\ImGUI\LICENSE.txt">

@@ -6,7 +6,7 @@ class MeshManager
 {
 public:
 	Mesh* GetMesh(std::string name);
-	void AddMesh(std::string meshName, std::string meshPath, std::string fileName, bool useMaterial = false, bool useTextureFolder = false, bool normalizePositions = false);
+	void AddMesh(std::string meshName, std::string meshPath, std::string fileName, bool useMaterial = false, bool useTextureFolder = false, bool normalizePositions = false, bool useShader = false);
 
 	Model* GetModel(std::string name);
 	void AddModel(std::string modelName, std::string modelPath, std::string fileName);

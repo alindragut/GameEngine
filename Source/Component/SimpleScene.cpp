@@ -131,21 +131,6 @@ void SimpleScene::DrawCoordinatSystem(const glm::mat4 & viewMatrix, const glm::m
 			glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(objectModel->GetModel()));
 			glUniform3f(shader->GetUniformLocation("color"), 0.5f, 0.5f, 0.5f);
 			xozPlane->Render();
-			objectModel->SetScale(glm::vec3(1));
-			objectModel->SetWorldPosition(glm::vec3(25, 0, 25));
-			glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(objectModel->GetModel()));
-			glUniform3f(shader->GetUniformLocation("color"), 0.5f, 0.5f, 0.5f);
-			xozPlane->Render();
-			objectModel->SetScale(glm::vec3(1));
-			objectModel->SetWorldPosition(glm::vec3(50, 0, 50));
-			glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(objectModel->GetModel()));
-			glUniform3f(shader->GetUniformLocation("color"), 0.5f, 0.5f, 0.5f);
-			xozPlane->Render();
-			objectModel->SetScale(glm::vec3(1));
-			objectModel->SetWorldPosition(glm::vec3(75, 0, 75));
-			glUniformMatrix4fv(shader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(objectModel->GetModel()));
-			glUniform3f(shader->GetUniformLocation("color"), 0.5f, 0.5f, 0.5f);
-			xozPlane->Render();
 		}
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

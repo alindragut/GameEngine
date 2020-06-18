@@ -7,8 +7,8 @@ in vec4 light_space_position;
 uniform vec3 light_pos;
 uniform vec3 view_pos;
 uniform float far;
+uniform vec3 diff;
 
-layout(binding = 0) uniform sampler2D txt;
 layout(binding = 1) uniform samplerCube shadow_cube;
 layout(binding = 2) uniform sampler2DShadow shadow_map;
 
@@ -41,17 +41,21 @@ float calculateDirShadow() {
 
 float calculateDirLight(vec3 normal, vec3 view_dir)
 {
+	float ambient = 0.15f;
+
 	vec3 light_dir = normalize(vec3(1));
 	vec3 reflect_dir = reflect(-light_dir, normal);
-	
+
 	float diffuse = max(dot(normal, light_dir), 0.0);
 	float specular = 1 * pow(max(dot(view_dir, reflect_dir), 0.0), 32);
 
-	return specular + diffuse;
+	return ambient + specular + diffuse;
 }
 
 float calculatePointLight(vec3 normal, vec3 view_dir)
 {
+	float ambient = 0.15f;
+
 	vec3 light_dir = normalize(light_pos - world_position);
 	vec3 reflect_dir = reflect(-light_dir, normal);
 
@@ -59,12 +63,12 @@ float calculatePointLight(vec3 normal, vec3 view_dir)
 	float specular = 1 * pow(max(dot(view_dir, reflect_dir), 0.0), 32);
 	float attenuation = 1 / (pow(distance(light_pos, world_position), 2) + 1);
 
-	return (specular + diffuse) * attenuation;
+	return (ambient + specular + diffuse) * attenuation;
 }
-
 
 void main()
 {
+	//float shadow = calculatePointShadow();
 	float ambient = 0.15f;
 
 	vec3 normal = normalize(world_normal);
@@ -76,4 +80,23 @@ void main()
 	vec3 color = color1 + color2;
 
 	out_color = vec4(color, 1.0);
+
+	/*if (shadow == 0.0f) {
+		out_color = vec4(ambient * color, 1.0);
+	}
+	else {
+		shadow = calculateDirShadow();
+
+		if (shadow == 0.0f) {
+			out_color = vec4(ambient * color, 1.0);
+		}
+		else {
+			vec3 normal = normalize(world_normal);
+			vec3 view_dir = normalize(view_pos - world_position);
+
+			float lightFactor = calculateDirLight(normal, view_dir) + calculatePointLight(normal, view_dir);
+
+			
+		}
+	}*/
 }  

@@ -7,6 +7,7 @@ PointShadowRenderer::PointShadowRenderer() {
 	pressed = false;
 	renderDepth = true;
 	shaderName = "PointShadowLight";
+	depthShaderName = "PointShadowDepth";
 	meshName = "box";
 	skybox = false;
 	dirLightView = glm::mat4(1);
@@ -15,18 +16,19 @@ PointShadowRenderer::PointShadowRenderer() {
 	ShaderCache& sc = ShaderCache::GetInstance();
 	sc.AddShader("PointShadowLight", "Source/GameEngine/Shaders", "VertexShaderLighting.glsl", "FragmentShaderLighting.glsl");
 	sc.AddShader("Skybox", "Source/GameEngine/Shaders", "VertexShaderLighting.glsl", "SkyBox.glsl");
+	sc.AddShader("DungeonPack", "Source/GameEngine/Shaders", "VertexShaderLighting.glsl", "FragmentShaderDungeon.glsl");
 	sc.AddShader("PointShadowDepth", "Source/GameEngine/Shaders", "VertexShaderPointShadows.glsl", "FragmentShaderPointShadows.glsl", true, "GeometryShaderPointShadows.glsl");
 
 	MeshManager& mm = MeshManager::GetInstance();
 	mm.AddMesh("arrow", "Source/GameEngine/Models", "Arrow.fbx");
 	mm.AddMesh("box", RESOURCE_PATH::MODELS + "Primitives", "box.obj");
 	//mm.AddMesh("wall01", "Source/GameEngine/Models", "SM_Bld_Castle_Wall_01.fbx", true, true, true);
-	mm.AddMesh("wall01", "Source/GameEngine/Models", "ModularStoneWall.fbx", true, true, false);
-	mm.AddMesh("fence01", "Source/GameEngine/Models", "Fence_Straight_Modular.fbx", true, true, false);
-	mm.AddMesh("fence02", "Source/GameEngine/Models", "Fence_End_Modular.fbx", true, true, false);
-	mm.AddMesh("fence03", "Source/GameEngine/Models", "Fence_90_Modular.fbx", true, true, false);
+	mm.AddMesh("wall01", "Source/GameEngine/Models", "ModularStoneWall.fbx", true, true, false, true);
+	mm.AddMesh("fence01", "Source/GameEngine/Models", "Fence_Straight_Modular.fbx", true, true, false, true);
+	mm.AddMesh("fence02", "Source/GameEngine/Models", "Fence_End_Modular.fbx", true, true, false, true);
+	mm.AddMesh("fence03", "Source/GameEngine/Models", "Fence_90_Modular.fbx", true, true, false, true);
 	mm.AddMesh("door01", "Source/GameEngine/Models", "SM_Bld_Rockwall_Archway_01.fbx", true, true, true);
-	mm.AddMesh("floor01", "Source/GameEngine/Models", "ModularFloor.fbx", true, true, true);
+	mm.AddMesh("floor01", "Source/GameEngine/Models", "ModularFloor.fbx", true, true, true, true);
 }
 
 PointShadowRenderer::~PointShadowRenderer() {
@@ -55,7 +57,7 @@ void PointShadowRenderer::OnKeyPress(int key, int mods) {
 }
 
 void PointShadowRenderer::RenderDepth() {
-	Shader* depthShader = ShaderCache::GetInstance().GetShader(shaderName);
+	Shader* depthShader = ShaderCache::GetInstance().GetShader(depthShaderName);
 	depthShader->Use();
 
 	glm::mat4 proj = camera->GetProjectionMatrix();
@@ -89,9 +91,6 @@ void PointShadowRenderer::RenderDepth() {
 
 void PointShadowRenderer::RenderLight() {
 	Shader* lightShader = ShaderCache::GetInstance().GetShader(shaderName);
-	if (skybox) {
-		lightShader = ShaderCache::GetInstance().GetShader("Skybox");
-	}
 	lightShader->Use();
 
 	glUniformMatrix4fv(lightShader->loc_view_matrix, 1, GL_FALSE, glm::value_ptr(camera->GetViewMatrix()));

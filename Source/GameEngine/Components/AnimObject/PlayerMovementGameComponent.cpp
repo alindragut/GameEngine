@@ -35,8 +35,8 @@ void PlayerMovementGameComponent::update(float deltaTimeSeconds) {
 	if (centeredCamera) {
 		Camera* cam = EngineManager::GetInstance().GetGameEngine()->GetCamera();
 		glm::vec3 newPos = object->GetTransform()->GetPos();
-		cam->SetPosition(newPos + glm::vec3(-4, 4, -4));
-		cam->SetRotation(glm::inverse(glm::lookAt(newPos + glm::vec3(-4, 4, -4), newPos, glm::vec3(0, 1, 0))));
+		cam->SetPosition(newPos + glm::vec3(-3, 5, -3));
+		cam->SetRotation(glm::inverse(glm::lookAt(newPos + glm::vec3(-3, 5, -3), newPos, glm::vec3(0, 1, 0))));
 		cam->Update();
 	}
 

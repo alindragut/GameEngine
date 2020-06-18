@@ -34,6 +34,7 @@ private:
 	bool renderDepth;
 	std::string meshName;
 	std::string shaderName;
+	std::string depthShaderName;
 	glm::vec3 lightPos;
 	bool pressed;
 	bool skybox;

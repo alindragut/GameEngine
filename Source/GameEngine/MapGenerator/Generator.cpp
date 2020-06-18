@@ -58,7 +58,7 @@ Generator::~Generator() {
 }
 
 void Generator::Init() {
-	//NPCSpawner::SpawnNPC(player, rooms.back().location);
+	NPCSpawner::SpawnNPC(player, rooms.back().location);
 }
 
 glm::vec3 Generator::GetSpawnPoint() {

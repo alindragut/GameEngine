@@ -41,7 +41,7 @@ void GameEngine::Init() {
 	glm::ivec2 res = window->GetResolution();
 
 	sceneRenderer = new ShadowMapSceneRenderer(&objects);
-	sceneRenderer->Init(res.x, res.y, 128, 128, 256, 256);
+	sceneRenderer->Init(res.x, res.y, 1024, 1024, 2048, 2048);
 
 	BaseGameObject* obj = factory.createObject(1);
 

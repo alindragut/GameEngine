@@ -5,6 +5,7 @@
 #include <Core/GPU/GPUBuffers.h>
 #include <Core/GPU/Texture2D.h>
 #include <Core/Managers/TextureManager.h>
+#include <GameEngine/Utils/ShaderCache.h>
 
 using namespace std;
 
@@ -17,6 +18,7 @@ Mesh::Mesh(std::string meshID)
 	useMaterial = true;
 	normalizePositions = false;
 	useTextureFolder = false;
+	useShader = false;
 	glDrawMode = GL_TRIANGLES;
 	buffers = new GPUBuffers();
 }
@@ -270,6 +272,10 @@ void Mesh::UseMaterials(bool value)
 	useMaterial = value;
 }
 
+void Mesh::UseShader(bool value) {
+	useShader = value;
+}
+
 void Mesh::SetNormalizePositions(bool value)
 {
 	normalizePositions = value;
@@ -282,6 +288,7 @@ void Mesh::UseTextureFolder(bool useTextureFolder) {
 void Mesh::Render() const
 {
 	glBindVertexArray(buffers->VAO);
+	Shader* shader = ShaderCache::GetInstance().GetShader("DungeonPack");
 	for (unsigned int i = 0; i < meshEntries.size(); i++)
 	{
 		if (useMaterial)
@@ -294,6 +301,13 @@ void Mesh::Render() const
 			}
 			else {
 				TextureManager::GetTexture(static_cast<unsigned int>(0))->BindToTextureUnit(GL_TEXTURE0);
+			}
+
+			if (useShader) {
+				if (materialIndex != INVALID_MATERIAL)
+				{
+					glUniform3fv(shader->GetUniformLocation("diff"), 1, glm::value_ptr(materials[materialIndex]->diffuse));
+				}
 			}
 		}
 

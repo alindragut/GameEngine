@@ -16,7 +16,7 @@ Model* MeshManager::GetModel(std::string name) {
 	return models[name];
 }
 
-void MeshManager::AddMesh(std::string meshName, std::string meshPath, std::string fileName, bool useMaterial, bool useTextureFolder, bool normalizePositions) {
+void MeshManager::AddMesh(std::string meshName, std::string meshPath, std::string fileName, bool useMaterial, bool useTextureFolder, bool normalizePositions, bool useShader) {
 	if (meshes.find(meshName) != meshes.end()) {
 		return;
 	}
@@ -25,6 +25,7 @@ void MeshManager::AddMesh(std::string meshName, std::string meshPath, std::strin
 	mesh->UseMaterials(useMaterial);
 	mesh->UseTextureFolder(useTextureFolder);
 	mesh->SetNormalizePositions(normalizePositions);
+	mesh->UseShader(useShader);
 	mesh->LoadMesh(meshPath, fileName);
 	meshes[meshName] = mesh;
 }

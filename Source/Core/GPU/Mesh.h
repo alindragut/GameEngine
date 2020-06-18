@@ -99,6 +99,10 @@ class Mesh
 
 		void UseTextureFolder(bool useTextureFolder);
 
+		void UseShader(bool useShader);
+
+		
+
 		void SetNormalizePositions(bool normalizePositions);
 
 		// GL_POINTS, GL_TRIANGLES, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_LINE_STRIP_ADJACENCY, GL_LINES_ADJACENCY,
@@ -142,4 +146,5 @@ class Mesh
 
 		std::vector<MeshEntry> meshEntries;
 		std::vector<Material*> materials;
+		bool useShader;
 };

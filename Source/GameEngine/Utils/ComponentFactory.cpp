@@ -23,7 +23,9 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 		case 3:
 		{
 			BaseGameObject* go(new GameObject(globalObjectId++));
-			go->AddComponent(new PointShadowRenderer());
+			PointShadowRenderer* psr = new PointShadowRenderer();
+			psr->SetShader("DungeonPack");
+			go->AddComponent(psr);
 			go->AddComponent(new RigidBodyComponent());
 			go->InitComponents();
 			return go;
@@ -51,6 +53,7 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 			
 			PointShadowRenderer* psr = new PointShadowRenderer();
 			psr->SetSkybox(true);
+			psr->SetShader("Skybox");
 			go->AddComponent(psr);
 			
 			RigidBodyComponent* rbc = new RigidBodyComponent();
