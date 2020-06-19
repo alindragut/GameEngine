@@ -1,4 +1,5 @@
 #include "MeshManager.h"
+#include <Core/GPU/MeshInstanced.h>
 
 Mesh* MeshManager::GetMesh(std::string name) {
 	if (meshes.find(name) == meshes.end()) {
@@ -22,6 +23,20 @@ void MeshManager::AddMesh(std::string meshName, std::string meshPath, std::strin
 	}
 
 	Mesh* mesh = new Mesh(meshName);
+	mesh->UseMaterials(useMaterial);
+	mesh->UseTextureFolder(useTextureFolder);
+	mesh->SetNormalizePositions(normalizePositions);
+	mesh->UseShader(useShader);
+	mesh->LoadMesh(meshPath, fileName);
+	meshes[meshName] = mesh;
+}
+
+void MeshManager::AddInstancedMesh(std::string meshName, std::string meshPath, std::string fileName, bool useMaterial, bool useTextureFolder, bool normalizePositions, bool useShader) {
+	if (meshes.find(meshName) != meshes.end()) {
+		return;
+	}
+
+	Mesh* mesh = new MeshInstanced(meshName);
 	mesh->UseMaterials(useMaterial);
 	mesh->UseTextureFolder(useTextureFolder);
 	mesh->SetNormalizePositions(normalizePositions);

@@ -7,6 +7,8 @@
 #include <GameEngine/Utils/DebugDraw.h>
 #include <GameEngine/MapGenerator/GeneratorManager.h>
 #include <GameEngine/Components/NPC/NPCSpawner.h>
+#include <Core/GPU/MeshInstanced.h>
+#include <GameEngine/Utils/MeshManager.h>
 
 Generator::Generator(int roomCount, int locationMaxX, int locationMaxY, int sizeMaxX, int sizeMaxY, int navigationMatrixSizeMultiplier) {
 
@@ -58,7 +60,16 @@ Generator::~Generator() {
 }
 
 void Generator::Init() {
-	NPCSpawner::SpawnNPC(player, rooms.back().location);
+	
+	/*for (Room room : rooms) {
+		if (room.location != rooms.front().location) {
+			float randX = rand() % (int)(room.size.x / 2);
+			NPCSpawner::SpawnNPC(player, room.location + glm::vec3(randX, 0, 0));
+			NPCSpawner::SpawnNPC(player, room.location);
+		}
+		
+	}*/
+	//NPCSpawner::SpawnNPC(player, rooms.back().location);
 }
 
 glm::vec3 Generator::GetSpawnPoint() {
@@ -177,13 +188,15 @@ void Generator::PlaceRooms() {
 			if (auxMapMatrix[i][j] != 1) {
 				int val = GetWallDirection(auxMapMatrix, i, j);
 				if (val != 5) {
-					PlaceWll(glm::vec3(j, 0, i), val, auxMapMatrix[i][j], GetCorridorType(auxMapMatrix, i, j), GetWallOffset(auxMapMatrix, i, j));
+					//PlaceWll(glm::vec3(j, 0, i), val, auxMapMatrix[i][j], GetCorridorType(auxMapMatrix, i, j), GetWallOffset(auxMapMatrix, i, j));
 				}
 				PlaceFloor(glm::vec3(j, 0, i));
 			}
 		}
 	}
 
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("floor01"))->Reconstruct();
+	/*
 	std::vector<glm::ivec2> dirs;
 	dirs.push_back(glm::ivec2(1, 0));
 	dirs.push_back(glm::ivec2(-1, 0));
@@ -232,7 +245,7 @@ void Generator::PlaceRooms() {
 		}
 		printf("\n");
 	}*/
-
+	/*
 	startI = -1, startJ = -1;
 
 	for (int i = 0; i < (2 * locationMaxX + 10) * navSizeMult; i++) {
@@ -308,7 +321,7 @@ void Generator::PlaceRooms() {
 			}
 		}
 	}
-	
+	*/
 
 }
 
@@ -769,16 +782,20 @@ void Generator::PlaceRoom(glm::vec3 location, glm::vec3 size) {
 }
 
 void Generator::PlaceFloor(glm::vec3 pos) {
-	ComponentFactory& factory = ComponentFactory::GetInstance();
-	EngineManager& em = EngineManager::GetInstance();
+	//ComponentFactory& factory = ComponentFactory::GetInstance();
+	//EngineManager& em = EngineManager::GetInstance();
 
-	auto object = factory.createObject(3);
-	static_cast<PointShadowRenderer*>(object->GetComponent("PointShadowRenderer"))->SetMesh("floor01");
-	static_cast<RigidBodyComponent*>(object->GetComponent("RigidBodyComponent"))->SetWalkable(true);
-	object->GetTransform()->SetPos(pos + glm::vec3(0.5, -0.5, 0.5));
-	object->GetTransform()->SetRot(glm::vec3(-M_PI_2, 0, 0));
+	//auto object = factory.createObject(3);
+	//static_cast<PointShadowRenderer*>(object->GetComponent("PointShadowRenderer"))->SetMesh("floor01");
+	//static_cast<RigidBodyComponent*>(object->GetComponent("RigidBodyComponent"))->SetWalkable(true);
+	//object->GetTransform()->SetPos(pos + glm::vec3(0.5, -0.5, 0.5));
+	//object->GetTransform()->SetRot(glm::vec3(-M_PI_2, 0, 0));
 
-	em.GetGameEngine()->AddObject(object);
+	//em.GetGameEngine()->AddObject(object);
+
+	glm::mat4 model = glm::translate(glm::mat4(1), pos + glm::vec3(0.5, -0.5, 0.5)) * glm::rotate(glm::mat4(1), float(-M_PI_2), glm::vec3(1, 0, 0));
+
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("floor01"))->AddInstance(model);
 }
 
 void Generator::PlaceCorridor(glm::vec3 location, float size) {

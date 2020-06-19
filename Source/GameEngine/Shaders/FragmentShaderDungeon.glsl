@@ -49,7 +49,7 @@ float calculateDirLight(vec3 normal, vec3 view_dir)
 	float diffuse = max(dot(normal, light_dir), 0.0);
 	float specular = 1 * pow(max(dot(view_dir, reflect_dir), 0.0), 32);
 
-	return ambient + specular + diffuse;
+	return ambient + calculateDirShadow() * (specular + diffuse);
 }
 
 float calculatePointLight(vec3 normal, vec3 view_dir)
@@ -63,7 +63,7 @@ float calculatePointLight(vec3 normal, vec3 view_dir)
 	float specular = 1 * pow(max(dot(view_dir, reflect_dir), 0.0), 32);
 	float attenuation = 1 / (pow(distance(light_pos, world_position), 2) + 1);
 
-	return (ambient + specular + diffuse) * attenuation;
+	return (ambient + calculatePointShadow() * (specular + diffuse)) * attenuation;
 }
 
 void main()
@@ -74,8 +74,8 @@ void main()
 	vec3 normal = normalize(world_normal);
 	vec3 view_dir = normalize(view_pos - world_position);
 
-	vec3 color1 = diff * calculatePointShadow() * calculatePointLight(normal, view_dir);
-	vec3 color2 = diff * calculateDirShadow() * calculateDirLight(normal, view_dir);
+	vec3 color1 = diff * calculatePointLight(normal, view_dir);
+	vec3 color2 = diff * calculateDirLight(normal, view_dir);
 
 	vec3 color = color1 + color2;
 

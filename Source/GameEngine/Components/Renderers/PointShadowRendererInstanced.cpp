@@ -1,8 +1,8 @@
-#include "PointShadowRenderer.h"
+#include "PointShadowRendererInstanced.h"
 #include <GameEngine/Utils/ShaderCache.h>
 #include <GameEngine/Utils/MeshManager.h>
 
-PointShadowRenderer::PointShadowRenderer() {
+PointShadowRendererInstanced::PointShadowRendererInstanced() {
 	lightPos = glm::vec3(10, 3, -10);
 	pressed = false;
 	renderDepth = true;
@@ -15,47 +15,72 @@ PointShadowRenderer::PointShadowRenderer() {
 
 	ShaderCache& sc = ShaderCache::GetInstance();
 	sc.AddShader("PointShadowLight", "Source/GameEngine/Shaders", "VertexShaderLighting.glsl", "FragmentShaderLighting.glsl");
-	sc.AddShader("DungeonPack", "Source/GameEngine/Shaders", "VertexShaderDungeon.glsl", "FragmentShaderDungeon.glsl");
+	sc.AddShader("DungeonPack", "Source/GameEngine/Shaders", "VertexShaderLighting.glsl", "FragmentShaderDungeon.glsl");
 	sc.AddShader("PointShadowDepth", "Source/GameEngine/Shaders", "VertexShaderPointShadows.glsl", "FragmentShaderPointShadows.glsl", true, "GeometryShaderPointShadows.glsl");
 
 	MeshManager& mm = MeshManager::GetInstance();
 	mm.AddMesh("arrow", "Source/GameEngine/Models", "Arrow.fbx");
 	mm.AddMesh("box", RESOURCE_PATH::MODELS + "Primitives", "box.obj");
 	//mm.AddMesh("wall01", "Source/GameEngine/Models", "SM_Bld_Castle_Wall_01.fbx", true, true, true);
-	mm.AddInstancedMesh("wall01", "Source/GameEngine/Models", "ModularStoneWall.fbx", true, true, false, true);
-	mm.AddInstancedMesh("fence01", "Source/GameEngine/Models", "Fence_Straight_Modular.fbx", true, true, false, true);
-	mm.AddInstancedMesh("fence02", "Source/GameEngine/Models", "Fence_End_Modular.fbx", true, true, false, true);
-	mm.AddInstancedMesh("fence03", "Source/GameEngine/Models", "Fence_90_Modular.fbx", true, true, false, true);
-	mm.AddInstancedMesh("door01", "Source/GameEngine/Models", "SM_Bld_Rockwall_Archway_01.fbx", true, true, true);
-	mm.AddInstancedMesh("floor01", "Source/GameEngine/Models", "ModularFloor.fbx", true, true, true, true);
+	mm.AddMesh("wall01", "Source/GameEngine/Models", "ModularStoneWall.fbx", true, true, false, true);
+	mm.AddMesh("fence01", "Source/GameEngine/Models", "Fence_Straight_Modular.fbx", true, true, false, true);
+	mm.AddMesh("fence02", "Source/GameEngine/Models", "Fence_End_Modular.fbx", true, true, false, true);
+	mm.AddMesh("fence03", "Source/GameEngine/Models", "Fence_90_Modular.fbx", true, true, false, true);
+	mm.AddMesh("door01", "Source/GameEngine/Models", "SM_Bld_Rockwall_Archway_01.fbx", true, true, true);
+	mm.AddMesh("floor01", "Source/GameEngine/Models", "ModularFloor.fbx", true, true, true, true);
 }
 
-PointShadowRenderer::~PointShadowRenderer() {
+PointShadowRendererInstanced::~PointShadowRendererInstanced() {
 }
 
-void PointShadowRenderer::update(float deltaTimeSeconds) {
+void PointShadowRendererInstanced::update(float deltaTimeSeconds) {
 	if (pressed) {
 		lightPos = camera->transform->GetWorldPosition();
 	}
 }
 
-void PointShadowRenderer::render() {
-	if (renderDepth) {
-		RenderDepth();
-	} else {
-		RenderLight();
-	}
-	
-	MeshManager::GetInstance().GetMesh(meshName)->Render();
+void PointShadowRendererInstanced::AddInstance(glm::mat4 model) {
+	models.push_back(model);
 }
 
-void PointShadowRenderer::OnKeyPress(int key, int mods) {
+void PointShadowRendererInstanced::render() {
+	glBindVertexArray(buffers->VAO);
+	for (unsigned int i = 0; i < meshEntries.size(); i++)
+	{
+		if (useMaterial)
+		{
+			auto materialIndex = meshEntries[i].materialIndex;
+
+			if (materialIndex != INVALID_MATERIAL && materials[materialIndex]->texture)
+			{
+				(materials[materialIndex]->texture)->BindToTextureUnit(GL_TEXTURE0);
+			}
+			else {
+				TextureManager::GetTexture(static_cast<unsigned int>(0))->BindToTextureUnit(GL_TEXTURE0);
+			}
+
+			if (useShader) {
+				if (materialIndex != INVALID_MATERIAL)
+				{
+					glUniform3fv(shader->GetUniformLocation("diff"), 1, glm::value_ptr(materials[materialIndex]->diffuse));
+				}
+			}
+		}
+
+		glDrawElementsBaseVertex(glDrawMode, meshEntries[i].nrIndices,
+			GL_UNSIGNED_SHORT, (void*)(sizeof(unsigned short) * meshEntries[i].baseIndex),
+			meshEntries[i].baseVertex);
+	}
+	glBindVertexArray(0);
+}
+
+void PointShadowRendererInstanced::OnKeyPress(int key, int mods) {
 	if (key == GLFW_KEY_7) {
 		pressed = !pressed;
 	}
 }
 
-void PointShadowRenderer::RenderDepth() {
+void PointShadowRendererInstanced::RenderDepth() {
 	Shader* depthShader = ShaderCache::GetInstance().GetShader(depthShaderName);
 	depthShader->Use();
 
@@ -88,7 +113,7 @@ void PointShadowRenderer::RenderDepth() {
 	glUniformMatrix4fv(depthShader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(modelMat));
 }
 
-void PointShadowRenderer::RenderLight() {
+void PointShadowRendererInstanced::RenderLight() {
 	Shader* lightShader = ShaderCache::GetInstance().GetShader(shaderName);
 	lightShader->Use();
 
@@ -120,6 +145,6 @@ void PointShadowRenderer::RenderLight() {
 	glUniformMatrix4fv(lightShader->loc_model_matrix, 1, GL_FALSE, glm::value_ptr(modelMat));
 }
 
-void PointShadowRenderer::SetMesh(std::string meshName) {
+void PointShadowRendererInstanced::SetMesh(std::string meshName) {
 	this->meshName = meshName;
 }

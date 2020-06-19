@@ -49,7 +49,7 @@ void ShadowMapSceneRenderer::renderScene() {
 	renderPointShadow();
 
 	dirShadowPass->BindForWriting();
-	cam->SetOrthographic(20, 20, 0.01f, 40);
+	cam->SetOrthographic(20, 20, -150, 150);
 	cam->transform->SetWorldPosition(lightPos + glm::vec3(10));
 	cam->transform->SetWorldRotation(glm::inverse(glm::lookAt(glm::vec3(lightPos) + glm::vec3(10), glm::vec3(lightPos), glm::vec3(0, 1, 0))));
 	cam->Update();
@@ -69,8 +69,9 @@ void ShadowMapSceneRenderer::renderScene() {
 }
 
 void ShadowMapSceneRenderer::renderGameObjects() {
+	TextureRenderer* cubeMapRenderer = nullptr;
 	for (auto it = (*objects).begin(); it != (*objects).end();) {
-		if (glm::l2Norm((*it)->GetTransform()->GetPos() - lightPos) < 50.0f) {
+		if (glm::l2Norm((*it)->GetTransform()->GetPos() - lightPos) < 500.0f) {
 			if (AnimationRenderer* ar = dynamic_cast<AnimationRenderer*>(((*it)->GetComponent("AnimationRenderer")))) {
 				ar->render();
 			}
@@ -78,13 +79,19 @@ void ShadowMapSceneRenderer::renderGameObjects() {
 				dr->render();
 			}
 			if (TextureRenderer* tr = dynamic_cast<TextureRenderer*>(((*it)->GetComponent("TextureRenderer")))) {
-				tr->render();
+				cubeMapRenderer = tr;
 			}
 			if (PointShadowRenderer* psr = dynamic_cast<PointShadowRenderer*>(((*it)->GetComponent("PointShadowRenderer")))) {
 				psr->render();
 			}
 		}
 		++it;
+	}
+
+	if (cubeMapRenderer != nullptr) {
+		glDepthFunc(GL_LEQUAL);
+		cubeMapRenderer->render();
+		glDepthFunc(GL_LESS);
 	}
 }
 

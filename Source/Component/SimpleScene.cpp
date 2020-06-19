@@ -267,7 +267,7 @@ void SimpleScene::ClearScreen()
 	glm::ivec2 resolution = window->props.resolution;
 
 	// sets the clear color for the color buffer
-	glClearColor(0, 0, 0, 1);
+	glClearColor(0.5, 0.5, 0.5, 1);
 
 	// clears the color buffer (using the previously set color) and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -58,6 +58,7 @@ private:
 	void OnMouseScroll(int mouseX, int mouseY, int offsetX, int offsetY) override;
 	void OnWindowResize(int width, int height) override;
 
+	BaseGameObject* test;
 	ShadowMapSceneRenderer* sceneRenderer;
 	PhysicsEngine* physics;
 	ImGuiSetup* ImGui;

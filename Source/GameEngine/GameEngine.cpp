@@ -35,8 +35,7 @@ void GameEngine::Init() {
 	ImGui = new ImGuiSetup();
 	ImGui->Init();
 
-	generator = new Generator(3, 50, 50, 3, 3, 4);
-	generator->PlaceRooms();
+	generator = new Generator(6, 70, 70, 3, 3, 4);
 
 	glm::ivec2 res = window->GetResolution();
 
@@ -55,7 +54,7 @@ void GameEngine::Init() {
 		objects.push_back(obj);
 	}
 
-	obj = factory.createObject(3);
+	/*obj = factory.createObject(3);
 
 	if (obj != nullptr) {
 		obj->GetTransform()->SetPos(glm::vec3(-2, 0.5, 2));
@@ -96,6 +95,18 @@ void GameEngine::Init() {
 	}*/
 
 	generator->Init();
+
+	obj = factory.createObject(10);
+
+	if (obj != nullptr) {
+		objects.push_back(obj);
+	}
+
+	test = factory.createObject(11);
+	objects.push_back(test);
+
+	generator->PlaceRooms();
+	static_cast<CameraInput*>(GetCameraInput())->SetCameraLock(false);
 }
 
 void GameEngine::FrameStart() {
@@ -134,7 +145,7 @@ void GameEngine::Update(float deltaTimeSeconds) {
 }
 
 void GameEngine::FrameEnd() {
-	DrawCoordinatSystem();
+	//DrawCoordinatSystem();
 	ImGui->EndFrame();
 }
 

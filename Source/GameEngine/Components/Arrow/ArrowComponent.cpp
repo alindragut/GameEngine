@@ -1,6 +1,7 @@
 #include "ArrowComponent.h"
 #include <GameEngine/IncludeList.h>
 #include <GameEngine/Utils/PhysicsManager.h>
+#include <GameEngine/Components/NPC/NPCMovementComponent.h>
 
 ArrowComponent::ArrowComponent() {
 	creatorObject = nullptr;
@@ -27,7 +28,9 @@ void ArrowComponent::update(float deltaTimeSeconds) {
 	BaseGameObject* obj = PhysicsManager::GetInstance().GetPhysicsEngine()->RayCastObject(currentPos, currentPos + dir * speed, &hit);
 
 	if (obj != nullptr) {
-		obj->SetShouldDelete(true);
+		if (dynamic_cast<NPCMovementComponent*>(obj->GetComponent("NPCMovementComponent")) != nullptr) {
+			obj->SetShouldDelete(true);
+		}
 	}
 
 	UpdateModel();

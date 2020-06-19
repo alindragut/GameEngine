@@ -110,7 +110,7 @@ class Mesh
 		void SetDrawMode(GLenum primitive);
 		GLenum GetDrawMode() const;
 
-		void Render() const;
+		virtual void Render() const;
 
 		const GPUBuffers* GetBuffers() const;
 		const char* GetMeshID() const;

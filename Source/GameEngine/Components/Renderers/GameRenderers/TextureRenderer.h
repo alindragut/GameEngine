@@ -18,9 +18,11 @@ public:
 	void SetShader(std::string shaderName);
 	void SetMesh(std::string meshName);
 	void SetTexture(Texture2D* texture);
+	void LoadCubemap();
 
 private:
 	std::string meshName;
 	std::string shaderName;
 	Texture2D* texture;
+	unsigned int cubeMapId;
 };

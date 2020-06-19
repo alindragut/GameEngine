@@ -253,6 +253,9 @@
     <ClCompile Include="..\Source\GameEngine\Components\Combat\CombatComponent.cpp">
       <Filter>GameEngine\Components\Combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Core\GPU\MeshInstanced.cpp">
+      <Filter>Core\GPU</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Core\World.h">
@@ -486,6 +489,9 @@
     <ClInclude Include="..\Source\GameEngine\Components\Combat\CombatComponent.h">
       <Filter>GameEngine\Components\Combat</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Core\GPU\MeshInstanced.h">
+      <Filter>Core\GPU</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Source\GameEngine\Shaders\FragmentShaderDefault.glsl">
@@ -534,6 +540,12 @@
       <Filter>GameEngine\Shaders</Filter>
     </None>
     <None Include="..\Source\GameEngine\Shaders\FragmentShaderDungeon.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
+    <None Include="..\Source\GameEngine\Shaders\VertexShaderSkybox.glsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </None>
+    <None Include="..\Source\GameEngine\Shaders\VertexShaderDungeon.glsl">
       <Filter>GameEngine\Shaders</Filter>
     </None>
   </ItemGroup>

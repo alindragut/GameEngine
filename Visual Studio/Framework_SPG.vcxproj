@@ -26,6 +26,7 @@
     <ClCompile Include="..\Source\Core\GPU\FrameBuffer.cpp" />
     <ClCompile Include="..\Source\Core\GPU\GPUBuffers.cpp" />
     <ClCompile Include="..\Source\Core\GPU\Mesh.cpp" />
+    <ClCompile Include="..\Source\Core\GPU\MeshInstanced.cpp" />
     <ClCompile Include="..\Source\Core\GPU\Shader.cpp" />
     <ClCompile Include="..\Source\Core\GPU\Texture2D.cpp" />
     <ClCompile Include="..\Source\Core\Managers\TextureManager.cpp" />
@@ -88,6 +89,7 @@
     <ClInclude Include="..\Source\Core\GPU\FrameBuffer.h" />
     <ClInclude Include="..\Source\Core\GPU\GPUBuffers.h" />
     <ClInclude Include="..\Source\Core\GPU\Mesh.h" />
+    <ClInclude Include="..\Source\Core\GPU\MeshInstanced.h" />
     <ClInclude Include="..\Source\Core\GPU\ParticleEffect.h" />
     <ClInclude Include="..\Source\Core\GPU\Shader.h" />
     <ClInclude Include="..\Source\Core\GPU\SSBO.h" />
@@ -173,9 +175,11 @@
     <None Include="..\Source\GameEngine\Shaders\SkyBox.glsl" />
     <None Include="..\Source\GameEngine\Shaders\VertexShaderAnim.glsl" />
     <None Include="..\Source\GameEngine\Shaders\VertexShaderDefault.glsl" />
+    <None Include="..\Source\GameEngine\Shaders\VertexShaderDungeon.glsl" />
     <None Include="..\Source\GameEngine\Shaders\VertexShaderLighting.glsl" />
     <None Include="..\Source\GameEngine\Shaders\VertexShaderPointShadows.glsl" />
     <None Include="..\Source\GameEngine\Shaders\VertexShaderPointShadowsAnim.glsl" />
+    <None Include="..\Source\GameEngine\Shaders\VertexShaderSkybox.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Source\GameEngine\ImGUI\LICENSE.txt" />

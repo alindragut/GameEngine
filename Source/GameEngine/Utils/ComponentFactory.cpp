@@ -90,6 +90,27 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 			go->InitComponents();
 			return go;
 		}
+		case 10:
+		{
+			BaseGameObject* go(new GameObject(globalObjectId++));
+			TextureRenderer* tr = new TextureRenderer();
+			tr->SetShader("Skybox");
+			tr->LoadCubemap();
+			go->AddComponent(tr);
+			go->InitComponents();
+			return go;
+		}
+		case 11:
+		{
+			BaseGameObject* go(new GameObject(globalObjectId++));
+			PointShadowRenderer* psr = new PointShadowRenderer();
+			psr->SetShader("DungeonPack");
+			psr->SetMesh("floor01");
+			go->AddComponent(psr);
+			go->InitComponents();
+			return go;
+		}
+
 		default:
 			return nullptr;
 	}

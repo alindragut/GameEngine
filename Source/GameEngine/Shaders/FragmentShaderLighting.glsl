@@ -70,6 +70,8 @@ void main()
 	vec3 normal = normalize(world_normal);
 	vec3 view_dir = normalize(view_pos - world_position);
 
+	vec3 diff = texture(txt, tex_coords).xyz;
+
 	vec3 color1 = diff * calculatePointShadow() * calculatePointLight(normal, view_dir);
 	vec3 color2 = diff * calculateDirShadow() * calculateDirLight(normal, view_dir);
 
