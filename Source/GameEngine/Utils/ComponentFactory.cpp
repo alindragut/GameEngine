@@ -105,7 +105,6 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 			BaseGameObject* go(new GameObject(globalObjectId++));
 			PointShadowRenderer* psr = new PointShadowRenderer();
 			psr->SetShader("DungeonPack");
-			psr->SetMesh("floor01");
 			go->AddComponent(psr);
 			go->InitComponents();
 			return go;

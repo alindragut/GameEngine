@@ -76,6 +76,7 @@
     <ClCompile Include="..\Source\GameEngine\Utils\Delaunay\numeric.cpp" />
     <ClCompile Include="..\Source\GameEngine\Utils\Delaunay\triangle.cpp" />
     <ClCompile Include="..\Source\GameEngine\Utils\Delaunay\vector2.cpp" />
+    <ClCompile Include="..\Source\GameEngine\Utils\Map.cpp" />
     <ClCompile Include="..\Source\GameEngine\Utils\MeshManager.cpp" />
     <ClCompile Include="..\Source\GameEngine\Utils\ShaderCache.cpp" />
     <ClCompile Include="..\Source\include\gl.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="..\Source\GameEngine\Utils\Delaunay\numeric.h" />
     <ClInclude Include="..\Source\GameEngine\Utils\Delaunay\triangle.h" />
     <ClInclude Include="..\Source\GameEngine\Utils\Delaunay\vector2.h" />
+    <ClInclude Include="..\Source\GameEngine\Utils\Map.h" />
     <ClInclude Include="..\Source\GameEngine\Utils\MeshManager.h" />
     <ClInclude Include="..\Source\GameEngine\Utils\MSTAlgorithm.h" />
     <ClInclude Include="..\Source\GameEngine\Utils\PhysicsManager.h" />

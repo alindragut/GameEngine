@@ -8,6 +8,7 @@
 #include <GameEngine/Utils/DebugDraw.h>
 #include <GameEngine/Utils/ShaderCache.h>
 #include <Component/CameraInput.h>
+#include <GameEngine/Utils/Map.h>
 
 GameEngine::GameEngine() {
 }
@@ -35,6 +36,8 @@ void GameEngine::Init() {
 	ImGui = new ImGuiSetup();
 	ImGui->Init();
 
+	Map::Init();
+
 	generator = new Generator(6, 70, 70, 3, 3, 4);
 
 	glm::ivec2 res = window->GetResolution();
@@ -42,13 +45,13 @@ void GameEngine::Init() {
 	sceneRenderer = new ShadowMapSceneRenderer(&objects);
 	sceneRenderer->Init(res.x, res.y, 1024, 1024, 2048, 2048);
 
-	BaseGameObject* obj = factory.createObject(1);
+	/*BaseGameObject* obj = factory.createObject(1);
 
 	if (obj != nullptr) {
 		objects.push_back(obj);
-	}
+	}*/
 
-	obj = factory.createObject(4);
+	BaseGameObject* obj = factory.createObject(4);
 
 	if (obj != nullptr) {
 		objects.push_back(obj);
@@ -96,14 +99,11 @@ void GameEngine::Init() {
 
 	generator->Init();
 
-	obj = factory.createObject(10);
+	/*obj = factory.createObject(10);
 
 	if (obj != nullptr) {
 		objects.push_back(obj);
-	}
-
-	test = factory.createObject(11);
-	objects.push_back(test);
+	}*/
 
 	generator->PlaceRooms();
 	static_cast<CameraInput*>(GetCameraInput())->SetCameraLock(false);

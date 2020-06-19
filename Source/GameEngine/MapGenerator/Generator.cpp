@@ -196,132 +196,132 @@ void Generator::PlaceRooms() {
 	}
 
 	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("floor01"))->Reconstruct();
-	/*
-	std::vector<glm::ivec2> dirs;
-	dirs.push_back(glm::ivec2(1, 0));
-	dirs.push_back(glm::ivec2(-1, 0));
-	dirs.push_back(glm::ivec2(0, 1));
-	dirs.push_back(glm::ivec2(0, -1));
-	glm::ivec2 dir = dirs[0];
-	glm::ivec2 crtMapPos = glm::ivec2(startI, startJ);
 
-	/*if (startI != -1) {
-		while (auxMapMatrix[crtMapPos.x][crtMapPos.y] != 5) {
-			auxMapMatrix[crtMapPos.x][crtMapPos.y] = 5;
+	//std::vector<glm::ivec2> dirs;
+	//dirs.push_back(glm::ivec2(1, 0));
+	//dirs.push_back(glm::ivec2(-1, 0));
+	//dirs.push_back(glm::ivec2(0, 1));
+	//dirs.push_back(glm::ivec2(0, -1));
+	//glm::ivec2 dir = dirs[0];
+	//glm::ivec2 crtMapPos = glm::ivec2(startI, startJ);
 
-			PlaceWll(glm::vec3(crtMapPos.y, 0, crtMapPos.x), dir);
+	///*if (startI != -1) {
+	//	while (auxMapMatrix[crtMapPos.x][crtMapPos.y] != 5) {
+	//		auxMapMatrix[crtMapPos.x][crtMapPos.y] = 5;
 
-			glm::ivec2 nextPos = crtMapPos + dir;
-			bool end = true;
+	//		PlaceWll(glm::vec3(crtMapPos.y, 0, crtMapPos.x), dir);
 
-			if ((auxMapMatrix[nextPos.x][nextPos.y] == 1) && GetNumberOfValidNeighbours(auxMapMatrix, nextPos.x, nextPos.y) > 0) {
-				crtMapPos = nextPos;
-				end = false;
-			}
-			else {
-				for (glm::ivec2 dirIt : dirs) {
-					if (dirIt != dir && dirIt != -dir) {
-						nextPos = crtMapPos + dirIt;
-						if ((auxMapMatrix[nextPos.x][nextPos.y] == 1) && GetNumberOfValidNeighbours(auxMapMatrix, nextPos.x, nextPos.y) > 0) {
-							dir = dirIt;
-							crtMapPos = nextPos;
-							end = false;
-							break;
-						}
-					}
-				}
-			}
-			if (end) {
-				printf("end gen\n");
-				break;
-			}
+	//		glm::ivec2 nextPos = crtMapPos + dir;
+	//		bool end = true;
 
-		}
-	}*/
+	//		if ((auxMapMatrix[nextPos.x][nextPos.y] == 1) && GetNumberOfValidNeighbours(auxMapMatrix, nextPos.x, nextPos.y) > 0) {
+	//			crtMapPos = nextPos;
+	//			end = false;
+	//		}
+	//		else {
+	//			for (glm::ivec2 dirIt : dirs) {
+	//				if (dirIt != dir && dirIt != -dir) {
+	//					nextPos = crtMapPos + dirIt;
+	//					if ((auxMapMatrix[nextPos.x][nextPos.y] == 1) && GetNumberOfValidNeighbours(auxMapMatrix, nextPos.x, nextPos.y) > 0) {
+	//						dir = dirIt;
+	//						crtMapPos = nextPos;
+	//						end = false;
+	//						break;
+	//					}
+	//				}
+	//			}
+	//		}
+	//		if (end) {
+	//			printf("end gen\n");
+	//			break;
+	//		}
 
-	/*for (int i = 0; i < (2 * locationMaxX + 10); i++) {
-		for (int j = 0; j < (2 * locationMaxY + 10); j++) {
-			printf("%d", auxMapMatrix[i][j]);
-		}
-		printf("\n");
-	}*/
-	/*
-	startI = -1, startJ = -1;
+	//	}
+	//}*/
 
-	for (int i = 0; i < (2 * locationMaxX + 10) * navSizeMult; i++) {
-		for (int j = 0; j < (2 * locationMaxY + 10) * navSizeMult; j++) {
-			if (mapMatrix[i][j] != 1) {
-				startI = i;
-				startJ = j;
-				break;
-			}
-		}
-		if (startI != -1) {
-			break;
-		}
-	}
+	///*for (int i = 0; i < (2 * locationMaxX + 10); i++) {
+	//	for (int j = 0; j < (2 * locationMaxY + 10); j++) {
+	//		printf("%d", auxMapMatrix[i][j]);
+	//	}
+	//	printf("\n");
+	//}*/
 
-	if (startI != -1) {
-		while (mapMatrix[startI][startJ] != 5) {
-			mapMatrix[startI][startJ] = 5;
+	//startI = -1, startJ = -1;
 
-			int max = -1;
-			int index = 0;
-			int up = -1; 
-			int down = -1;
-			int left = -1; 
-			int right = -1;
+	//for (int i = 0; i < (2 * locationMaxX + 10) * navSizeMult; i++) {
+	//	for (int j = 0; j < (2 * locationMaxY + 10) * navSizeMult; j++) {
+	//		if (mapMatrix[i][j] != 1) {
+	//			startI = i;
+	//			startJ = j;
+	//			break;
+	//		}
+	//	}
+	//	if (startI != -1) {
+	//		break;
+	//	}
+	//}
 
-			if (mapMatrix[startI - 1][startJ] != 1 && mapMatrix[startI - 1][startJ] != 5) {
-				up = GetNumberOfInvalidNeighbours(mapMatrix, startI - 1, startJ);
-			}
-			if (mapMatrix[startI + 1][startJ] != 1 && mapMatrix[startI + 1][startJ] != 5) {
-				down = GetNumberOfInvalidNeighbours(mapMatrix, startI + 1, startJ);
-			}
-			if (mapMatrix[startI][startJ - 1] != 1 && mapMatrix[startI][startJ - 1] != 5) {
-				left = GetNumberOfInvalidNeighbours(mapMatrix, startI, startJ - 1);;
-			}
-			if (mapMatrix[startI][startJ + 1] != 1 && mapMatrix[startI][startJ + 1] != 5) {
-				right = GetNumberOfInvalidNeighbours(mapMatrix, startI, startJ + 1);;
-			}
+	//if (startI != -1) {
+	//	while (mapMatrix[startI][startJ] != 5) {
+	//		mapMatrix[startI][startJ] = 5;
 
-			if (down > max) {
-				max = down;
-				index = 1;
-			}
-			if (left > max) {
-				max = left;
-				index = 2;
-			}
-			if (right > max) {
-				max = right;
-				index = 3;
-			}
-			if (up > max) {
-				max = up;
-				index = 4;
-			}
+	//		int max = -1;
+	//		int index = 0;
+	//		int up = -1; 
+	//		int down = -1;
+	//		int left = -1; 
+	//		int right = -1;
 
-			if (max == 0) {
-				printf("max 0\n");
-				break;
-			}
+	//		if (mapMatrix[startI - 1][startJ] != 1 && mapMatrix[startI - 1][startJ] != 5) {
+	//			up = GetNumberOfInvalidNeighbours(mapMatrix, startI - 1, startJ);
+	//		}
+	//		if (mapMatrix[startI + 1][startJ] != 1 && mapMatrix[startI + 1][startJ] != 5) {
+	//			down = GetNumberOfInvalidNeighbours(mapMatrix, startI + 1, startJ);
+	//		}
+	//		if (mapMatrix[startI][startJ - 1] != 1 && mapMatrix[startI][startJ - 1] != 5) {
+	//			left = GetNumberOfInvalidNeighbours(mapMatrix, startI, startJ - 1);;
+	//		}
+	//		if (mapMatrix[startI][startJ + 1] != 1 && mapMatrix[startI][startJ + 1] != 5) {
+	//			right = GetNumberOfInvalidNeighbours(mapMatrix, startI, startJ + 1);;
+	//		}
 
-			if (index == 1) {
-				startI += 1;
-			}
-			else if (index == 2) {
-				startJ -= 1;
-			}
-			else if (index == 3) {
-				startJ += 1;
-			}
-			else if (index == 4) {
-				startI -= 1;
-			}
-		}
-	}
-	*/
+	//		if (down > max) {
+	//			max = down;
+	//			index = 1;
+	//		}
+	//		if (left > max) {
+	//			max = left;
+	//			index = 2;
+	//		}
+	//		if (right > max) {
+	//			max = right;
+	//			index = 3;
+	//		}
+	//		if (up > max) {
+	//			max = up;
+	//			index = 4;
+	//		}
+
+	//		if (max == 0) {
+	//			printf("max 0\n");
+	//			break;
+	//		}
+
+	//		if (index == 1) {
+	//			startI += 1;
+	//		}
+	//		else if (index == 2) {
+	//			startJ -= 1;
+	//		}
+	//		else if (index == 3) {
+	//			startJ += 1;
+	//		}
+	//		else if (index == 4) {
+	//			startI -= 1;
+	//		}
+	//	}
+	//}
+	//
 
 }
 

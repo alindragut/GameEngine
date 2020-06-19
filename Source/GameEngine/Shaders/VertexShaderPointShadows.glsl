@@ -1,10 +1,9 @@
 #version 430
 
 layout (location = 0) in vec3 v_position;
-
-uniform mat4 Model;
+layout(location = 3) in mat4 instanceMatrix;
 
 void main()
 {
-    gl_Position = Model * vec4(v_position, 1.0);
+    gl_Position = instanceMatrix * vec4(v_position, 1.0);
 }  

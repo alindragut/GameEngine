@@ -71,6 +71,7 @@ void ShadowMapSceneRenderer::renderScene() {
 void ShadowMapSceneRenderer::renderGameObjects() {
 	TextureRenderer* cubeMapRenderer = nullptr;
 	for (auto it = (*objects).begin(); it != (*objects).end();) {
+		
 		if (glm::l2Norm((*it)->GetTransform()->GetPos() - lightPos) < 500.0f) {
 			if (AnimationRenderer* ar = dynamic_cast<AnimationRenderer*>(((*it)->GetComponent("AnimationRenderer")))) {
 				ar->render();
@@ -82,6 +83,8 @@ void ShadowMapSceneRenderer::renderGameObjects() {
 				cubeMapRenderer = tr;
 			}
 			if (PointShadowRenderer* psr = dynamic_cast<PointShadowRenderer*>(((*it)->GetComponent("PointShadowRenderer")))) {
+				psr->SetRenderDepth(false);
+				psr->SetShader("DungeonPack");
 				psr->render();
 			}
 		}
@@ -89,9 +92,7 @@ void ShadowMapSceneRenderer::renderGameObjects() {
 	}
 
 	if (cubeMapRenderer != nullptr) {
-		glDepthFunc(GL_LEQUAL);
-		cubeMapRenderer->render();
-		glDepthFunc(GL_LESS);
+		//cubeMapRenderer->render();
 	}
 }
 

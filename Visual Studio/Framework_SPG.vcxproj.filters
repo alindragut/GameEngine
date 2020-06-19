@@ -256,6 +256,9 @@
     <ClCompile Include="..\Source\Core\GPU\MeshInstanced.cpp">
       <Filter>Core\GPU</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Utils\Map.cpp">
+      <Filter>GameEngine\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Core\World.h">
@@ -491,6 +494,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Core\GPU\MeshInstanced.h">
       <Filter>Core\GPU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Utils\Map.h">
+      <Filter>GameEngine\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

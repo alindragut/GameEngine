@@ -23,9 +23,9 @@ float calculatePointShadow() {
 
 float calculateDirShadow() {
 	vec3 pos = (light_space_position.xyz / light_space_position.w) * 0.5 + 0.5;
-	pos.z = clamp(pos.z, 0, 1);
+	pos.z = clamp(pos.z, 0.0, 1.0);
 	float bias = 0.002;
-	bias = clamp(bias, 0, 0.01);
+	bias = clamp(bias, 0.0, 0.01);
 	pos.z -= bias;
 	float shadow = 0.0;
 	vec2 texelSize = 1.0 / textureSize(shadow_map, 0);
