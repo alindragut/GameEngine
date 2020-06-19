@@ -98,7 +98,7 @@ void Generator::PlaceRooms() {
 		bool add = true;
 		Room* newRoom = new Room(location, size);
 		for (Room room : rooms) {
-			if (newRoom->Intersection(room, 4.f)) {
+			if (newRoom->Intersection(room, 2.f)) {
 				add = false;
 				break;
 			}
@@ -188,7 +188,7 @@ void Generator::PlaceRooms() {
 			if (auxMapMatrix[i][j] != 1) {
 				int val = GetWallDirection(auxMapMatrix, i, j);
 				if (val != 5) {
-					//PlaceWll(glm::vec3(j, 0, i), val, auxMapMatrix[i][j], GetCorridorType(auxMapMatrix, i, j), GetWallOffset(auxMapMatrix, i, j));
+					PlaceWll(glm::vec3(j, 0, i), val, auxMapMatrix[i][j], GetCorridorType(auxMapMatrix, i, j), GetWallOffset(auxMapMatrix, i, j));
 				}
 				PlaceFloor(glm::vec3(j, 0, i));
 			}
@@ -198,8 +198,9 @@ void Generator::PlaceRooms() {
 	//glm::mat4 model = glm::translate(glm::mat4(1),glm::vec3(0.5, -0.5, 0.5)) * glm::rotate(glm::mat4(1), float(-M_PI_2), glm::vec3(1, 0, 0));
 
 	//static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("wall01"))->AddInstance(model);
-
-	//static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("wall01"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("fence01"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("fence03"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("wall01"))->Reconstruct();
 	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("floor01"))->Reconstruct();
 
 	//std::vector<glm::ivec2> dirs;
@@ -578,64 +579,60 @@ bool Generator::VerifyFinalCorridorPos(int i, int j, int dir) {
 }
 
 void Generator::PlaceWll(glm::vec3 pos, int dir, int type, int corridorType, glm::vec3 wallOffset) {
-	ComponentFactory& factory = ComponentFactory::GetInstance();
-	EngineManager& em = EngineManager::GetInstance();
-
-	auto object = factory.createObject(3);
+	glm::vec3 objPos = pos;
+	glm::vec3 objRot = glm::vec3(0);
+	glm::vec3 objScale = glm::vec3(1);
 	
 	
 
 	if (dir == 8) {
-		object->GetTransform()->SetPos(pos + glm::vec3(0, 0, 0));
-		object->GetTransform()->SetRot(glm::vec3(0, -M_PI_2, 0));
+		objRot = glm::vec3(0, -M_PI_2, 0);
 	}
 
 	if (dir == 7) {
-		object->GetTransform()->SetPos(pos + glm::vec3(0, 0, 0));
 		if (type == 4 && corridorType != 4) {
-			object->GetTransform()->SetPos(pos + glm::vec3(1, 0, 1));
+			objPos += glm::vec3(1, 0, 1);
 		}
 	}
 	
 	if (dir == 9) {
-		object->GetTransform()->SetPos(pos + glm::vec3(1, 0, 0));
-		object->GetTransform()->SetRot(glm::vec3(0, -M_PI_2, 0));
+		objPos += glm::vec3(1, 0, 0);
+		objRot = glm::vec3(0, -M_PI_2, 0);
 		if (type == 4 && corridorType != 4) {
-			object->GetTransform()->SetPos(pos + glm::vec3(0, 0, 1));
-			
+			objPos = pos + glm::vec3(0, 0, 1);
 		}
 	}
 
 	if (dir == 2) {
-		object->GetTransform()->SetPos(pos + glm::vec3(1, 0, 1));
-		object->GetTransform()->SetRot(glm::vec3(0, M_PI_2, 0));
+		objPos += glm::vec3(1, 0, 1);
+		objRot = glm::vec3(0, M_PI_2, 0);
 
 	}
 		
 	if (dir == 3) {
-		object->GetTransform()->SetRot(glm::vec3(0, M_PI, 0));
-		object->GetTransform()->SetPos(pos + glm::vec3(1, 0, 1));
+		objRot = glm::vec3(0, M_PI, 0);
+		objPos += glm::vec3(1, 0, 1);
 		if (type == 4 && corridorType != 4) {
-			object->GetTransform()->SetPos(pos + glm::vec3(0, 0, 0));
+			objPos = pos;
 		}
 	}
 
 	if (dir == 1) {
-		object->GetTransform()->SetRot(glm::vec3(0, M_PI_2, 0));
-		object->GetTransform()->SetPos(pos + glm::vec3(0, 0, 1));
+		objRot = glm::vec3(0, M_PI_2, 0);
+		objPos += glm::vec3(0, 0, 1);
 		if (type == 4 && corridorType != 4) {
-			object->GetTransform()->SetPos(pos + glm::vec3(1, 0, 0));
+			objPos = pos + glm::vec3(1, 0, 0);
 
 		}
 	}
 
 	if (dir == 6) {
-		object->GetTransform()->SetPos(pos + glm::vec3(1, 0, 0));
-		object->GetTransform()->SetRot(glm::vec3(0, M_PI, 0));
+		objPos += glm::vec3(1, 0, 0);
+		objRot = glm::vec3(0, M_PI, 0);
 	}
 
 	if (dir == 4) {
-		object->GetTransform()->SetPos(pos + glm::vec3(0, 0, 1));
+		objPos += glm::vec3(0, 0, 1);
 	}
 
 	if (dir % 2 == 1) {
@@ -643,23 +640,32 @@ void Generator::PlaceWll(glm::vec3 pos, int dir, int type, int corridorType, glm
 	}
 
 	if (wallOffset != glm::vec3(0)) {
-		object->GetTransform()->SetScale(glm::vec3(1, 1, 0.5));
+		objScale = glm::vec3(1, 1, 0.5);
 	}
 
-	object->GetTransform()->SetPos(object->GetTransform()->GetPos() + glm::vec3(0, 1, 0) + wallOffset);
+	objPos += glm::vec3(0, 1, 0) + wallOffset;
 	
 
 	if (type == 0) {
-		static_cast<PointShadowRenderer*>(object->GetComponent("PointShadowRenderer"))->SetMesh("wall01");
-		object->GetTransform()->SetScale(object->GetTransform()->GetScale() + glm::vec3(0.625, 0, 0));
+		objScale += glm::vec3(0.625, 0, 0);
+		glm::mat4 model = glm::translate(glm::mat4(1), objPos) * glm::scale(glm::mat4(1), objScale) * glm::mat4(glm::quat(objRot));
+
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("wall01"))->AddInstance(model);
 	}
 	else if (type == 4) {
 		//intersection
+		if (dir % 2 != 1) {
+			if (!VerifyFinalCorridorPos(int(objPos.z), int(objPos.x), dir)) {
+				return;
+			}
+		}
+		objRot += glm::vec3(-M_PI_2, M_PI_2, 0);
 		if (corridorType >= 3) {
-			static_cast<PointShadowRenderer*>(object->GetComponent("PointShadowRenderer"))->SetMesh("fence03");
 			//intersection that needs flip
 			//if (corridorType == 4) {
-				object->GetTransform()->SetRot(object->GetTransform()->GetRot() + glm::vec3(0, M_PI, 0));
+			objRot += glm::vec3(0, M_PI, 0);
+			glm::mat4 model = glm::translate(glm::mat4(1), objPos) * glm::scale(glm::mat4(1), objScale) * glm::mat4(glm::quat(objRot));
+			static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("fence03"))->AddInstance(model);
 			//}
 		}
 		else {
@@ -672,24 +678,14 @@ void Generator::PlaceWll(glm::vec3 pos, int dir, int type, int corridorType, glm
 				object->GetTransform()->SetScale(glm::vec3(1, 1, 5));
 			}
 			else {*/
-				static_cast<PointShadowRenderer*>(object->GetComponent("PointShadowRenderer"))->SetMesh("fence01");
+			glm::mat4 model = glm::translate(glm::mat4(1), objPos) * glm::scale(glm::mat4(1), objScale) * glm::mat4(glm::quat(objRot));
+			static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("fence01"))->AddInstance(model);
 			//}
 		}
 		//start/end of corridor
 		
-		
-		object->GetTransform()->SetRot(object->GetTransform()->GetRot() + glm::vec3(-M_PI_2, M_PI_2, 0));
 	}
 
-	if (type == 4 && dir % 2 != 1) {
-		glm::vec3 finalPos = object->GetTransform()->GetPos();
-		if (!VerifyFinalCorridorPos(int(finalPos.z), int(finalPos.x), dir)) {
-			delete object;
-			return;
-		}
-	}
-
-	em.GetGameEngine()->AddObject(object);
 }
 
 int Generator::CalcLinearInterp(float nr, int mode) {

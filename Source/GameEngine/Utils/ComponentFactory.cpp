@@ -112,9 +112,9 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 		case 12:
 		{
 			BaseGameObject* go(new GameObject(globalObjectId++));
-			PointShadowRenderer* psr = new PointShadowRenderer();
-			psr->SetShader("DungeonPack");
-			go->AddComponent(psr);
+			RigidBodyComponent* rbc = new RigidBodyComponent();
+			rbc->SetWalkable(true);
+			go->AddComponent(rbc);
 			go->InitComponents();
 			return go;
 		}

@@ -35,7 +35,7 @@ void MeshManager::AddInstancedMesh(std::string meshName, std::string meshPath, s
 	if (meshes.find(meshName) != meshes.end()) {
 		return;
 	}
-
+	printf("%s\n", meshName);
 	Mesh* mesh = new MeshInstanced(meshName);
 	mesh->UseMaterials(useMaterial);
 	mesh->UseTextureFolder(useTextureFolder);

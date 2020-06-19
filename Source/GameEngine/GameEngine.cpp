@@ -43,13 +43,15 @@ void GameEngine::Init() {
 	glm::ivec2 res = window->GetResolution();
 
 	sceneRenderer = new ShadowMapSceneRenderer(&objects);
-	sceneRenderer->Init(res.x, res.y, 1024, 1024, 2048, 2048);
+	sceneRenderer->Init(res.x, res.y, 128, 128, 2048, 2048);
 
 	/*BaseGameObject* obj = factory.createObject(1);
 
 	if (obj != nullptr) {
 		objects.push_back(obj);
 	}*/
+
+	generator->PlaceRooms();
 
 	BaseGameObject* obj = factory.createObject(4);
 
@@ -105,7 +107,14 @@ void GameEngine::Init() {
 		objects.push_back(obj);
 	}
 
-	generator->PlaceRooms();
+	obj = factory.createObject(12);
+
+	if (obj != nullptr) {
+		obj->GetTransform()->SetPos(glm::vec3(35, 0, 35));
+		obj->GetTransform()->SetScale(glm::vec3(100, 2, 100));
+		objects.push_back(obj);
+	}
+	
 	static_cast<CameraInput*>(GetCameraInput())->SetCameraLock(false);
 }
 
@@ -221,6 +230,9 @@ void GameEngine::OnMouseScroll(int mouseX, int mouseY, int offsetX, int offsetY)
 	}
 }
 void GameEngine::OnWindowResize(int width, int height) {
+	glm::ivec2 res = window->GetResolution();
+	sceneRenderer->Init(res.x, res.y, 512, 512, 2048, 2048);
+
 	for (auto obj = objects.begin(); obj != objects.end();) {
 		auto components = (*obj)->GetComponents();
 		for (const auto& it : (*components)) {
