@@ -195,6 +195,11 @@ void Generator::PlaceRooms() {
 		}
 	}
 
+	//glm::mat4 model = glm::translate(glm::mat4(1),glm::vec3(0.5, -0.5, 0.5)) * glm::rotate(glm::mat4(1), float(-M_PI_2), glm::vec3(1, 0, 0));
+
+	//static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("wall01"))->AddInstance(model);
+
+	//static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("wall01"))->Reconstruct();
 	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("floor01"))->Reconstruct();
 
 	//std::vector<glm::ivec2> dirs;
@@ -239,12 +244,12 @@ void Generator::PlaceRooms() {
 	//	}
 	//}*/
 
-	///*for (int i = 0; i < (2 * locationMaxX + 10); i++) {
-	//	for (int j = 0; j < (2 * locationMaxY + 10); j++) {
-	//		printf("%d", auxMapMatrix[i][j]);
-	//	}
-	//	printf("\n");
-	//}*/
+	for (int i = 0; i < (2 * locationMaxX + 10); i++) {
+		for (int j = 0; j < (2 * locationMaxY + 10); j++) {
+			printf("%d", auxMapMatrix[i][j]);
+		}
+		printf("\n");
+	}
 
 	//startI = -1, startJ = -1;
 

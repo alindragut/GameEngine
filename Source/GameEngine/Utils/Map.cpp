@@ -8,10 +8,10 @@ void Map::Init() {
 	ComponentFactory& factory = ComponentFactory::GetInstance();
 
 
-	BaseGameObject* obj = factory.createObject(11);
-	static_cast<PointShadowRenderer*>(obj->GetComponent("PointShadowRenderer"))->SetMesh("wall01");
-	engine->AddObject(obj);
-
+	//BaseGameObject* obj = factory.createObject(12);
+	/*static_cast<PointShadowRenderer*>(obj->GetComponent("PointShadowRenderer"))->SetMesh("wall01");
+	engine->AddObject(obj);*/
+	/*
 	obj = factory.createObject(11);
 	static_cast<PointShadowRenderer*>(obj->GetComponent("PointShadowRenderer"))->SetMesh("fence01");
 	engine->AddObject(obj);
@@ -26,9 +26,9 @@ void Map::Init() {
 
 	obj = factory.createObject(11);
 	static_cast<PointShadowRenderer*>(obj->GetComponent("PointShadowRenderer"))->SetMesh("door01");
-	engine->AddObject(obj);
+	engine->AddObject(obj);*/
 
-	obj = factory.createObject(11);
+	BaseGameObject * obj = factory.createObject(11);
 	static_cast<PointShadowRenderer*>(obj->GetComponent("PointShadowRenderer"))->SetMesh("floor01");
 	engine->AddObject(obj);
 }

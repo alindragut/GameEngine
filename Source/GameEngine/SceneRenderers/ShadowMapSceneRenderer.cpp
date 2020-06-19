@@ -83,8 +83,6 @@ void ShadowMapSceneRenderer::renderGameObjects() {
 				cubeMapRenderer = tr;
 			}
 			if (PointShadowRenderer* psr = dynamic_cast<PointShadowRenderer*>(((*it)->GetComponent("PointShadowRenderer")))) {
-				psr->SetRenderDepth(false);
-				psr->SetShader("DungeonPack");
 				psr->render();
 			}
 		}
@@ -92,7 +90,9 @@ void ShadowMapSceneRenderer::renderGameObjects() {
 	}
 
 	if (cubeMapRenderer != nullptr) {
-		//cubeMapRenderer->render();
+		glDepthFunc(GL_LEQUAL);
+		cubeMapRenderer->render();
+		glDepthFunc(GL_LESS);
 	}
 }
 

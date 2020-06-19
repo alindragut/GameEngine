@@ -109,6 +109,15 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 			go->InitComponents();
 			return go;
 		}
+		case 12:
+		{
+			BaseGameObject* go(new GameObject(globalObjectId++));
+			PointShadowRenderer* psr = new PointShadowRenderer();
+			psr->SetShader("DungeonPack");
+			go->AddComponent(psr);
+			go->InitComponents();
+			return go;
+		}
 
 		default:
 			return nullptr;

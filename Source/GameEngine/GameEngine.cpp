@@ -99,11 +99,11 @@ void GameEngine::Init() {
 
 	generator->Init();
 
-	/*obj = factory.createObject(10);
+	obj = factory.createObject(10);
 
 	if (obj != nullptr) {
 		objects.push_back(obj);
-	}*/
+	}
 
 	generator->PlaceRooms();
 	static_cast<CameraInput*>(GetCameraInput())->SetCameraLock(false);
@@ -145,7 +145,7 @@ void GameEngine::Update(float deltaTimeSeconds) {
 }
 
 void GameEngine::FrameEnd() {
-	//DrawCoordinatSystem();
+	DrawCoordinatSystem();
 	ImGui->EndFrame();
 }
 
