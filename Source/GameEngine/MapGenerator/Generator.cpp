@@ -252,82 +252,82 @@ void Generator::PlaceRooms() {
 		printf("\n");
 	}
 
-	//startI = -1, startJ = -1;
+	startI = -1, startJ = -1;
 
-	//for (int i = 0; i < (2 * locationMaxX + 10) * navSizeMult; i++) {
-	//	for (int j = 0; j < (2 * locationMaxY + 10) * navSizeMult; j++) {
-	//		if (mapMatrix[i][j] != 1) {
-	//			startI = i;
-	//			startJ = j;
-	//			break;
-	//		}
-	//	}
-	//	if (startI != -1) {
-	//		break;
-	//	}
-	//}
+	for (int i = 0; i < (2 * locationMaxX + 10) * navSizeMult; i++) {
+		for (int j = 0; j < (2 * locationMaxY + 10) * navSizeMult; j++) {
+			if (mapMatrix[i][j] != 1) {
+				startI = i;
+				startJ = j;
+				break;
+			}
+		}
+		if (startI != -1) {
+			break;
+		}
+	}
 
-	//if (startI != -1) {
-	//	while (mapMatrix[startI][startJ] != 5) {
-	//		mapMatrix[startI][startJ] = 5;
+	if (startI != -1) {
+		while (mapMatrix[startI][startJ] != 5) {
+			mapMatrix[startI][startJ] = 5;
 
-	//		int max = -1;
-	//		int index = 0;
-	//		int up = -1; 
-	//		int down = -1;
-	//		int left = -1; 
-	//		int right = -1;
+			int max = -1;
+			int index = 0;
+			int up = -1; 
+			int down = -1;
+			int left = -1; 
+			int right = -1;
 
-	//		if (mapMatrix[startI - 1][startJ] != 1 && mapMatrix[startI - 1][startJ] != 5) {
-	//			up = GetNumberOfInvalidNeighbours(mapMatrix, startI - 1, startJ);
-	//		}
-	//		if (mapMatrix[startI + 1][startJ] != 1 && mapMatrix[startI + 1][startJ] != 5) {
-	//			down = GetNumberOfInvalidNeighbours(mapMatrix, startI + 1, startJ);
-	//		}
-	//		if (mapMatrix[startI][startJ - 1] != 1 && mapMatrix[startI][startJ - 1] != 5) {
-	//			left = GetNumberOfInvalidNeighbours(mapMatrix, startI, startJ - 1);;
-	//		}
-	//		if (mapMatrix[startI][startJ + 1] != 1 && mapMatrix[startI][startJ + 1] != 5) {
-	//			right = GetNumberOfInvalidNeighbours(mapMatrix, startI, startJ + 1);;
-	//		}
+			if (mapMatrix[startI - 1][startJ] != 1 && mapMatrix[startI - 1][startJ] != 5) {
+				up = GetNumberOfInvalidNeighbours(mapMatrix, startI - 1, startJ);
+			}
+			if (mapMatrix[startI + 1][startJ] != 1 && mapMatrix[startI + 1][startJ] != 5) {
+				down = GetNumberOfInvalidNeighbours(mapMatrix, startI + 1, startJ);
+			}
+			if (mapMatrix[startI][startJ - 1] != 1 && mapMatrix[startI][startJ - 1] != 5) {
+				left = GetNumberOfInvalidNeighbours(mapMatrix, startI, startJ - 1);;
+			}
+			if (mapMatrix[startI][startJ + 1] != 1 && mapMatrix[startI][startJ + 1] != 5) {
+				right = GetNumberOfInvalidNeighbours(mapMatrix, startI, startJ + 1);;
+			}
 
-	//		if (down > max) {
-	//			max = down;
-	//			index = 1;
-	//		}
-	//		if (left > max) {
-	//			max = left;
-	//			index = 2;
-	//		}
-	//		if (right > max) {
-	//			max = right;
-	//			index = 3;
-	//		}
-	//		if (up > max) {
-	//			max = up;
-	//			index = 4;
-	//		}
+			if (down > max) {
+				max = down;
+				index = 1;
+			}
+			if (left > max) {
+				max = left;
+				index = 2;
+			}
+			if (right > max) {
+				max = right;
+				index = 3;
+			}
+			if (up > max) {
+				max = up;
+				index = 4;
+			}
 
-	//		if (max == 0) {
-	//			printf("max 0\n");
-	//			break;
-	//		}
+			if (max == 0) {
+				printf("max 0\n");
+				break;
+			}
 
-	//		if (index == 1) {
-	//			startI += 1;
-	//		}
-	//		else if (index == 2) {
-	//			startJ -= 1;
-	//		}
-	//		else if (index == 3) {
-	//			startJ += 1;
-	//		}
-	//		else if (index == 4) {
-	//			startI -= 1;
-	//		}
-	//	}
-	//}
-	//
+			if (index == 1) {
+				startI += 1;
+			}
+			else if (index == 2) {
+				startJ -= 1;
+			}
+			else if (index == 3) {
+				startJ += 1;
+			}
+			else if (index == 4) {
+				startI -= 1;
+			}
+		}
+	}
+	
 
 }
 
@@ -648,7 +648,7 @@ void Generator::PlaceWll(glm::vec3 pos, int dir, int type, int corridorType, glm
 
 	if (type == 0) {
 		objScale += glm::vec3(0.625, 0, 0);
-		glm::mat4 model = glm::translate(glm::mat4(1), objPos) * glm::scale(glm::mat4(1), objScale) * glm::mat4(glm::quat(objRot));
+		glm::mat4 model = glm::translate(glm::mat4(1), objPos)  * glm::mat4(glm::quat(objRot)) * glm::scale(glm::mat4(1), objScale);
 
 		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("wall01"))->AddInstance(model);
 	}
@@ -664,7 +664,7 @@ void Generator::PlaceWll(glm::vec3 pos, int dir, int type, int corridorType, glm
 			//intersection that needs flip
 			//if (corridorType == 4) {
 			objRot += glm::vec3(0, M_PI, 0);
-			glm::mat4 model = glm::translate(glm::mat4(1), objPos) * glm::scale(glm::mat4(1), objScale) * glm::mat4(glm::quat(objRot));
+			glm::mat4 model = glm::translate(glm::mat4(1), objPos)  * glm::mat4(glm::quat(objRot)) * glm::scale(glm::mat4(1), objScale);
 			static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("fence03"))->AddInstance(model);
 			//}
 		}
@@ -678,7 +678,7 @@ void Generator::PlaceWll(glm::vec3 pos, int dir, int type, int corridorType, glm
 				object->GetTransform()->SetScale(glm::vec3(1, 1, 5));
 			}
 			else {*/
-			glm::mat4 model = glm::translate(glm::mat4(1), objPos) * glm::scale(glm::mat4(1), objScale) * glm::mat4(glm::quat(objRot));
+			glm::mat4 model = glm::translate(glm::mat4(1), objPos)  * glm::mat4(glm::quat(objRot)) * glm::scale(glm::mat4(1), objScale);
 			static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("fence01"))->AddInstance(model);
 			//}
 		}

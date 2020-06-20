@@ -15,7 +15,7 @@ PlayerMovementGameComponent::PlayerMovementGameComponent() {
 	state = 0;
 	speed = 1;
 	currentDest = glm::vec3(0);
-	centeredCamera = false;
+	centeredCamera = true;
 	alive = true;
 }
 

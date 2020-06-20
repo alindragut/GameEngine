@@ -38,12 +38,12 @@ void GameEngine::Init() {
 
 	Map::Init();
 
-	generator = new Generator(6, 70, 70, 3, 3, 4);
+	generator = new Generator(6, 70, 70, 3, 3, 3);
 
 	glm::ivec2 res = window->GetResolution();
 
 	sceneRenderer = new ShadowMapSceneRenderer(&objects);
-	sceneRenderer->Init(res.x, res.y, 128, 128, 2048, 2048);
+	sceneRenderer->Init(res.x, res.y, 512, 512, 2048, 2048);
 
 	/*BaseGameObject* obj = factory.createObject(1);
 
@@ -154,7 +154,7 @@ void GameEngine::Update(float deltaTimeSeconds) {
 }
 
 void GameEngine::FrameEnd() {
-	DrawCoordinatSystem();
+	//DrawCoordinatSystem();
 	ImGui->EndFrame();
 }
 
@@ -231,7 +231,7 @@ void GameEngine::OnMouseScroll(int mouseX, int mouseY, int offsetX, int offsetY)
 }
 void GameEngine::OnWindowResize(int width, int height) {
 	glm::ivec2 res = window->GetResolution();
-	sceneRenderer->Init(res.x, res.y, 512, 512, 2048, 2048);
+	sceneRenderer->Init(res.x, res.y, 128, 128, 2048, 2048);
 
 	for (auto obj = objects.begin(); obj != objects.end();) {
 		auto components = (*obj)->GetComponents();

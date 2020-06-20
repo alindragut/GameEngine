@@ -25,19 +25,23 @@ void TextureRenderer::LoadCubemap()
 {
 	std::vector<std::string> faces =
 	{
-		"forestrt.tga",
-		"forestlf.tga",
-		"forestup.tga",
-		"forestdn.tga",
-		"forestbk.tga",
-		"forestft.tga"
+		"DrkGft.tga",
+		"DrkGbk.tga",
+		
+		
+		
+		"DrkGup.tga",
+		"DrkGdn.tga",
+		
+		"DrkGrt.tga",
+		"DrkGlf.tga",
 	};
 	
 	glGenTextures(1, &cubeMapId);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapId);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
