@@ -79,6 +79,7 @@ private:
 	void PlaceCorridors(glm::vec3 crtPos, glm::vec3 finalPos, glm::vec3 size);
 	void PlaceWalls(Room room);
 	void PlaceWall(Room room);
+	void PlaceColumns(Room room);
 	void PlaceWll(glm::vec3 pos, int wallDir, int type, int corridorType, glm::vec3 wallOffset);
 	
 

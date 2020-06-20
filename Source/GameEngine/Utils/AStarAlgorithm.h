@@ -601,7 +601,7 @@ private:
 	bool isUnBlocked(int** grid, int row, int col)
 	{
 		// Returns true if the cell is not blocked else false 
-		if (grid[row][col] != 1)
+		if (grid[row][col] != 1 && grid[row][col] != 5)
 			return (true);
 		else
 			return (false);

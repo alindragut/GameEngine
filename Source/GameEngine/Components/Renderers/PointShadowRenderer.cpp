@@ -28,6 +28,7 @@ PointShadowRenderer::PointShadowRenderer() {
 	mm.AddInstancedMesh("fence03", "Source/GameEngine/Models", "Fence_90_Modular.fbx", true, true, false, true);
 	mm.AddInstancedMesh("door01", "Source/GameEngine/Models", "SM_Bld_Rockwall_Archway_01.fbx", true, true, true);
 	mm.AddInstancedMesh("floor01", "Source/GameEngine/Models", "ModularFloor.fbx", true, true, true, true);
+	mm.AddInstancedMesh("column", "Source/GameEngine/Models", "Column.fbx", true, true, true, true);
 }
 
 PointShadowRenderer::~PointShadowRenderer() {

@@ -31,4 +31,8 @@ void Map::Init() {
 	obj = factory.createObject(11);
 	static_cast<PointShadowRenderer*>(obj->GetComponent("PointShadowRenderer"))->SetMesh("floor01");
 	engine->AddObject(obj);
+
+	obj = factory.createObject(11);
+	static_cast<PointShadowRenderer*>(obj->GetComponent("PointShadowRenderer"))->SetMesh("column");
+	engine->AddObject(obj);
 }
