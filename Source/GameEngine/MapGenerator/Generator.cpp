@@ -978,26 +978,44 @@ std::pair<glm::vec3, glm::vec3> Generator::IsDoor(glm::vec3 from, glm::vec3 to, 
 
 void Generator::PlaceColumns(Room room) {
 
-	glm::vec3 scale = glm::vec3(0.5f, 0.5f, 2);
-	glm::vec3 rot = glm::vec3(3 * M_PI / 2, 0, 0);
+	int res = rand() % 3;
 
-	glm::ivec3 loc = room.location + glm::vec3(room.size.x / 4, 1.5f, room.size.z / 4);
-	auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
-	glm::mat4 model = glm::translate(glm::mat4(1), glm::vec3(loc)) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
-	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
+	if (res == 0) {
+		glm::vec3 scale = glm::vec3(0.5f, 0.5f, 2);
+		glm::vec3 rot = glm::vec3(3 * M_PI / 2, 0, 0);
 
-	loc = room.location + glm::vec3(-room.size.x / 4, 1.5f, room.size.z / 4);
-	auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
-	model = glm::translate(glm::mat4(1), glm::vec3(loc)) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
-	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
+		glm::vec3 loc = room.location + glm::vec3(room.size.x / 4, 1.5f, room.size.z / 4);
+		auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
+		glm::mat4 model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
 
-	loc = room.location + glm::vec3(room.size.x / 4, 1.5f, -room.size.z / 4);
-	auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
-	model = glm::translate(glm::mat4(1), glm::vec3(loc)) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
-	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
+		loc = room.location + glm::vec3(-room.size.x / 4, 1.5f, room.size.z / 4);
+		auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
 
-	loc = room.location + glm::vec3(-room.size.x / 4, 1.5f, -room.size.z / 4);
-	auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
-	model = glm::translate(glm::mat4(1), glm::vec3(loc)) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
-	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
+		loc = room.location + glm::vec3(room.size.x / 4, 1.5f, -room.size.z / 4);
+		auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 4, 1.5f, -room.size.z / 4);
+		auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
+	}
+	else if (res == 1) {
+		glm::vec3 scale = glm::vec3(2);
+		glm::vec3 rot = glm::vec3(3 * M_PI / 2, 0, 0);
+
+		glm::vec3 loc = room.location + glm::vec3(0, 1.5f, 0);
+		auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
+		glm::mat4 model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
+	}
+	else {
+		return;
+	}
+
+	
 }
