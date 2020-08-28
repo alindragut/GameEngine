@@ -19,16 +19,54 @@ PointShadowRenderer::PointShadowRenderer() {
 	sc.AddShader("PointShadowDepth", "Source/GameEngine/Shaders", "VertexShaderPointShadows.glsl", "FragmentShaderPointShadows.glsl", true, "GeometryShaderPointShadows.glsl");
 
 	MeshManager& mm = MeshManager::GetInstance();
-	mm.AddMesh("arrow", "Source/GameEngine/Models", "Arrow.fbx");
+
+	mm.AddMesh("arrow", "Source/GameEngine/Models/Gameplay", "Arrow.fbx");
 	mm.AddMesh("box", RESOURCE_PATH::MODELS + "Primitives", "box.obj");
-	//mm.AddMesh("wall01", "Source/GameEngine/Models", "SM_Bld_Castle_Wall_01.fbx", true, true, true);
-	mm.AddInstancedMesh("wall01", "Source/GameEngine/Models", "ModularStoneWall.fbx", true, true, false, true);
-	mm.AddInstancedMesh("fence01", "Source/GameEngine/Models", "Fence_Straight_Modular.fbx", true, true, false, true);
-	mm.AddInstancedMesh("fence02", "Source/GameEngine/Models", "Fence_End_Modular.fbx", true, true, false, true);
-	mm.AddInstancedMesh("fence03", "Source/GameEngine/Models", "Fence_90_Modular.fbx", true, true, false, true);
-	mm.AddInstancedMesh("door01", "Source/GameEngine/Models", "SM_Bld_Rockwall_Archway_01.fbx", true, true, true);
-	mm.AddInstancedMesh("floor01", "Source/GameEngine/Models", "ModularFloor.fbx", true, true, true, true);
-	mm.AddInstancedMesh("column", "Source/GameEngine/Models", "Column.fbx", true, true, true, true);
+	mm.AddMesh("sphere", RESOURCE_PATH::MODELS + "Primitives", "sphere.obj");
+
+	mm.AddInstancedMesh("wall01", "Source/GameEngine/Models/Room", "ModularStoneWall.fbx", true, true, false, true);
+	mm.AddInstancedMesh("fence01", "Source/GameEngine/Models/Room", "Fence_Straight_Modular.fbx", true, true, false, true);
+	mm.AddInstancedMesh("fence02", "Source/GameEngine/Models/Room", "Fence_End_Modular.fbx", true, true, false, true);
+	mm.AddInstancedMesh("fence03", "Source/GameEngine/Models/Room", "Fence_90_Modular.fbx", true, true, false, true);
+	mm.AddInstancedMesh("door01", "Source/GameEngine/Models/Room", "SM_Bld_Rockwall_Archway_01.fbx", true, true, true);
+	mm.AddInstancedMesh("floor01", "Source/GameEngine/Models/Room", "ModularFloor.fbx", true, true, true, true);
+
+	mm.AddInstancedMesh("column", "Source/GameEngine/Models/Decorations", "Column.fbx", true, true, true, true);
+	mm.AddInstancedMesh("column_broken", "Source/GameEngine/Models/Decorations", "Column_Broken.fbx", true, true, true, true);
+	mm.AddInstancedMesh("banner", "Source/GameEngine/Models/Decorations", "Banner.fbx", true, true, false, true);
+	mm.AddInstancedMesh("banner_wall", "Source/GameEngine/Models/Decorations", "Banner_wall.fbx", true, true, false, true);
+	mm.AddInstancedMesh("barrel", "Source/GameEngine/Models/Decorations", "Barrel.fbx", true, true, false, true);
+	mm.AddInstancedMesh("barrel_2", "Source/GameEngine/Models/Decorations", "Barrel2.fbx", true, true, false, true);
+	mm.AddInstancedMesh("bones", "Source/GameEngine/Models/Decorations", "Bones.fbx", true, true, false, true);
+	mm.AddInstancedMesh("bones_2", "Source/GameEngine/Models/Decorations", "Bones2.fbx", true, true, false, true);
+	mm.AddInstancedMesh("book", "Source/GameEngine/Models/Decorations", "Book.fbx", true, true, false, true);
+	mm.AddInstancedMesh("book_2", "Source/GameEngine/Models/Decorations", "Book2.fbx", true, true, false, true);
+	mm.AddInstancedMesh("book_3", "Source/GameEngine/Models/Decorations", "Book3.fbx", true, true, false, true);
+	mm.AddInstancedMesh("bucket", "Source/GameEngine/Models/Decorations", "Bucket.fbx", true, true, false, true);
+	mm.AddInstancedMesh("candelabrum_tall", "Source/GameEngine/Models/Decorations", "Candelabrum_tall.fbx", true, true, false, true);
+	mm.AddInstancedMesh("candle", "Source/GameEngine/Models/Decorations", "Candle.fbx", true, true, false, true);
+	mm.AddInstancedMesh("carpet", "Source/GameEngine/Models/Decorations", "Carpet.fbx", true, true, false, true);
+	mm.AddInstancedMesh("chair", "Source/GameEngine/Models/Decorations", "Chair.fbx", true, true, false, true);
+	mm.AddInstancedMesh("chest", "Source/GameEngine/Models/Decorations", "Chest.fbx", true, true, false, true);
+	mm.AddInstancedMesh("cobweb", "Source/GameEngine/Models/Decorations", "Cobweb.fbx", true, true, false, true);
+	mm.AddInstancedMesh("cobweb_2", "Source/GameEngine/Models/Decorations", "Cobweb2.fbx", true, true, false, true);
+	mm.AddInstancedMesh("crate", "Source/GameEngine/Models/Decorations", "Crate.fbx", true, true, false, true);
+	mm.AddInstancedMesh("pedestal", "Source/GameEngine/Models/Decorations", "Pedestal.fbx", true, true, false, true);
+	mm.AddInstancedMesh("pedestal_2", "Source/GameEngine/Models/Decorations", "Pedestal2.fbx", true, true, false, true);
+	mm.AddInstancedMesh("potion", "Source/GameEngine/Models/Decorations", "Potion.fbx", true, true, false, true);
+	mm.AddInstancedMesh("potion_2", "Source/GameEngine/Models/Decorations", "Potion2.fbx", true, true, false, true);
+	mm.AddInstancedMesh("potion_3", "Source/GameEngine/Models/Decorations", "Potion3.fbx", true, true, false, true);
+	mm.AddInstancedMesh("potion_4", "Source/GameEngine/Models/Decorations", "Potion4.fbx", true, true, false, true);
+	mm.AddInstancedMesh("potion_5", "Source/GameEngine/Models/Decorations", "Potion5.fbx", true, true, false, true);
+	mm.AddInstancedMesh("potion_6", "Source/GameEngine/Models/Decorations", "Potion6.fbx", true, true, false, true);
+	mm.AddInstancedMesh("skull", "Source/GameEngine/Models/Decorations", "Skull.fbx", true, true, false, true);
+	mm.AddInstancedMesh("table_big", "Source/GameEngine/Models/Decorations", "Table_Big.fbx", true, true, false, true);
+	mm.AddInstancedMesh("table_small", "Source/GameEngine/Models/Decorations", "Table_Small.fbx", true, true, false, true);
+	mm.AddInstancedMesh("torch_wall", "Source/GameEngine/Models/Decorations", "Torch_Wall.fbx", true, true, false, true);
+	mm.AddInstancedMesh("vase", "Source/GameEngine/Models/Decorations", "Vase.fbx", true, true, false, true);
+	mm.AddInstancedMesh("window", "Source/GameEngine/Models/Decorations", "Window.fbx", true, true, false, true);
+	mm.AddInstancedMesh("woodfire", "Source/GameEngine/Models/Decorations", "Woodfire.fbx", true, true, false, true);
+
 }
 
 PointShadowRenderer::~PointShadowRenderer() {

@@ -1,11 +1,11 @@
 #include "NPCMovementComponent.h"
 #include <GameEngine/Utils/PhysicsManager.h>
 #include <GameEngine/IncludeList.h>
-#include <GameEngine/Components/Arrow/ArrowSpawner.h>
+#include <GameEngine/Components/Projectile/ProjectileSpawner.h>
 #include <GameEngine/MapGenerator/GeneratorManager.h>
 #include <GameEngine/Utils/MeshManager.h>
 #include <GameEngine/Components/Combat/CombatComponent.h>
-#include <GameEngine/Components/AnimObject/PlayerMovementGameComponent.h>
+#include <GameEngine/Components/Player/PlayerComponent.h>
 
 NPCMovementComponent::NPCMovementComponent() {
 	dir = glm::vec3(0);
@@ -13,7 +13,7 @@ NPCMovementComponent::NPCMovementComponent() {
 	speed = 1;
 	currentDest = glm::vec3(0);
 	spawnPos = glm::vec3(0);
-	pathfindCooldown = 0.33f;
+	pathfindCooldown = 2.f;
 	timer = 0.0f;
 	state = 0;
 	crtAnimDuration = 0.f;
@@ -33,7 +33,7 @@ void NPCMovementComponent::update(float deltaTimeSeconds) {
 	glm::vec3 currentTargetPos = target->GetTransform()->GetPos();
 	int crtState = state;
 
-	if (!static_cast<PlayerMovementGameComponent*>(target->GetComponent("PlayerMovementGameComponent"))->isAlive()) {
+	if (!static_cast<PlayerComponent*>(target->GetComponent("PlayerComponent"))->isAlive()) {
 		state = 0;
 		speed = 0;
 	} else if (glm::l1Norm(currentPos - currentTargetPos) > 10.f) {

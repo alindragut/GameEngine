@@ -69,7 +69,6 @@ void MeshManager::AddModel(std::string modelName, std::string modelPath, std::st
 		models[modelName] = model;
 	}
 	else {
-		printf("Error\n");
 		return;
 	}
 }
@@ -90,7 +89,6 @@ void MeshManager::AddAnimation(std::string modelName, std::string animationName,
 	Model* model = GetModel(modelName);
 
 	if (model == nullptr) {
-		printf("Error\n");
 		return;
 	}
 	
@@ -111,7 +109,6 @@ void MeshManager::AddAnimation(std::string modelName, std::string animationName,
 		animations[animationName] = anim;
 	}
 	else {
-		printf("Error\n");
 		return;
 	}
 }

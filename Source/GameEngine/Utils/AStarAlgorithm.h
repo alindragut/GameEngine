@@ -42,28 +42,28 @@ public:
 		// If the source is out of range 
 		if (isValid(src.first, src.second) == false)
 		{
-			printf("Source is invalid\n");
+			////printf("Source is invalid\n");
 			return std::stack<Pair>();
 		}
 
 		// If the destination is out of range 
 		if (isValid(dest.first, dest.second) == false)
 		{
-			printf("Destination is invalid\n");
+			////printf("Destination is invalid\n");
 			return std::stack<Pair>();
 		}
 
 		// Either the source or the destination is blocked 
 		if (isUnBlocked(*grid, dest.first, dest.second) == false)
 		{
-			printf("Source or the destination is blocked\n");
+			////printf("Source or the destination is blocked\n");
 			return std::stack<Pair>();
 		}
 
 		// If the destination cell is the same as source cell 
 		if (isDestination(src.first, src.second, dest) == true)
 		{
-			printf("We are already at the destination\n");
+			////printf("We are already at the destination\n");
 			return std::stack<Pair>();
 		}
 
@@ -173,7 +173,7 @@ public:
 					// Set the Parent of the destination cell 
 					cellDetails[(i - 1) * rows + j].parent_i = i;
 					cellDetails[(i - 1) * rows + j].parent_j = j;
-					printf("The destination cell is found\n");
+					////printf("The destination cell is found\n");
 					foundDest = true;
 					return tracePath(cellDetails, dest, auxMatrix);
 				}
@@ -223,7 +223,7 @@ public:
 					// Set the Parent of the destination cell 
 					cellDetails[(i + 1) * rows + j].parent_i = i;
 					cellDetails[(i + 1) * rows + j].parent_j = j;
-					printf("The destination cell is found\n");
+					////printf("The destination cell is found\n");
 					foundDest = true;
 					return tracePath(cellDetails, dest, auxMatrix);
 				}
@@ -271,7 +271,7 @@ public:
 					// Set the Parent of the destination cell 
 					cellDetails[i * rows + j + 1].parent_i = i;
 					cellDetails[i * rows + j + 1].parent_j = j;
-					printf("The destination cell is found\n");
+					////printf("The destination cell is found\n");
 					foundDest = true;
 					return tracePath(cellDetails, dest, auxMatrix);
 				}
@@ -322,7 +322,7 @@ public:
 					// Set the Parent of the destination cell 
 					cellDetails[i * rows + j - 1].parent_i = i;
 					cellDetails[i * rows + j - 1].parent_j = j;
-					printf("The destination cell is found\n");
+					//printf("The destination cell is found\n");
 					foundDest = true;
 					return tracePath(cellDetails, dest, auxMatrix);
 				}
@@ -375,7 +375,7 @@ public:
 						// Set the Parent of the destination cell 
 						cellDetails[(i - 1) * rows + j + 1].parent_i = i;
 						cellDetails[(i - 1) * rows + j + 1].parent_j = j;
-						printf("The destination cell is found\n");
+						//printf("The destination cell is found\n");
 						foundDest = true;
 						return tracePath(cellDetails, dest, auxMatrix);
 					}
@@ -427,7 +427,7 @@ public:
 						// Set the Parent of the destination cell 
 						cellDetails[(i - 1) * rows + j - 1].parent_i = i;
 						cellDetails[(i - 1) * rows + j - 1].parent_j = j;
-						printf("The destination cell is found\n");
+						//printf("The destination cell is found\n");
 						foundDest = true;
 						return tracePath(cellDetails, dest, auxMatrix);
 					}
@@ -477,7 +477,7 @@ public:
 						// Set the Parent of the destination cell 
 						cellDetails[(i + 1) * rows + j + 1].parent_i = i;
 						cellDetails[(i + 1) * rows + j + 1].parent_j = j;
-						printf("The destination cell is found\n");
+						//printf("The destination cell is found\n");
 						foundDest = true;
 						return tracePath(cellDetails, dest, auxMatrix);
 					}
@@ -529,7 +529,7 @@ public:
 						// Set the Parent of the destination cell 
 						cellDetails[(i + 1) * rows + j - 1].parent_i = i;
 						cellDetails[(i + 1) * rows + j - 1].parent_j = j;
-						printf("The destination cell is found\n");
+						//printf("The destination cell is found\n");
 						foundDest = true;
 						return tracePath(cellDetails, dest, auxMatrix);
 					}
@@ -576,7 +576,7 @@ public:
 		// reach the destiantion cell. This may happen when the 
 		// there is no way to destination cell (due to blockages) 
 		if (foundDest == false)
-			printf("Failed to find the Destination Cell\n");
+			//printf("Failed to find the Destination Cell\n");
 
 		return std::stack<Pair>();
 	}
@@ -665,9 +665,9 @@ private:
 		{
 			std::pair<int, int> p = Path.top();
 			Path.pop();
-			printf("\n-> (%d,%d)", p.first, p.second);
+			//printf("\n-> (%d,%d)", p.first, p.second);
 		}
-		printf("\n");*/
+		//printf("\n");*/
 
 		for (int i = 0; i < rows; i++) {
 			delete[] closedList[i];

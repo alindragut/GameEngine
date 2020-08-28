@@ -11,5 +11,5 @@ public:
 	NPCSpawner() {};
 	~NPCSpawner() {};
 
-	static BaseGameObject* SpawnNPC(BaseGameObject* creatorObject, glm::vec3 spawnPos);
+	static BaseGameObject* SpawnNPC(BaseGameObject* creatorObject, glm::vec3 spawnPos, int type);
 };

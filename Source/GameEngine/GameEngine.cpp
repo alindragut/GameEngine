@@ -38,7 +38,7 @@ void GameEngine::Init() {
 
 	Map::Init();
 
-	generator = new Generator(6, 70, 70, 3, 3, 3);
+	generator = new Generator(6, 60, 60, 3, 3, 3);
 
 	glm::ivec2 res = window->GetResolution();
 
@@ -125,9 +125,10 @@ void GameEngine::FrameStart() {
 
 void GameEngine::Update(float deltaTimeSeconds) {
 	{
-		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+		ImGui::Begin("");									// Create a window called "Hello, world!" and append into it.
 
-		ImGui::Text("%.1f fps", 1.0f / deltaTimeSeconds);               // Display some text (you can use a format strings too)
+		ImGui::Text("%.1f fps", 1.0f / deltaTimeSeconds);               // Display some text (you can use a format strings too)\
+
 	}
 
 	physics->Step(deltaTimeSeconds);

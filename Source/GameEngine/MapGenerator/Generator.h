@@ -77,13 +77,11 @@ private:
 	void PlaceRoom(glm::vec3 location, glm::vec3 size);
 	void PlaceCorridor(glm::vec3 location, float size);
 	void PlaceCorridors(glm::vec3 crtPos, glm::vec3 finalPos, glm::vec3 size);
-	void PlaceWalls(Room room);
-	void PlaceWall(Room room);
 	void PlaceColumns(Room room);
-	void PlaceWll(glm::vec3 pos, int wallDir, int type, int corridorType, glm::vec3 wallOffset);
+	void PlaceWall(glm::vec3 pos, int wallDir, int type, int corridorType, glm::vec3 wallOffset);
+	void PlaceDecorations(Room room);
 	
 
 	std::pair<glm::vec3, glm::vec3> IsDoor(glm::vec3 from, glm::vec3 to, bool *isDoor);
-
 
 };

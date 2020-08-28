@@ -33,10 +33,12 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 		case 4:
 		{
 			BaseGameObject* go(new AnimObject(globalObjectId++));
-			go->AddComponent(new PlayerMovementGameComponent());
+			go->AddComponent(new PlayerComponent());
 			go->AddComponent(new AnimationRenderer("model", "player_idle"));
 			go->AddComponent(new PointLightComponent());
 			go->AddComponent(new CombatComponent());
+			go->AddComponent(new SkillTreeComponent());
+			go->AddComponent(new RigidBodyComponent());
 			go->InitComponents();
 			return go;
 		}
@@ -83,8 +85,8 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 		case 9:
 		{
 			BaseGameObject* go(new AnimObject(globalObjectId++));
-			go->AddComponent(new NPCMovementComponent());
-			go->AddComponent(new AnimationRenderer("npc", "npc_idle"));
+			go->AddComponent(new SkeletonComponent());
+			go->AddComponent(new AnimationRenderer("skeleton", "skeleton_idle"));
 			go->AddComponent(new RigidBodyComponent());
 			go->AddComponent(new CombatComponent());
 			go->InitComponents();
@@ -106,6 +108,7 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 			PointShadowRenderer* psr = new PointShadowRenderer();
 			psr->SetShader("DungeonPack");
 			go->AddComponent(psr);
+			go->AddComponent(new RigidBodyComponent());
 			go->InitComponents();
 			return go;
 		}
@@ -115,6 +118,45 @@ BaseGameObject* ComponentFactory::createObject(int id) {
 			RigidBodyComponent* rbc = new RigidBodyComponent();
 			rbc->SetWalkable(true);
 			go->AddComponent(rbc);
+			go->InitComponents();
+			return go;
+		}
+		case 13:
+		{
+			BaseGameObject* go(new AnimObject(globalObjectId++));
+			go->AddComponent(new SkeletonComponent());
+			go->AddComponent(new AnimationRenderer("skeleton", "skeleton_idle"));
+			go->AddComponent(new RigidBodyComponent());
+			go->AddComponent(new CombatComponent());
+			go->InitComponents();
+			return go;
+		}
+		case 14:
+		{
+			BaseGameObject* go(new AnimObject(globalObjectId++));
+			go->AddComponent(new BruiserComponent());
+			go->AddComponent(new AnimationRenderer("bruiser", "bruiser_idle"));
+			go->AddComponent(new RigidBodyComponent());
+			go->AddComponent(new CombatComponent());
+			go->InitComponents();
+			return go;
+		}
+		case 15:
+		{
+			BaseGameObject* go(new AnimObject(globalObjectId++));
+			go->AddComponent(new MageComponent());
+			go->AddComponent(new AnimationRenderer("mage", "mage_idle"));
+			go->AddComponent(new RigidBodyComponent());
+			go->AddComponent(new CombatComponent());
+			go->InitComponents();
+			return go;
+		}
+		case 16:
+		{
+			BaseGameObject* go(new GameObject(globalObjectId++));
+			go->AddComponent(new PointShadowRenderer());
+			go->AddComponent(new RigidBodyComponent());
+			go->AddComponent(new SpellComponent());
 			go->InitComponents();
 			return go;
 		}

@@ -49,6 +49,7 @@ public:
 	std::map<std::string, Bone*>* GetBones();
 	GLenum LoadModel(const aiScene* scene);
 	void Render(Shader* shader, glm::mat4 ViewMat, glm::mat4 ProjectionMat, glm::mat4 ModelMat, float time, Animation* anim, bool depth = false, float farPlane = 0.0f, glm::vec3 lightPos = glm::vec3(0));
+	glm::vec3 GetScaleDifference();
 
 protected:
 	std::map<std::string, Bone*> bones;

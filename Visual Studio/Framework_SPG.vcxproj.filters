@@ -55,9 +55,6 @@
     <Filter Include="GameEngine\Physics">
       <UniqueIdentifier>{a2ab0e22-f8b4-485b-a93c-dd642fbfda8f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameEngine\Components\Arrow">
-      <UniqueIdentifier>{00b2d9bc-8f6d-4a26-877b-f7ed960284cf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\MapGenerator">
       <UniqueIdentifier>{3ecc8067-c398-4204-ac8b-1279cc83ff6e}</UniqueIdentifier>
     </Filter>
@@ -72,6 +69,12 @@
     </Filter>
     <Filter Include="GameEngine\Components\Combat">
       <UniqueIdentifier>{80f5d944-d89b-4742-8da0-8d44fa5dddfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Components\Projectile">
+      <UniqueIdentifier>{00b2d9bc-8f6d-4a26-877b-f7ed960284cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Components\Player">
+      <UniqueIdentifier>{2db5cff7-6109-41ee-83fc-b0ba1a44eccb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -208,12 +211,6 @@
     <ClCompile Include="..\Source\GameEngine\Components\BaseComponents\PointLightComponent.cpp">
       <Filter>GameEngine\Components\BaseComponents</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\GameEngine\Components\Arrow\ArrowComponent.cpp">
-      <Filter>GameEngine\Components\Arrow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\GameEngine\Components\Arrow\ArrowSpawner.cpp">
-      <Filter>GameEngine\Components\Arrow</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\GameEngine\MapGenerator\GeneratorManager.cpp">
       <Filter>GameEngine\MapGenerator</Filter>
     </ClCompile>
@@ -247,9 +244,6 @@
     <ClCompile Include="..\Source\GameEngine\Components\NPC\NPCSpawner.cpp">
       <Filter>GameEngine\Components\NPC</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\GameEngine\Components\AnimObject\PlayerMovementGameComponent.cpp">
-      <Filter>GameEngine\Components\AnimObject</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\GameEngine\Components\Combat\CombatComponent.cpp">
       <Filter>GameEngine\Components\Combat</Filter>
     </ClCompile>
@@ -258,6 +252,30 @@
     </ClCompile>
     <ClCompile Include="..\Source\GameEngine\Utils\Map.cpp">
       <Filter>GameEngine\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\NPC\SkeletonComponent.cpp">
+      <Filter>GameEngine\Components\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\NPC\BruiserComponent.cpp">
+      <Filter>GameEngine\Components\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\NPC\MageComponent.cpp">
+      <Filter>GameEngine\Components\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\Projectile\ArrowComponent.cpp">
+      <Filter>GameEngine\Components\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\Projectile\SpellComponent.cpp">
+      <Filter>GameEngine\Components\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\Projectile\ProjectileSpawner.cpp">
+      <Filter>GameEngine\Components\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\Combat\SkillTreeComponent.cpp">
+      <Filter>GameEngine\Components\Combat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GameEngine\Components\Player\PlayerComponent.cpp">
+      <Filter>GameEngine\Components\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -441,12 +459,6 @@
     <ClInclude Include="..\Source\GameEngine\Components\BaseComponents\PointLightComponent.h">
       <Filter>GameEngine\Components\BaseComponents</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\GameEngine\Components\Arrow\ArrowComponent.h">
-      <Filter>GameEngine\Components\Arrow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\GameEngine\Components\Arrow\ArrowSpawner.h">
-      <Filter>GameEngine\Components\Arrow</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\GameEngine\MapGenerator\GeneratorManager.h">
       <Filter>GameEngine\MapGenerator</Filter>
     </ClInclude>
@@ -486,9 +498,6 @@
     <ClInclude Include="..\Source\GameEngine\Components\NPC\NPCSpawner.h">
       <Filter>GameEngine\Components\NPC</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\GameEngine\Components\AnimObject\PlayerMovementGameComponent.h">
-      <Filter>GameEngine\Components\AnimObject</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\GameEngine\Components\Combat\CombatComponent.h">
       <Filter>GameEngine\Components\Combat</Filter>
     </ClInclude>
@@ -497,6 +506,30 @@
     </ClInclude>
     <ClInclude Include="..\Source\GameEngine\Utils\Map.h">
       <Filter>GameEngine\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\NPC\SkeletonComponent.h">
+      <Filter>GameEngine\Components\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\NPC\BruiserComponent.h">
+      <Filter>GameEngine\Components\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\NPC\MageComponent.h">
+      <Filter>GameEngine\Components\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\Projectile\ArrowComponent.h">
+      <Filter>GameEngine\Components\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\Projectile\SpellComponent.h">
+      <Filter>GameEngine\Components\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\Projectile\ProjectileSpawner.h">
+      <Filter>GameEngine\Components\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\Combat\SkillTreeComponent.h">
+      <Filter>GameEngine\Components\Combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GameEngine\Components\Player\PlayerComponent.h">
+      <Filter>GameEngine\Components\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

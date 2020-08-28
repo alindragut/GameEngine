@@ -6,7 +6,8 @@ CombatComponent::CombatComponent() {
 	this->stamina = 100;
 	this->maxStamina = 100;
 	this->ammo = 20;
-	this->damage = 100;
+	this->damage = 10;
+	this->baseDamage = 10;
 }
 
 CombatComponent::CombatComponent(int hp, int stamina, int ammo, int damage) {
@@ -16,6 +17,7 @@ CombatComponent::CombatComponent(int hp, int stamina, int ammo, int damage) {
 	this->maxStamina = stamina;
 	this->ammo = ammo;
 	this->damage = damage;
+	this->baseDamage = damage;
 }
 
 CombatComponent::~CombatComponent() {

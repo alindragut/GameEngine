@@ -6,6 +6,6 @@ PointLightComponent::PointLightComponent() {
 }
 
 void PointLightComponent::update(float deltaTimeSeconds) {
-	SetWorldPosition(object->GetTransform()->GetPos() + glm::vec3(0, 1, 0));
+	SetWorldPosition(object->GetTransform()->GetPos() + glm::vec3(0, 2, 0));
 	EngineManager::GetInstance().GetGameEngine()->GetSceneRenderer()->SetLightPos(worldPosition);
 }

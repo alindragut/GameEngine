@@ -61,15 +61,13 @@ Generator::~Generator() {
 
 void Generator::Init() {
 	
-	/*for (Room room : rooms) {
+	for (Room room : rooms) {
 		if (room.location != rooms.front().location) {
 			float randX = rand() % (int)(room.size.x / 2);
-			NPCSpawner::SpawnNPC(player, room.location + glm::vec3(randX, 0, 0));
-			NPCSpawner::SpawnNPC(player, room.location);
+			NPCSpawner::SpawnNPC(player, room.location + glm::vec3(randX, 0.5f, 0), 2);
 		}
 		
-	}*/
-	//NPCSpawner::SpawnNPC(player, rooms.back().location);
+	}
 }
 
 glm::vec3 Generator::GetSpawnPoint() {
@@ -86,7 +84,6 @@ void Generator::PlaceRooms() {
 		float randomx = 2 * rand() % (locationMaxX) + 6;
 		float randomy = 2 * rand() % (locationMaxY) + 6;
 
-		printf("%lf %lf\n", randomx, randomy);
 
 		glm::vec3 location = glm::vec3(randomx, -0.5f, randomy);
 
@@ -131,25 +128,6 @@ void Generator::PlaceRooms() {
 
 	std::map<std::pair<float, float>, std::pair<float, float>> MST = MSTAlgorithm::Algorithm(triangles, roomLocations);
 
-	/*for (int i = 0; i < 3; i++) {
-		
-		auto it = MST.begin();
-		std::advance(it, rand() % MST.size());
-		std::pair<float, float> random_key_x = it->first;
-
-		it = MST.begin();
-		std::advance(it, rand() % MST.size());
-		std::pair<float, float> random_key_y = it->first;
-
-		if (random_key_x == random_key_y) {
-			i--;
-			continue;
-		}
-
-		MST.insert({ random_key_x, random_key_y });
-
-	}*/
-
 	for (auto const& edge : MST) {
 		glm::vec3 size = glm::vec3(1);
 		Room *from, *to;
@@ -170,8 +148,8 @@ void Generator::PlaceRooms() {
 	}
 
 	for (auto room : rooms) {
-		//PlaceWall(room);
 		PlaceColumns(room);
+		PlaceDecorations(room);
 	}
 
 	for (int i = 0; i < 2 * locationMaxX + 10; i++) {
@@ -189,7 +167,7 @@ void Generator::PlaceRooms() {
 			if (auxMapMatrix[i][j] != 1) {
 				int val = GetWallDirection(auxMapMatrix, i, j);
 				if (val != 5) {
-					PlaceWll(glm::vec3(j, 0, i), val, auxMapMatrix[i][j], GetCorridorType(auxMapMatrix, i, j), GetWallOffset(auxMapMatrix, i, j));
+					PlaceWall(glm::vec3(j, 0, i), val, auxMapMatrix[i][j], GetCorridorType(auxMapMatrix, i, j), GetWallOffset(auxMapMatrix, i, j));
 				}
 				PlaceFloor(glm::vec3(j, 0, i));
 			}
@@ -199,60 +177,47 @@ void Generator::PlaceRooms() {
 	//glm::mat4 model = glm::translate(glm::mat4(1),glm::vec3(0.5, -0.5, 0.5)) * glm::rotate(glm::mat4(1), float(-M_PI_2), glm::vec3(1, 0, 0));
 
 	//static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("wall01"))->AddInstance(model);
+
 	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("fence01"))->Reconstruct();
 	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("fence03"))->Reconstruct();
 	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("wall01"))->Reconstruct();
 	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("floor01"))->Reconstruct();
+
 	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->Reconstruct();
-
-	//std::vector<glm::ivec2> dirs;
-	//dirs.push_back(glm::ivec2(1, 0));
-	//dirs.push_back(glm::ivec2(-1, 0));
-	//dirs.push_back(glm::ivec2(0, 1));
-	//dirs.push_back(glm::ivec2(0, -1));
-	//glm::ivec2 dir = dirs[0];
-	//glm::ivec2 crtMapPos = glm::ivec2(startI, startJ);
-
-	///*if (startI != -1) {
-	//	while (auxMapMatrix[crtMapPos.x][crtMapPos.y] != 5) {
-	//		auxMapMatrix[crtMapPos.x][crtMapPos.y] = 5;
-
-	//		PlaceWll(glm::vec3(crtMapPos.y, 0, crtMapPos.x), dir);
-
-	//		glm::ivec2 nextPos = crtMapPos + dir;
-	//		bool end = true;
-
-	//		if ((auxMapMatrix[nextPos.x][nextPos.y] == 1) && GetNumberOfValidNeighbours(auxMapMatrix, nextPos.x, nextPos.y) > 0) {
-	//			crtMapPos = nextPos;
-	//			end = false;
-	//		}
-	//		else {
-	//			for (glm::ivec2 dirIt : dirs) {
-	//				if (dirIt != dir && dirIt != -dir) {
-	//					nextPos = crtMapPos + dirIt;
-	//					if ((auxMapMatrix[nextPos.x][nextPos.y] == 1) && GetNumberOfValidNeighbours(auxMapMatrix, nextPos.x, nextPos.y) > 0) {
-	//						dir = dirIt;
-	//						crtMapPos = nextPos;
-	//						end = false;
-	//						break;
-	//					}
-	//				}
-	//			}
-	//		}
-	//		if (end) {
-	//			printf("end gen\n");
-	//			break;
-	//		}
-
-	//	}
-	//}*/
-
-	for (int i = 0; i < (2 * locationMaxX + 10); i++) {
-		for (int j = 0; j < (2 * locationMaxY + 10); j++) {
-			printf("%d", auxMapMatrix[i][j]);
-		}
-		printf("\n");
-	}
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column_broken"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("banner"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("banner_wall"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel_2"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("bones"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("bones_2"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("book"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("book_2"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("book_3"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("bucket"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("candelabrum_tall"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("candle"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("carpet"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("chair"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("chest"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb_2"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("crate"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("pedestal"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("pedestal_2"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("potion"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("potion_2"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("potion_3"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("potion_4"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("potion_5"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("potion_6"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("skull"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("table_big"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("table_small"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("torch_wall"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("vase"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("window"))->Reconstruct();
+	static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("woodfire"))->Reconstruct();
 
 	startI = -1, startJ = -1;
 
@@ -311,7 +276,6 @@ void Generator::PlaceRooms() {
 			}
 
 			if (max == 0) {
-				printf("max 0\n");
 				break;
 			}
 
@@ -580,12 +544,10 @@ bool Generator::VerifyFinalCorridorPos(int i, int j, int dir) {
 	return true;
 }
 
-void Generator::PlaceWll(glm::vec3 pos, int dir, int type, int corridorType, glm::vec3 wallOffset) {
+void Generator::PlaceWall(glm::vec3 pos, int dir, int type, int corridorType, glm::vec3 wallOffset) {
 	glm::vec3 objPos = pos;
 	glm::vec3 objRot = glm::vec3(0);
 	glm::vec3 objScale = glm::vec3(1);
-	
-	
 
 	if (dir == 8) {
 		objRot = glm::vec3(0, -M_PI_2, 0);
@@ -706,7 +668,7 @@ int Generator::GetNavMatrixValue(glm::vec3 pos, int mode) {
 }
 
 std::stack<std::pair<float, float>> Generator::GetPath(glm::vec3 from, glm::vec3 to) {
-	printf("from %d %d\n", GetNavMatrixValue(from), GetNavMatrixValue(from, 0));
+	//printf("from %d %d\n", GetNavMatrixValue(from), GetNavMatrixValue(from, 0));
 
 	std::stack<std::pair<int, int>> aStarRes = astar->aStarSearch(&mapMatrix, std::make_pair(CalcLinearInterp(from.z),
 		CalcLinearInterp(from.x)),
@@ -760,7 +722,6 @@ glm::vec3 Generator::GetCorridorBoundary(Room* r1, Room* r2) {
 		next = crtPos + glm::vec3(0, 0, round(size.z / 2.0f + 1));
 	}
 
-	printf("qwe %lf %lf %lf\n", next.x, next.y, next.z);
 	PlaceCorridor(next, 2);
 	next = next + 2.0f * glm::normalize(next - crtPos);
 	PlaceCorridor(next, 2);
@@ -847,7 +808,6 @@ void Generator::PlaceCorridors(glm::vec3 crtPos, glm::vec3 finalPos, glm::vec3 s
 		next = crtPos + glm::vec3(0, 0, multiplier);
 	}
 
-	printf("next %d %d\n", (int)next.x, (int)next.z);
 
 	if (auxMapMatrix[(int)next.z][(int)next.x] == 1) {
 		PlaceCorridor(next, (int)multiplier);
@@ -862,88 +822,6 @@ void Generator::PlaceCorridors(glm::vec3 crtPos, glm::vec3 finalPos, glm::vec3 s
 	}
 
 	PlaceCorridors(next, finalPos, size);
-}
-
-void Generator::PlaceWalls(Room room) {
-
-}
-
-void Generator::PlaceWall(Room room) {
-	ComponentFactory& factory = ComponentFactory::GetInstance();
-	EngineManager& em = EngineManager::GetInstance();
-
-	auto object1 = factory.createObject(3);
-	auto object2 = factory.createObject(3);
-	auto object3 = factory.createObject(3);
-	auto object4 = factory.createObject(3);
-
-	bool isDoor;
-
-
-	IsDoor(glm::vec3(room.location.x - room.size.x / 2.0f, 0, room.location.z - room.size.z / 2.0f - 1.0f), glm::vec3(room.location.x + room.size.x / 2.0f, 0, room.location.z - room.size.z / 2.0f - 1.0f), &isDoor);
-
-	
-	if (isDoor) {
-		static_cast<PointShadowRenderer*>(object1->GetComponent("PointShadowRenderer"))->SetMesh("door01");
-		object1->GetTransform()->SetRot(glm::vec3(0, M_PI / 2.0f, 0));
-		object1->GetTransform()->SetScale(glm::vec3(1, 3, room.size.x));
-	}
-	else {
-		static_cast<PointShadowRenderer*>(object1->GetComponent("PointShadowRenderer"))->SetMesh("wall01");
-		//object1->GetTransform()->SetScale(glm::vec3(room.size.x, 3, 1));
-	}
-
-	
-	object1->GetTransform()->SetPos(glm::vec3(room.location.x, 1, room.location.z - room.size.z / 2));
-	object1->InitComponents();
-	em.GetGameEngine()->AddObject(object1);
-	IsDoor(glm::vec3(room.location.x - room.size.x / 2.0f - 1.0f, 0, room.location.z - room.size.z / 2.0f), glm::vec3(room.location.x - room.size.x / 2.0f - 1.0f, 0, room.location.z + room.size.z / 2.0f), &isDoor);
-
-	if (isDoor) {
-		static_cast<PointShadowRenderer*>(object2->GetComponent("PointShadowRenderer"))->SetMesh("door01");
-		object2->GetTransform()->SetScale(glm::vec3(1, 3, room.size.z));
-	}
-	else {
-		static_cast<PointShadowRenderer*>(object2->GetComponent("PointShadowRenderer"))->SetMesh("wall01");
-		//object2->GetTransform()->SetRot(glm::vec3(0, M_PI / 2.0f, 0));
-		//object2->GetTransform()->SetScale(glm::vec3(room.size.z, 3, 1));
-	}
-
-	object2->GetTransform()->SetPos(glm::vec3(room.location.x - room.size.x / 2, 1, room.location.z));
-	object2->InitComponents();
-	em.GetGameEngine()->AddObject(object2);
-	IsDoor(glm::vec3(room.location.x + room.size.x / 2.0f - 1.0f, 0, room.location.z + room.size.z / 2.0f), glm::vec3(room.location.x - room.size.x / 2.0f - 1.0f, 0, room.location.z + room.size.z / 2.0f), &isDoor);
-
-	if (isDoor) {
-		static_cast<PointShadowRenderer*>(object3->GetComponent("PointShadowRenderer"))->SetMesh("door01");
-		object3->GetTransform()->SetRot(glm::vec3(0, M_PI / 2.0f, 0));
-		object3->GetTransform()->SetScale(glm::vec3(1, 3, room.size.x));
-	}
-	else {
-		static_cast<PointShadowRenderer*>(object3->GetComponent("PointShadowRenderer"))->SetMesh("wall01");
-		//object3->GetTransform()->SetScale(glm::vec3(room.size.x, 3, 1));
-	}
-
-	
-	object3->GetTransform()->SetPos(glm::vec3(room.location.x, 1, room.location.z + room.size.z / 2));
-	object3->InitComponents();
-	em.GetGameEngine()->AddObject(object3);
-	IsDoor(glm::vec3(room.location.x + room.size.x / 2.0f, 0, room.location.z - room.size.z / 2.0f), glm::vec3(room.location.x + room.size.x / 2.0f, 0, room.location.z + room.size.z / 2.0f), &isDoor);
-
-
-	if (isDoor) {
-		static_cast<PointShadowRenderer*>(object4->GetComponent("PointShadowRenderer"))->SetMesh("door01");
-		object4->GetTransform()->SetScale(glm::vec3(1, 3, room.size.z));
-	}
-	else {
-		static_cast<PointShadowRenderer*>(object4->GetComponent("PointShadowRenderer"))->SetMesh("wall01");
-		//object4->GetTransform()->SetRot(glm::vec3(0, M_PI / 2.0f, 0));
-		//object4->GetTransform()->SetScale(glm::vec3(room.size.z, 3, 1));
-	}
-
-	object4->GetTransform()->SetPos(glm::vec3(room.location.x + room.size.x / 2, 1, room.location.z));
-	object4->InitComponents();
-	em.GetGameEngine()->AddObject(object4);
 }
 
 std::pair<glm::vec3, glm::vec3> Generator::IsDoor(glm::vec3 from, glm::vec3 to, bool *isDoor) {
@@ -978,44 +856,408 @@ std::pair<glm::vec3, glm::vec3> Generator::IsDoor(glm::vec3 from, glm::vec3 to, 
 
 void Generator::PlaceColumns(Room room) {
 
-	int res = rand() % 3;
+	int res = rand() % 2;
 
 	if (res == 0) {
 		glm::vec3 scale = glm::vec3(0.5f, 0.5f, 2);
 		glm::vec3 rot = glm::vec3(3 * M_PI / 2, 0, 0);
 
 		glm::vec3 loc = room.location + glm::vec3(room.size.x / 4, 1.5f, room.size.z / 4);
-		auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
 		glm::mat4 model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
 		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
+		
 
 		loc = room.location + glm::vec3(-room.size.x / 4, 1.5f, room.size.z / 4);
-		auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
 		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
 		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
 
 		loc = room.location + glm::vec3(room.size.x / 4, 1.5f, -room.size.z / 4);
-		auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
 		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
 		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
 
 		loc = room.location + glm::vec3(-room.size.x / 4, 1.5f, -room.size.z / 4);
-		auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
 		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
-		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
-	}
-	else if (res == 1) {
-		glm::vec3 scale = glm::vec3(2);
-		glm::vec3 rot = glm::vec3(3 * M_PI / 2, 0, 0);
-
-		glm::vec3 loc = room.location + glm::vec3(0, 1.5f, 0);
-		auxMapMatrix[(int)loc.z][(int)loc.x] = 5;
-		glm::mat4 model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
 		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("column"))->AddInstance(model);
 	}
 	else {
 		return;
 	}
-
 	
+}
+
+void Generator::PlaceDecorations(Room room) {
+
+	glm::vec3 loc;
+	glm::vec3 rot;
+	glm::vec3 scale;
+	glm::mat4 model;
+	glm::vec3 offset = glm::vec3(0);
+	
+	// Table with chairs and decorations - DONE
+	/*{
+		loc = room.location + glm::vec3(0, 0.37f, 0) + offset;
+		rot = glm::vec3(0, M_PI / 2, M_PI / 2);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("carpet"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(0, 0.5f, 0) + offset;
+		rot = glm::vec3(-M_PI_2, -M_PI_2, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("table_big"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-0.5f, 1.3f, 0) + offset;
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(0.5f);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("potion_3"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(0.5f, 1.3f, 0) + offset;
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(0.5f);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("book"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(1.5f, 0.5f, 0) + offset;
+		rot = glm::vec3(-M_PI_2, -M_PI_2,0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("chair"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-1.5f, 0.5f, 0) + offset;
+		rot = glm::vec3(-M_PI_2, M_PI_2, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("chair"))->AddInstance(model);
+	}*/
+
+	// Windows - DONE
+	{
+		loc = room.location + glm::vec3(room.size.x/2, 1.5f, room.size.z/4);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(0.5f, 1, 1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("window"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(room.size.x / 2, 1.5f, -room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(0.5f, 1, 1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("window"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 2, 1.5f, room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(0.5f, 1, 1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("window"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 2, 1.5f, -room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(0.5f, 1, 1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("window"))->AddInstance(model);
+	}
+
+	//Skeletons - DONE
+	/*{
+		loc = room.location + glm::vec3(1, 0.5f, 0) + offset;
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("bones"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-1, 0.5f, 0) + offset;
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("bones_2"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(1, 0.5f, 1) + offset;
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("skull"))->AddInstance(model);
+
+	}*/
+
+	// Woodfire - DONE
+	/*{
+		loc = room.location + glm::vec3(0, 0.5f, 0) + offset;
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1.2f);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("woodfire"))->AddInstance(model);
+	}*/
+
+	// Torch Wall - DONE
+	/*{
+		loc = room.location + glm::vec3(room.size.x / 2, 1.5f, room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("torch_wall"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(room.size.x / 2, 1.5f, -room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("torch_wall"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 2, 1.5f, room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("torch_wall"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 2, 1.5f, -room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("torch_wall"))->AddInstance(model);
+	}*/
+
+	// Barrel left- DONE
+	/*{
+		loc = room.location + glm::vec3(room.size.x / 2 - 0.5f, 0.5f, room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(room.size.x / 2 - 0.5f, 0.5f, 0);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(room.size.x / 2 - 0.5f, 0.5f, -room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+
+	}
+
+	// Barrel right- DONE
+
+	{
+		loc = room.location + glm::vec3(-room.size.x / 2 + 0.5f, 0.5f, room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 2 + 0.5f, 0.5f, 0);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 2 + 0.5f, 0.5f, -room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+	}
+
+	// Barrel front
+	{
+		loc = room.location + glm::vec3(room.size.x / 4, 0.5f, room.size.z / 2 - 0.5f);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(0, 0.5f, room.size.z / 2 - 0.5f);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 4, 0.5f, room.size.z / 2 - 0.5f);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+	}
+
+	// Barrel back
+	{
+		loc = room.location + glm::vec3(room.size.x / 4, 0.5f, -room.size.z / 2 + 0.5f);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(0, 0.5f, -room.size.z / 2 + 0.5f);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 4, 0.5f, -room.size.z / 2 + 0.5f);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+	}*/
+
+	// Candelabrum
+	/*{
+		loc = room.location + glm::vec3(room.size.x / 4, 0.5f, room.size.z / 2 - 0.5f);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("candelabrum_tall"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(room.size.x / 4, 0.5f, -room.size.z / 2 + 0.5f);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("candelabrum_tall"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 4, 0.5f, room.size.z / 2 - 0.5f);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("candelabrum_tall"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 4, 0.5f, -room.size.z / 2 + 0.5f);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("candelabrum_tall"))->AddInstance(model);
+	} */
+
+	// cobweb left- DONE
+	/*{
+		loc = room.location + glm::vec3(room.size.x / 2 - 0.5f, 0.5f, room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, -M_PI_2, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(room.size.x / 2 - 0.5f, 0.5f, 0);
+		rot = glm::vec3(-M_PI_2, -M_PI_2, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(room.size.x / 2 - 0.5f, 0.5f, -room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, -M_PI_2, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+
+	}
+
+	// cobweb right- DONE
+
+	{
+		loc = room.location + glm::vec3(-room.size.x / 2 + 0.5f, 0.5f, room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, M_PI_2, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 2 + 0.5f, 0.5f, 0);
+		rot = glm::vec3(-M_PI_2, M_PI_2, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 2 + 0.5f, 0.5f, -room.size.z / 4);
+		rot = glm::vec3(-M_PI_2, M_PI_2, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+	}
+
+	// cobweb front
+	{
+		loc = room.location + glm::vec3(room.size.x / 4, 0.5f, room.size.z / 2 - 0.5f);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(0, 0.5f, room.size.z / 2 - 0.5f);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 4, 0.5f, room.size.z / 2 - 0.5f);
+		rot = glm::vec3(-M_PI_2, M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+	}
+
+	// cobweb back
+	{
+		loc = room.location + glm::vec3(room.size.x / 4, 0.5f, -room.size.z / 2 + 0.5f);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(0, 0.5f, -room.size.z / 2 + 0.5f);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 4, 0.5f, -room.size.z / 2 + 0.5f);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+	}*/
+
+	// cobweb corners - DONE
+	/*{
+		loc = room.location + glm::vec3(room.size.x / 2 - 0.5f, 0.5f, room.size.z / 2 - 0.5f);
+		rot = glm::vec3(-M_PI_2, M_PI/6 + M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(room.size.x / 2 - 0.5f, 0.5f, -room.size.z / 2 + 0.5f);
+		rot = glm::vec3(-M_PI_2, -M_PI/6, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 2 + 0.5f, 0.5f, room.size.z / 2 - 0.5f);
+		rot = glm::vec3(-M_PI_2, -M_PI/6 + M_PI, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+
+		loc = room.location + glm::vec3(-room.size.x / 2 + 0.5f, 0.5f, -room.size.z / 2 + 0.5f);
+		rot = glm::vec3(-M_PI_2, M_PI/6, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("cobweb"))->AddInstance(model);
+	}*/
+
+	// crate
+	{
+		loc = room.location + glm::vec3(0, 0.5f,0);
+		rot = glm::vec3(-M_PI_2,0, 0);
+		scale = glm::vec3(0.5f);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("crate"))->AddInstance(model);
+	}
+
+	// barrel rand
+	{
+		loc = room.location + glm::vec3(0, 0.5f, 0);
+		rot = glm::vec3(-M_PI_2, 0, 0);
+		scale = glm::vec3(1);
+		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
+		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+	}
 }

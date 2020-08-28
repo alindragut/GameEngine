@@ -11,10 +11,14 @@ public:
 	~CombatComponent();
 
 	int GetHP() { return this->hp; }
+	int GetMaxHP() { return this->maxHp; }
 	int GetStamina() { return this->stamina; }
 	int GetAmmo() { return this->ammo; }
-	int AddAmmo(int bonusAmmo) { this->ammo += bonusAmmo; }
+	void AddAmmo(int bonusAmmo) { this->ammo += bonusAmmo; }
+	void AddDamage(int bonusDamage) { this->damage += bonusDamage; }
 	int GetDamage() { return this->damage; }
+	int GetBaseDamage() { return this->baseDamage; }
+	void ResetDamage() { this->damage = this->baseDamage; }
 
 	void DealDamage(int damage) { this->hp -= damage; }
 	void RegenerateStamina() { if(this->stamina < this->maxStamina)this->stamina++; }
@@ -30,4 +34,5 @@ private:
 	int stamina;
 	int ammo;
 	int damage;
+	int baseDamage;
 };

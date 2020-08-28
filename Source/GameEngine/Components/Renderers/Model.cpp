@@ -322,3 +322,35 @@ void Model::NormalizePositions() {
 		++it;
 	}
 }
+
+glm::vec3 Model::GetScaleDifference() {
+	float minX = FLT_MAX, minY = FLT_MAX, minZ = FLT_MAX, maxX = FLT_MIN, maxY = FLT_MIN, maxZ = FLT_MIN;
+
+	for (auto pos : positions) {
+		if (pos.x < minX) {
+			minX = pos.x;
+		}
+
+		if (pos.y < minY) {
+			minY = pos.y;
+		}
+
+		if (pos.z < minZ) {
+			minZ = pos.z;
+		}
+
+		if (pos.x > maxX) {
+			maxX = pos.x;
+		}
+
+		if (pos.y > maxY) {
+			maxY = pos.y;
+		}
+
+		if (pos.z > maxZ) {
+			maxZ = pos.z;
+		}
+	}
+
+	return glm::vec3(maxX, maxY, maxZ) - glm::vec3(minX, minY, minZ);
+}
