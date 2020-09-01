@@ -63,8 +63,11 @@ void Generator::Init() {
 	
 	for (Room room : rooms) {
 		if (room.location != rooms.front().location) {
+			int type = rand() % (3 - 2 + 1) + 2;
+			
 			float randX = rand() % (int)(room.size.x / 2);
-			NPCSpawner::SpawnNPC(player, room.location + glm::vec3(randX, 0.5f, 0), 2);
+			NPCSpawner::SpawnNPC(player, room.location + glm::vec3(0, 0.5f, 0), type);
+			
 		}
 		
 	}
@@ -1249,7 +1252,7 @@ void Generator::PlaceDecorations(Room room) {
 		rot = glm::vec3(-M_PI_2,0, 0);
 		scale = glm::vec3(0.5f);
 		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
-		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("crate"))->AddInstance(model);
+		//static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("crate"))->AddInstance(model);
 	}
 
 	// barrel rand
@@ -1258,6 +1261,6 @@ void Generator::PlaceDecorations(Room room) {
 		rot = glm::vec3(-M_PI_2, 0, 0);
 		scale = glm::vec3(1);
 		model = glm::translate(glm::mat4(1), loc) * glm::mat4(glm::quat(rot)) * glm::scale(glm::mat4(1), scale);
-		static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
+		//static_cast<MeshInstanced*>(MeshManager::GetInstance().GetMesh("barrel"))->AddInstance(model);
 	}
 }

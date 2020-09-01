@@ -15,8 +15,7 @@ public:
 	void update(float deltaTimeSeconds) override;
 	void Init() override;
 
-	void SetCreatorObject(BaseGameObject* creatorObject) { printf("here3.3.1\n");  this->creatorObject = creatorObject; printf("here3.3.2\n");
-	}
+	void SetCreatorObject(BaseGameObject* creatorObject) { this->creatorObject = creatorObject; printf("here3.3.2\n"); }
 	void SetSpawnPos(glm::vec3 spawnPos) { this->spawnPos = spawnPos; }
 	void SetDir(glm::vec3 dir) { this->dir = dir; }
 	void SetSpeed(float speed) { this->speed = speed; }

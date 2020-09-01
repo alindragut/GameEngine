@@ -100,6 +100,8 @@ void SkillTreeComponent::update(float dt) {
 	if (!opened) {
 		return;
 	}
+	ImGui::SetNextWindowPos(ImVec2(480, 270));
+	ImGui::SetNextWindowSize(ImVec2(444, 330));
 	ImGui::Begin("Skill Tree");
 	if (ImGui::TreeNode("Skill Tree")) {
 		if (ImGui::TreeNode("Single target perks")) {

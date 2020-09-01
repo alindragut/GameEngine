@@ -17,11 +17,6 @@ void AnimObjectGameComponent::update(float deltaTimeSeconds) {
 	glm::vec3 to = glm::vec3(object->GetTransform()->GetPos().x, 1.2, object->GetTransform()->GetPos().z + 1);
 	PhysicsManager& pm = PhysicsManager::GetInstance();
     glm::vec3 res = pm.GetPhysicsEngine()->RayCast(from, to, &hit);
-
-	if (hit)
-	{
-		printf("hit %lf %lf %lf\n", res.x, res.y, res.z);
-	}
 }
 
 

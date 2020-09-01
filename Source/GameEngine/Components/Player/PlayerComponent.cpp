@@ -17,7 +17,7 @@ PlayerComponent::PlayerComponent() {
 	isRotating = false;
 	animation = false;
 	state = 0;
-	speed = 5;
+	speed = 2.5f;
 	currentDest = glm::vec3(0);
 	centeredCamera = true;
 	alive = true;
@@ -42,11 +42,9 @@ void PlayerComponent::update(float deltaTimeSeconds) {
 	int crtState = state;
 	bool p_open = true;
 
-	ImGui::SetNextWindowPos(ImVec2(10, 843));
-	ImGui::SetNextWindowSize(ImVec2(278, 55));
+	ImGui::SetNextWindowPos(ImVec2(10, 850));
+	ImGui::SetNextWindowSize(ImVec2(270, 55));
 	ImGui::Begin("HP", nullptr, ImGuiWindowFlags_NoMove  | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoCollapse);
-	//ImGui::Begin("HP");
-	//ImGui::Text("HP");
 	ImGui::ProgressBar((float)hp/maxHp);
 	double mouseX, mouseY;
 	glfwGetCursorPos(EngineManager::GetInstance().GetGameEngine()->GetWindow()->GetGLFWWindow(), &mouseX, &mouseY);
@@ -58,7 +56,9 @@ void PlayerComponent::update(float deltaTimeSeconds) {
 	 dynamic_cast<BruiserComponent*>(target->GetComponent("BruiserComponent")) != nullptr)) {
 		int enemyHp = static_cast<CombatComponent*>(target->GetComponent("CombatComponent"))->GetHP();
 		int enemyMaxHp = static_cast<CombatComponent*>(target->GetComponent("CombatComponent"))->GetMaxHP();
-		ImGui::Begin("Enemy HP");
+		ImGui::SetNextWindowPos(ImVec2(560, 10));
+		ImGui::SetNextWindowSize(ImVec2(278, 55));
+		ImGui::Begin("Enemy HP", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoCollapse);
 		ImGui::ProgressBar((float)enemyHp / enemyMaxHp);
 	}
 	
@@ -68,8 +68,8 @@ void PlayerComponent::update(float deltaTimeSeconds) {
 		glm::vec3 newPos = object->GetTransform()->GetPos();
 		//glm::vec3 offsetDir = glm::normalize(glm::vec3(-3, 5, -3));
 		glm::vec3 offsetDir = glm::normalize(glm::vec3(-1, 2, -1));
-		cam->SetPosition(newPos + 10.0f * offsetDir);
-		cam->SetRotation(glm::inverse(glm::lookAt(newPos + 10.0f * offsetDir, newPos, glm::vec3(0, 1, 0))));
+		cam->SetPosition(newPos + 20.0f * offsetDir);
+		cam->SetRotation(glm::inverse(glm::lookAt(newPos + 20.0f * offsetDir, newPos, glm::vec3(0, 1, 0))));
 		cam->Update();
 	}
 
@@ -133,6 +133,7 @@ void PlayerComponent::update(float deltaTimeSeconds) {
 
 	// Add to the "shoot" timer + shoot
 	if (state == 5) {
+		crtPath = std::stack<std::pair<float, float>>();
 		crtAnimTimer += deltaTimeSeconds;
 		if (crtAnimTimer >= crtAnimDuration) {
 			if (static_cast<SkillTreeComponent*>(object->GetComponent("SkillTreeComponent"))->GetDirectionalShoot3()) {
@@ -166,6 +167,7 @@ void PlayerComponent::update(float deltaTimeSeconds) {
 
 	// Add to the "equip" timer
 	if (state == 6) {
+		crtPath = std::stack<std::pair<float, float>>();
 		crtAnimTimer += deltaTimeSeconds;
 		if (!isArmed && crtAnimTimer >= crtAnimDuration / 2) {
 			static_cast<AnimationRenderer*>(object->GetComponent("AnimationRenderer"))->SetModel("model_bow");
@@ -181,6 +183,7 @@ void PlayerComponent::update(float deltaTimeSeconds) {
 
 	// Add to the "disarm" timer
 	if (state == 7) {
+		crtPath = std::stack<std::pair<float, float>>();
 		crtAnimTimer += deltaTimeSeconds;
 		if (isArmed && crtAnimTimer >= crtAnimDuration / 3) {
 			static_cast<AnimationRenderer*>(object->GetComponent("AnimationRenderer"))->SetModel("model");
@@ -290,6 +293,9 @@ void PlayerComponent::OnKeyPress(int key, int mods) {
 
 	// Equip/ Disarm weapon
 	if (key == GLFW_KEY_R) {
+		if (!alive) {
+			return;
+		}
 
 		if (crtAnimTimer != 0.f) {
 			return;

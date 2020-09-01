@@ -29,7 +29,7 @@ MageComponent::MageComponent() {
 void MageComponent::Init() {
 	GeneratorManager& gm = GeneratorManager::GetInstance();
 	object->GetTransform()->SetPos(spawnPos);
-	object->GetTransform()->SetScale(glm::vec3(10, 10, 10));
+	object->GetTransform()->SetScale(glm::vec3(1, 3, 1));
 	object->GetTransform()->UseModel(true);
 }
 
@@ -110,6 +110,7 @@ void MageComponent::update(float deltaTimeSeconds) {
 		}
 		if (crtAnimTimer >= crtAnimDuration) {
 			shoot = false;
+			crtAnimTimer = 0;
 		}
 		crtAnimTimer += deltaTimeSeconds;
 	}

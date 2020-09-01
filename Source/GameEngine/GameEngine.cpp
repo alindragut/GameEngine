@@ -116,6 +116,8 @@ void GameEngine::Init() {
 	}
 	
 	static_cast<CameraInput*>(GetCameraInput())->SetCameraLock(false);
+
+	showTutorial = true;
 }
 
 void GameEngine::FrameStart() {
@@ -125,9 +127,18 @@ void GameEngine::FrameStart() {
 
 void GameEngine::Update(float deltaTimeSeconds) {
 	{
-		ImGui::Begin("");									// Create a window called "Hello, world!" and append into it.
 
-		ImGui::Text("%.1f fps", 1.0f / deltaTimeSeconds);               // Display some text (you can use a format strings too)\
+		ImGui::Begin("Example: Simple overlay", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav);
+
+
+		ImGui::Text("%.1f fps", 1.0f / deltaTimeSeconds);
+		if (showTutorial) {
+			ImGui::Text("Press Left Click to move");
+			ImGui::Text("Press R to equip/unequip weapon");
+			ImGui::Text("Press P for Skill Tree");
+			ImGui::Text("Press 1 to shoot with equipped weapon");
+			ImGui::Text("Press T to show/hide tutorial");
+		}
 
 	}
 
@@ -192,6 +203,9 @@ void GameEngine::OnKeyPress(int key, int mods) {
 	}
 	if (key == GLFW_KEY_L) {
 		static_cast<CameraInput*>(GetCameraInput())->SetCameraLock(false);
+	}
+	if (key == GLFW_KEY_T) {
+		showTutorial = !showTutorial;
 	}
 }
 void GameEngine::OnKeyRelease(int key, int mods) {

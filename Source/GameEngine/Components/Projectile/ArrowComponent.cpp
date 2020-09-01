@@ -36,7 +36,6 @@ void ArrowComponent::update(float deltaTimeSeconds) {
 		if (dynamic_cast<MageComponent*>(obj->GetComponent("MageComponent")) != nullptr) {
 			static_cast<CombatComponent*>(obj->GetComponent("CombatComponent"))->DealDamage(static_cast<CombatComponent*>(creatorObject->GetComponent("CombatComponent"))->GetDamage());
 			if (static_cast<SkillTreeComponent*>(creatorObject->GetComponent("SkillTreeComponent"))->GetDoT()) {
-				printf("%lf\n", deltaTimeSeconds);
 				static_cast<MageComponent*>(obj->GetComponent("MageComponent"))->SetStartTimeDoT(deltaTimeSeconds);
 				static_cast<MageComponent*>(obj->GetComponent("MageComponent"))->SetDoTDamage(static_cast<CombatComponent*>(creatorObject->GetComponent("CombatComponent"))->GetDamage() / 10);
 			}
@@ -44,7 +43,6 @@ void ArrowComponent::update(float deltaTimeSeconds) {
 		if (dynamic_cast<BruiserComponent*>(obj->GetComponent("BruiserComponent")) != nullptr) {
 			static_cast<CombatComponent*>(obj->GetComponent("CombatComponent"))->DealDamage(static_cast<CombatComponent*>(creatorObject->GetComponent("CombatComponent"))->GetDamage());
 			if (static_cast<SkillTreeComponent*>(creatorObject->GetComponent("SkillTreeComponent"))->GetDoT()) {
-				printf("%lf\n", deltaTimeSeconds);
 				static_cast<BruiserComponent*>(obj->GetComponent("BruiserComponent"))->SetStartTimeDoT(deltaTimeSeconds);
 				static_cast<BruiserComponent*>(obj->GetComponent("BruiserComponent"))->SetDoTDamage(static_cast<CombatComponent*>(creatorObject->GetComponent("CombatComponent"))->GetDamage()/10);
 			}

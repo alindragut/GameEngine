@@ -9,6 +9,7 @@ BaseGameObject* NPCSpawner::SpawnNPC(BaseGameObject* creatorObject, glm::vec3 sp
 	switch (type) {
 	case 1:
 		// LF a third model .dae to match the rest
+		break;
 	{
 		 obj = ComponentFactory::GetInstance().createObject(13);
 

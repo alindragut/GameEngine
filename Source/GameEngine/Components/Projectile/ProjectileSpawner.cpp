@@ -19,6 +19,7 @@ BaseGameObject* ProjectileSpawner::SpawnArrow(BaseGameObject* creatorObject, glm
 	ac->Init();
 
 	PointShadowRenderer* psr = static_cast<PointShadowRenderer*>(obj->GetComponent("PointShadowRenderer"));
+	//psr->SetShader("DungeonPack");
 	psr->SetMesh("arrow");
 
 	EngineManager::GetInstance().GetGameEngine()->AddObject(obj);
@@ -42,6 +43,7 @@ BaseGameObject* ProjectileSpawner::SpawnMagicSpell(BaseGameObject* creatorObject
 	sc->Init();
 
 	PointShadowRenderer* psr = static_cast<PointShadowRenderer*>(obj->GetComponent("PointShadowRenderer"));
+	//psr->SetShader("DungeonPack");
 	psr->SetMesh("sphere");
 
 	EngineManager::GetInstance().GetGameEngine()->AddObject(obj);

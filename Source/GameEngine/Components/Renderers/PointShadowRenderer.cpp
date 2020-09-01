@@ -20,7 +20,7 @@ PointShadowRenderer::PointShadowRenderer() {
 
 	MeshManager& mm = MeshManager::GetInstance();
 
-	mm.AddMesh("arrow", "Source/GameEngine/Models/Gameplay", "Arrow.fbx");
+	mm.AddMesh("arrow", "Source/GameEngine/Models/Gameplay", "Arrow.fbx", false, true, false, false);
 	mm.AddMesh("box", RESOURCE_PATH::MODELS + "Primitives", "box.obj");
 	mm.AddMesh("sphere", RESOURCE_PATH::MODELS + "Primitives", "sphere.obj");
 
